@@ -31,6 +31,13 @@ const Divider = ({ width, setWidth, widthRef, minWidth, maxWidth, openLeft = fal
     }
   }, [width, widthRef, storeLocal]);
 
+  const onDividerDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragStartClientStartPos(e.clientX);
+    setDragStartElementWidth(width);
+    setResizeEvent(true);
+  };
+
   const onDividerDrag = useCallback(
     (e: MouseEvent) => {
       e.preventDefault();
@@ -56,19 +63,15 @@ const Divider = ({ width, setWidth, widthRef, minWidth, maxWidth, openLeft = fal
   const onSidebarDividerDragEnd = useCallback(() => {
     window.removeEventListener('mousemove', onDividerDrag);
     window.removeEventListener('mouseup', onSidebarDividerDragEnd);
+    setResizeEvent(false);
   }, [onDividerDrag]);
 
   useEffect(() => {
-    window.addEventListener('mousemove', onDividerDrag);
-    window.addEventListener('mouseup', onSidebarDividerDragEnd);
-  }, [resizeEvent]);
-
-  const onDividerDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setDragStartClientStartPos(e.clientX);
-    setDragStartElementWidth(width);
-    setResizeEvent(true);
-  };
+    if (resizeEvent) {
+      window.addEventListener('mousemove', onDividerDrag);
+      window.addEventListener('mouseup', onSidebarDividerDragEnd);
+    }
+  }, [onDividerDrag, onSidebarDividerDragEnd, resizeEvent]);
 
   const style = {
     flex: '0 0 6px',
