@@ -1,0 +1,90 @@
+import React, { useCallback, useEffect } from 'react';
+import { useState } from 'react';
+import { debounce } from '../utils/debounce';
+
+export interface DividerProps {
+  width: number;
+  setWidth: React.Dispatch<React.SetStateAction<number>>;
+  widthRef: React.RefObject<HTMLElement>;
+  minWidth?: number;
+  maxWidth?: number;
+  openLeft?: boolean;
+  storeLocal?: string;
+}
+
+const Divider = ({ width, setWidth, widthRef, minWidth, maxWidth, openLeft = false, storeLocal }: DividerProps) => {
+  const [dragStartClientStartPos, setDragStartClientStartPos] = useState(0);
+  const [dragStartElementWidth, setDragStartElementWidth] = useState(width);
+  const [deboundedWidth, setDebouncedWidth] = useState();
+  const [resizeEvent, setResizeEvent] = useState(false);
+
+  console.log('storelocal:', storeLocal, 'width', width);
+
+  useEffect(() => {
+    console.log(widthRef.current);
+    if (widthRef.current) {
+      console.log('width', width);
+      widthRef.current.style.flex = `0 0 ${width}px`;
+    }
+    if (storeLocal) {
+      localStorage.setItem(storeLocal, width.toString());
+    }
+  }, [width, widthRef, storeLocal]);
+
+  const onDividerDrag = useCallback(
+    (e: MouseEvent) => {
+      e.preventDefault();
+      console.log('dragStartElementWidth', dragStartElementWidth);
+      console.log('e.clientX', e.clientX);
+      console.log('dragStartClientStartPos', dragStartClientStartPos);
+      const desiredNewWidth = openLeft
+        ? dragStartElementWidth - e.clientX + dragStartClientStartPos
+        : dragStartElementWidth + e.clientX - dragStartClientStartPos;
+      // max width to be based on media query
+      // minWidth
+      const newWidth =
+        minWidth && desiredNewWidth < minWidth
+          ? minWidth
+          : maxWidth && desiredNewWidth > maxWidth
+          ? maxWidth
+          : desiredNewWidth;
+      setWidth(newWidth);
+    },
+    [dragStartClientStartPos, dragStartElementWidth, maxWidth, minWidth, openLeft, setWidth]
+  );
+
+  const onSidebarDividerDragEnd = useCallback(() => {
+    window.removeEventListener('mousemove', onDividerDrag);
+    window.removeEventListener('mouseup', onSidebarDividerDragEnd);
+  }, [onDividerDrag]);
+
+  useEffect(() => {
+    window.addEventListener('mousemove', onDividerDrag);
+    window.addEventListener('mouseup', onSidebarDividerDragEnd);
+  }, [resizeEvent]);
+
+  const onDividerDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragStartClientStartPos(e.clientX);
+    setDragStartElementWidth(width);
+    setResizeEvent(true);
+  };
+
+  const style = {
+    flex: '0 0 6px',
+    backgroundColor: 'red',
+    cursor: 'default',
+  };
+
+  return (
+    <React.Fragment>
+      <div
+        style={style}
+        onMouseDown={onDividerDragStart}
+        onMouseOver={e => (e.currentTarget.style.cursor = 'col-resize')}
+      ></div>
+    </React.Fragment>
+  );
+};
+
+export default Divider;
