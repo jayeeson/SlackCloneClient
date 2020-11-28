@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { memo, useCallback, useEffect, useLayoutEffect } from 'react';
 import { useState } from 'react';
-import { debounce } from '../utils/debounce';
 
 export interface DividerProps {
   width: number;
@@ -15,12 +14,12 @@ export interface DividerProps {
 const Divider = ({ width, setWidth, widthRef, minWidth, maxWidth, openLeft = false, storeLocal }: DividerProps) => {
   const [dragStartClientStartPos, setDragStartClientStartPos] = useState(0);
   const [dragStartElementWidth, setDragStartElementWidth] = useState(width);
-  const [deboundedWidth, setDebouncedWidth] = useState();
+  const [] = useState();
   const [resizeEvent, setResizeEvent] = useState(false);
 
   console.log('storelocal:', storeLocal, 'width', width);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     console.log(widthRef.current);
     if (widthRef.current) {
       console.log('width', width);
@@ -89,5 +88,4 @@ const Divider = ({ width, setWidth, widthRef, minWidth, maxWidth, openLeft = fal
     </React.Fragment>
   );
 };
-
-export default Divider;
+export default memo(Divider);

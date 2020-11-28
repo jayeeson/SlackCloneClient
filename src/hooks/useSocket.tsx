@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import socketio from 'socket.io-client';
 
-const SlackSocket = () => {
+const useSlackSocket = () => {
   useEffect(() => {
     const socket = socketio('/');
 
     socket.on('connect', () => {
       console.log('connected');
-
       socket.emit('handshake', 'hi');
     });
     socket.on('message', (data: any) => {
@@ -18,4 +17,4 @@ const SlackSocket = () => {
   return <React.Fragment />;
 };
 
-export default SlackSocket;
+export default useSlackSocket;

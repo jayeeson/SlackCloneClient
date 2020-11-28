@@ -1,6 +1,6 @@
 import { CssBaseline } from '@material-ui/core';
 import React from 'react';
-import SlackSocket from './Socket';
+import SlackSocket from '../hooks/useSocket';
 
 const AppContainer = ({ children }: { children: React.ReactChild }) => {
   return (

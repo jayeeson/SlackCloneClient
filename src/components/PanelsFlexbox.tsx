@@ -1,6 +1,7 @@
 import { makeStyles, Typography, useMediaQuery } from '@material-ui/core';
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
+import useMsgPanelWidth from '../hooks/useMsgPanelWidth';
 import Divider from './Divider';
 
 const validateWidth = (width: number | string | null, minWidth?: number, maxWidth?: number) => {
@@ -75,6 +76,8 @@ const Panels = () => {
   const [viewPanelWidth, setviewPanelWidth] = useState(validateWidth(localStorage.getItem('viewPanelWidth')) || 250);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const viewPanelRef = useRef<HTMLDivElement>(null);
+  const msgPanelRef = useRef<HTMLDivElement>(null);
+  const msgPanelWidth = useMsgPanelWidth(msgPanelRef);
 
   const isMinWidth600 = useMediaQuery('(min-width:600px)');
 
@@ -89,6 +92,7 @@ const Panels = () => {
       <div ref={sidebarRef} className={clsx(classes.sidebar, classes.flexItem)}>
         one
       </div>
+
       <Divider
         width={sidebarWidth}
         setWidth={setSidebarWidth}
@@ -97,7 +101,9 @@ const Panels = () => {
         minWidth={150}
         maxWidth={600}
       />
-      <div className={clsx(classes.viewMessages, classes.flexItem)}>two</div>
+      <div ref={msgPanelRef} className={clsx(classes.viewMessages, classes.flexItem)}>
+        two
+      </div>
       <Divider
         width={viewPanelWidth}
         setWidth={setviewPanelWidth}
