@@ -1,12 +1,12 @@
 import React from 'react';
 import AppContainer from './AppContainer';
-import Panels from './PanelsFlexbox';
+import Layout from './Layout';
 
 const App = () => {
   return (
     <React.Fragment>
       <AppContainer>
-        <Panels />
+        <Layout />
       </AppContainer>
     </React.Fragment>
   );

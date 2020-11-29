@@ -1,19 +1,24 @@
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 
-const useMsgPanelWidth = (msgPanelRef: React.RefObject<HTMLDivElement>) => {
+const useMsgPanelWidth = (setMsgPanelWidth: React.Dispatch<React.SetStateAction<number>>) => {
   const [width, setWidth] = useState(0);
 
   useLayoutEffect(() => {
     const setWidthCallback = () => {
-      console.log(msgPanelRef.current?.getBoundingClientRect().width);
-      // setWidth(msgPanelRef.current);
+      const domWidth = document.getElementById('msgPanel')?.getBoundingClientRect().width;
+      if (domWidth) {
+        setWidth(domWidth);
+      }
     };
-    if (msgPanelRef) {
-      window.addEventListener('resize', setWidthCallback);
-      setWidthCallback();
-    }
+    window.addEventListener('resize', setWidthCallback);
+    setWidthCallback();
     return () => window.removeEventListener('resize', setWidthCallback);
-  }, [msgPanelRef]);
+  }, []);
+
+  useEffect(() => {
+    setMsgPanelWidth(width);
+  }, [setMsgPanelWidth, width]);
+
   return width;
 };
 

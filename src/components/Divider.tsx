@@ -1,34 +1,36 @@
-import React, { memo, useCallback, useEffect, useLayoutEffect } from 'react';
+import React, { memo, useCallback, useEffect } from 'react';
 import { useState } from 'react';
+import { debounce } from '../utils/debounce';
 
 export interface DividerProps {
   width: number;
   setWidth: React.Dispatch<React.SetStateAction<number>>;
-  widthRef: React.RefObject<HTMLElement>;
   minWidth?: number;
   maxWidth?: number;
   openLeft?: boolean;
   storeLocal?: string;
+  display?: string;
 }
 
-const Divider = ({ width, setWidth, widthRef, minWidth, maxWidth, openLeft = false, storeLocal }: DividerProps) => {
+const Divider = ({ width, setWidth, minWidth, maxWidth, openLeft = false, storeLocal, display }: DividerProps) => {
   const [dragStartClientStartPos, setDragStartClientStartPos] = useState(0);
   const [dragStartElementWidth, setDragStartElementWidth] = useState(width);
-  const [] = useState();
+  const [debouncedWidth, setDebouncedWidth] = useState<number>(width);
   const [resizeEvent, setResizeEvent] = useState(false);
 
   console.log('storelocal:', storeLocal, 'width', width);
 
-  useLayoutEffect(() => {
-    console.log(widthRef.current);
-    if (widthRef.current) {
-      console.log('width', width);
-      widthRef.current.style.flex = `0 0 ${width}px`;
-    }
+  useEffect(() => {
+    debounce(() => {
+      setDebouncedWidth(width);
+    }, 5000);
+  }, [width]);
+
+  useEffect(() => {
     if (storeLocal) {
-      localStorage.setItem(storeLocal, width.toString());
+      localStorage.setItem(storeLocal, debouncedWidth.toString());
     }
-  }, [width, widthRef, storeLocal]);
+  }, [debouncedWidth, storeLocal]);
 
   const onDividerDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -40,9 +42,6 @@ const Divider = ({ width, setWidth, widthRef, minWidth, maxWidth, openLeft = fal
   const onDividerDrag = useCallback(
     (e: MouseEvent) => {
       e.preventDefault();
-      console.log('dragStartElementWidth', dragStartElementWidth);
-      console.log('e.clientX', e.clientX);
-      console.log('dragStartClientStartPos', dragStartClientStartPos);
       const desiredNewWidth = openLeft
         ? dragStartElementWidth - e.clientX + dragStartClientStartPos
         : dragStartElementWidth + e.clientX - dragStartClientStartPos;
@@ -76,6 +75,7 @@ const Divider = ({ width, setWidth, widthRef, minWidth, maxWidth, openLeft = fal
     flex: '0 0 6px',
     backgroundColor: 'red',
     cursor: 'default',
+    display: display || 'initial',
   };
 
   return (
