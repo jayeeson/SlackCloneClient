@@ -1,5 +1,5 @@
 import { Box, makeStyles } from '@material-ui/core';
-import React, { ForwardedRef } from 'react';
+import React from 'react';
 
 const useStyles = makeStyles({
   root: {},
@@ -11,13 +11,13 @@ const useStyles = makeStyles({
   },
 });
 
-const MsgPanel = React.memo(({ display }: { display: any }) => {
+const MsgPanel = ({ display }: { display: any }) => {
   const classes = useStyles();
   return (
     <div id="msgPanel" className={classes.flexItem} style={{ display: display }}>
       <Box width="100%">two</Box>
     </div>
   );
-});
+};
 
-export default MsgPanel;
+export default React.memo(MsgPanel);

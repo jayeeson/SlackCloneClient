@@ -1,9 +1,9 @@
-import { Box, makeStyles, Typography, useMediaQuery, useTheme } from '@material-ui/core';
-import React, { useEffect, useRef, useState } from 'react';
+import { Box, makeStyles, Typography, useTheme } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
 import validateWidth from '../utils/validateWidth';
 import Divider from './Divider';
 import MsgPanel from './MsgPanel';
-import { debounce } from '../utils/debounce';
+import useWindowSize from '../hooks/useWindowSize';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -16,12 +16,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 const PanelsFlexbox = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [viewPanelOpen, setViewPanelOpen] = useState(false);
-  const [msgPanelOpen, setMsgPanelOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(true); ///\ todo: make redux state
+  const [viewPanelOpen, setViewPanelOpen] = useState(true); ///\ todo: make redux state
+  const [msgPanelOpen, setMsgPanelOpen] = useState(true); ///\ todo: make redux state
   const [sidebarWidth, setSidebarWidth] = useState(validateWidth(localStorage.getItem('sidebarWidth')) || 250);
   const [viewPanelWidth, setviewPanelWidth] = useState(validateWidth(localStorage.getItem('viewPanelWidth')) || 250);
-  const [windowSize, setWindowSize] = useState({ x: window.innerWidth, y: window.innerHeight });
+  const windowSize = useWindowSize();
   const theme = useTheme();
 
   const minMsgPanelWidth = 300;
@@ -60,22 +60,6 @@ const PanelsFlexbox = () => {
       setMsgPanelOpen(true);
     }
   }, [msgPanelOpen, sidebarOpen, viewPanelOpen, viewPanelWidth, windowSize.x]);
-
-  useEffect(() => {
-    const setSizeCallback = debounce(() => {
-      const newWindowSize = { x: window.innerWidth, y: window.innerHeight };
-      if (
-        newWindowSize.x > 0 &&
-        newWindowSize.y > 0 &&
-        (windowSize.x !== newWindowSize.x || windowSize.y !== newWindowSize.y)
-      ) {
-        setWindowSize(newWindowSize);
-      }
-    }, 200);
-    window.addEventListener('resize', setSizeCallback);
-    setSizeCallback();
-    return () => window.removeEventListener('resize', setSizeCallback);
-  });
 
   const classes = useStyles({ sidebar: { width: sidebarWidth }, viewPanel: { width: viewPanelWidth } });
 
