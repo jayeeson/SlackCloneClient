@@ -27,7 +27,7 @@ const Divider = ({ width, setWidth, minWidth, maxWidth, openLeft = false, storeL
   }, [width]);
 
   useEffect(() => {
-    if (storeLocal) {
+    if (storeLocal && debouncedWidth > 0) {
       localStorage.setItem(storeLocal, debouncedWidth.toString());
     }
   }, [debouncedWidth, storeLocal]);
