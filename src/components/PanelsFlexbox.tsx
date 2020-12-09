@@ -4,6 +4,9 @@ import validateWidth from '../utils/validateWidth';
 import Divider from './Divider';
 import MsgPanel from './MsgPanel';
 import useWindowSize from '../hooks/useWindowSize';
+import { connect } from 'react-redux';
+import { panelsSlice } from '../store/panels';
+import { RootState } from '../store';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -20,10 +23,29 @@ const storageItems = {
   viewPaneWidth: 'viewPanelWidth',
 };
 
-const PanelsFlexbox = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true); ///\ todo: make redux state
-  const [viewPanelOpen, setViewPanelOpen] = useState(true); ///\ todo: make redux state
-  const [msgPanelOpen, setMsgPanelOpen] = useState(true); ///\ todo: make redux state
+interface IProps {
+  sidebarOpen: boolean;
+  msgPanelOpen: boolean;
+  viewPanelOpen: boolean;
+  doOpenMsgPanel: typeof panelsSlice.actions.doOpenMsgPanel;
+  doCloseMsgPanel: typeof panelsSlice.actions.doCloseMsgPanel;
+  doOpenSidebar: typeof panelsSlice.actions.doOpenSidebar;
+  doCloseSidebar: typeof panelsSlice.actions.doCloseSidebar;
+  doOpenViewPanel: typeof panelsSlice.actions.doOpenViewPanel;
+  doCloseViewPanel: typeof panelsSlice.actions.doCloseViewPanel;
+}
+
+const PanelsFlexbox = ({
+  sidebarOpen,
+  msgPanelOpen,
+  viewPanelOpen,
+  doOpenMsgPanel,
+  doCloseMsgPanel,
+  doOpenSidebar,
+  doCloseSidebar,
+  doOpenViewPanel,
+  doCloseViewPanel,
+}: IProps) => {
   const [sidebarWidth, setSidebarWidth] = useState(
     validateWidth(localStorage.getItem(storageItems.sidebarWidth)) || 250
   );
@@ -43,7 +65,7 @@ const PanelsFlexbox = () => {
         windowSize.x - sidebarWidth - (viewPanelOpen ? viewPanelWidth : 0) - (viewPanelOpen ? 2 : 1) * dividerWidth <
           minMsgPanelWidth
       ) {
-        setSidebarOpen(false);
+        doCloseSidebar();
       } else if (
         !sidebarOpen &&
         sidebarWidth +
@@ -52,10 +74,19 @@ const PanelsFlexbox = () => {
           (viewPanelOpen ? 2 : 1) * dividerWidth <
           windowSize.x
       ) {
-        setSidebarOpen(true);
+        doOpenSidebar();
       }
     }
-  }, [msgPanelOpen, sidebarOpen, sidebarWidth, viewPanelOpen, viewPanelWidth, windowSize.x]);
+  }, [
+    doCloseSidebar,
+    doOpenSidebar,
+    msgPanelOpen,
+    sidebarOpen,
+    sidebarWidth,
+    viewPanelOpen,
+    viewPanelWidth,
+    windowSize.x,
+  ]);
 
   useEffect(() => {
     if (
@@ -64,11 +95,11 @@ const PanelsFlexbox = () => {
       windowSize.x - viewPanelWidth - dividerWidth < minMsgPanelWidth &&
       !sidebarOpen
     ) {
-      setMsgPanelOpen(false);
+      doCloseMsgPanel();
     } else if (!viewPanelOpen || (!msgPanelOpen && windowSize.x > viewPanelWidth + minMsgPanelWidth + dividerWidth)) {
-      setMsgPanelOpen(true);
+      doOpenMsgPanel();
     }
-  }, [msgPanelOpen, sidebarOpen, viewPanelOpen, viewPanelWidth, windowSize.x]);
+  }, [doCloseMsgPanel, doOpenMsgPanel, msgPanelOpen, sidebarOpen, viewPanelOpen, viewPanelWidth, windowSize.x]);
 
   const classes = useStyles({ sidebar: { width: sidebarWidth }, viewPanel: { width: viewPanelWidth } });
 
@@ -121,4 +152,21 @@ const PanelsFlexbox = () => {
   );
 };
 
-export default PanelsFlexbox;
+const mapDispatchToProps = {
+  doOpenMsgPanel: panelsSlice.actions.doOpenMsgPanel,
+  doCloseMsgPanel: panelsSlice.actions.doCloseMsgPanel,
+  doOpenSidebar: panelsSlice.actions.doOpenSidebar,
+  doCloseSidebar: panelsSlice.actions.doCloseSidebar,
+  doOpenViewPanel: panelsSlice.actions.doOpenViewPanel,
+  doCloseViewPanel: panelsSlice.actions.doCloseViewPanel,
+};
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    sidebarOpen: state.panels.sidebar,
+    msgPanelOpen: state.panels.msgPanel,
+    viewPanelOpen: state.panels.viewPanel,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PanelsFlexbox);
