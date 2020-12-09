@@ -15,12 +15,21 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const storageItems = {
+  sidebarWidth: 'sidebarWidth',
+  viewPaneWidth: 'viewPanelWidth',
+};
+
 const PanelsFlexbox = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true); ///\ todo: make redux state
   const [viewPanelOpen, setViewPanelOpen] = useState(true); ///\ todo: make redux state
   const [msgPanelOpen, setMsgPanelOpen] = useState(true); ///\ todo: make redux state
-  const [sidebarWidth, setSidebarWidth] = useState(validateWidth(localStorage.getItem('sidebarWidth')) || 250);
-  const [viewPanelWidth, setviewPanelWidth] = useState(validateWidth(localStorage.getItem('viewPanelWidth')) || 250);
+  const [sidebarWidth, setSidebarWidth] = useState(
+    validateWidth(localStorage.getItem(storageItems.sidebarWidth)) || 250
+  );
+  const [viewPanelWidth, setviewPanelWidth] = useState(
+    validateWidth(localStorage.getItem(storageItems.viewPaneWidth)) || 250
+  );
   const windowSize = useWindowSize();
   const theme = useTheme();
 

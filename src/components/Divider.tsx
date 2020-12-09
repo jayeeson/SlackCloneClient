@@ -15,22 +15,16 @@ export interface DividerProps {
 const Divider = ({ width, setWidth, minWidth, maxWidth, openLeft = false, storeLocal, display }: DividerProps) => {
   const [dragStartClientStartPos, setDragStartClientStartPos] = useState(0);
   const [dragStartElementWidth, setDragStartElementWidth] = useState(width);
-  const [debouncedWidth, setDebouncedWidth] = useState<number>(width);
   const [resizeEvent, setResizeEvent] = useState(false);
 
   console.log('storelocal:', storeLocal, 'width', width);
 
   useEffect(() => {
-    debounce(() => {
-      setDebouncedWidth(width);
-    }, 5000);
-  }, [width]);
-
-  useEffect(() => {
-    if (storeLocal && debouncedWidth > 0) {
-      localStorage.setItem(storeLocal, debouncedWidth.toString());
+    if (storeLocal) {
+      console.log('width writing to strage', width);
+      localStorage.setItem(storeLocal, width.toString());
     }
-  }, [debouncedWidth, storeLocal]);
+  }, [storeLocal, width]);
 
   const onDividerDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
