@@ -7,23 +7,11 @@ export const panelsSlice = createSlice({
   name: 'openPanels',
   initialState,
   reducers: {
-    doOpenSidebar: state => {
-      return { ...state, sidebar: true };
-    },
-    doCloseSidebar: state => {
-      return { ...state, sidebar: false };
-    },
-    doOpenMsgPanel: state => {
-      return { ...state, msgPanel: true };
-    },
-    doCloseMsgPanel: state => {
-      return { ...state, msgPanel: false };
-    },
-    doOpenViewPanel: state => {
-      return { ...state, viewPanel: true };
-    },
-    doCloseViewPanel: state => {
-      return { ...state, viewPanel: false };
-    },
+    doOpenSidebar: state => ({ ...state, sidebar: true }),
+    doCloseSidebar: state => ({ ...state, sidebar: false }),
+    doOpenMsgPanel: state => ({ ...state, msgPanel: true }),
+    doCloseMsgPanel: state => ({ ...state, msgPanel: false }),
+    doOpenViewPanel: state => ({ ...state, viewPanel: true }),
+    doCloseViewPanel: state => ({ ...state, viewPanel: false }),
   },
 });

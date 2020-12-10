@@ -1,5 +1,7 @@
 import { Box, makeStyles } from '@material-ui/core';
 import React from 'react';
+import { connect } from 'react-redux';
+import { RootState } from '../store';
 
 const useStyles = makeStyles({
   root: {},
@@ -11,13 +13,17 @@ const useStyles = makeStyles({
   },
 });
 
-const MsgPanel = ({ display }: { display: any }) => {
+const MsgPanel = ({ msgPanelOpen }: { msgPanelOpen: boolean }) => {
   const classes = useStyles();
+  const display = msgPanelOpen ? 'inline' : 'none';
   return (
-    <div id="msgPanel" className={classes.flexItem} style={{ display: display }}>
+    <div id="msgPanel" className={classes.flexItem} style={{ display }}>
       <Box width="100%">two</Box>
     </div>
   );
 };
+const mapStateToProps = (state: RootState) => {
+  return { msgPanelOpen: state.panels.msgPanel };
+};
 
-export default React.memo(MsgPanel);
+export default React.memo(connect(mapStateToProps)(MsgPanel));

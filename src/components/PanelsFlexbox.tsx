@@ -1,16 +1,17 @@
-import { Box, makeStyles, Typography, useTheme } from '@material-ui/core';
+import { Box, makeStyles, Typography, Theme } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import validateWidth from '../utils/validateWidth';
-import Divider from './Divider';
+import DraggableDivider from './DraggableDivider';
 import MsgPanel from './MsgPanel';
 import useWindowSize from '../hooks/useWindowSize';
 import { connect } from 'react-redux';
 import { panelsSlice } from '../store/panels';
 import { RootState } from '../store';
+import Sidebar from './Sidebar';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    background: 'linear-gradient(180deg, #636363 30%, #333333 90%)',
+    background: theme.palette.background.default,
   },
   flexItem: {
     margin: '0 0',
@@ -31,8 +32,6 @@ interface IProps {
   doCloseMsgPanel: typeof panelsSlice.actions.doCloseMsgPanel;
   doOpenSidebar: typeof panelsSlice.actions.doOpenSidebar;
   doCloseSidebar: typeof panelsSlice.actions.doCloseSidebar;
-  doOpenViewPanel: typeof panelsSlice.actions.doOpenViewPanel;
-  doCloseViewPanel: typeof panelsSlice.actions.doCloseViewPanel;
 }
 
 const PanelsFlexbox = ({
@@ -43,8 +42,6 @@ const PanelsFlexbox = ({
   doCloseMsgPanel,
   doOpenSidebar,
   doCloseSidebar,
-  doOpenViewPanel,
-  doCloseViewPanel,
 }: IProps) => {
   const [sidebarWidth, setSidebarWidth] = useState(
     validateWidth(localStorage.getItem(storageItems.sidebarWidth)) || 250
@@ -53,26 +50,20 @@ const PanelsFlexbox = ({
     validateWidth(localStorage.getItem(storageItems.viewPaneWidth)) || 250
   );
   const windowSize = useWindowSize();
-  const theme = useTheme();
 
   const minMsgPanelWidth = 300;
   const dividerWidth = 6;
 
   useEffect(() => {
+    const totalDividerWidth = (viewPanelOpen ? 2 : 1) * dividerWidth;
+    const viewPanelWidthIfOpen = viewPanelOpen ? viewPanelWidth : 0;
+
     if (msgPanelOpen) {
-      if (
-        sidebarOpen &&
-        windowSize.x - sidebarWidth - (viewPanelOpen ? viewPanelWidth : 0) - (viewPanelOpen ? 2 : 1) * dividerWidth <
-          minMsgPanelWidth
-      ) {
+      if (sidebarOpen && windowSize.x - sidebarWidth - viewPanelWidthIfOpen - totalDividerWidth < minMsgPanelWidth) {
         doCloseSidebar();
       } else if (
         !sidebarOpen &&
-        sidebarWidth +
-          minMsgPanelWidth +
-          (viewPanelOpen ? viewPanelWidth : 0) +
-          (viewPanelOpen ? 2 : 1) * dividerWidth <
-          windowSize.x
+        sidebarWidth + minMsgPanelWidth + viewPanelWidthIfOpen + totalDividerWidth < windowSize.x
       ) {
         doOpenSidebar();
       }
@@ -109,26 +100,28 @@ const PanelsFlexbox = ({
         height="100%"
         flexGrow={0}
         flexShrink={0}
-        flexBasis={sidebarWidth}
-        width={sidebarWidth}
-        id="sidebar"
+        flexBasis={40}
+        width={40}
+        id="serverMenu"
         className={classes.flexItem}
-        display={sidebarOpen ? 'inline' : 'none'}
       >
-        one
+        sm
       </Box>
+      <Sidebar sidebarWidth={sidebarWidth} />
 
-      <Divider
-        width={sidebarWidth}
+      <DraggableDivider
+        thisWidth={11}
+        panelWidth={sidebarWidth}
         setWidth={setSidebarWidth}
         storeLocal="sidebarWidth"
         minWidth={75}
         maxWidth={500}
         display={sidebarOpen ? 'inline' : 'none'}
       />
-      <MsgPanel display={msgPanelOpen ? 'inline' : 'none'} />
-      <Divider
-        width={viewPanelWidth}
+      <MsgPanel />
+      <DraggableDivider
+        thisWidth={11}
+        panelWidth={viewPanelWidth}
         setWidth={setviewPanelWidth}
         openLeft
         storeLocal="viewPanelWidth"
@@ -157,8 +150,6 @@ const mapDispatchToProps = {
   doCloseMsgPanel: panelsSlice.actions.doCloseMsgPanel,
   doOpenSidebar: panelsSlice.actions.doOpenSidebar,
   doCloseSidebar: panelsSlice.actions.doCloseSidebar,
-  doOpenViewPanel: panelsSlice.actions.doOpenViewPanel,
-  doCloseViewPanel: panelsSlice.actions.doCloseViewPanel,
 };
 
 const mapStateToProps = (state: RootState) => {
