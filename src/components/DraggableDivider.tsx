@@ -21,13 +21,13 @@ const useStyles = makeStyles({
     display: props.display || 'initial',
     boxSizing: 'border-box',
   }),
-  child: (props: any) => ({
+  childInactive: (props: any) => ({
     alignItems: 'left',
     borderRight: '1px solid black',
     height: '100vh',
     width: props.childDivWidth,
   }),
-  childOnHover: (props: any) => ({
+  childActive: (props: any) => ({
     alignItems: 'left',
     borderRight: '5px solid #22D2D2',
     height: '100vh',
@@ -50,6 +50,11 @@ const DraggableDivider = ({
   const [resizeEvent, setResizeEvent] = useState(false);
   const childDivRef = useRef<HTMLDivElement>(null);
 
+  const forceOddThisWidth = thisWidth % 2 === 0 ? thisWidth + 1 : thisWidth;
+  const childDivWidth = (forceOddThisWidth - 1) / 2 + 1;
+  const childWidthOnHover = childDivWidth + 2;
+
+  const classes = useStyles({ forceOddThisWidth, display, childDivWidth, childWidthOnHover });
   console.log('storelocal:', storeLocal, 'panelWidth', panelWidth);
 
   useEffect(() => {
@@ -81,26 +86,33 @@ const DraggableDivider = ({
           ? maxWidth
           : desiredNewWidth;
       setWidth(newWidth);
+
+      if (childDivRef && childDivRef.current) {
+        childDivRef.current.className = classes.childActive;
+      }
     },
-    [dragStartClientStartPos, dragStartElementWidth, maxWidth, minWidth, openLeft, setWidth]
+    [classes.childActive, dragStartClientStartPos, dragStartElementWidth, maxWidth, minWidth, openLeft, setWidth]
   );
 
   const onSidebarDividerDragEnd = useCallback(() => {
     window.removeEventListener('mousemove', onDividerDrag);
     window.removeEventListener('mouseup', onSidebarDividerDragEnd);
     setResizeEvent(false);
+    if (childDivRef && childDivRef.current) {
+      childDivRef.current.className = classes.childInactive;
+    }
   }, [onDividerDrag]);
 
   const onMouseOver = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.currentTarget.style.cursor = 'col-resize';
     if (childDivRef && childDivRef.current) {
-      childDivRef.current.className = classes.childOnHover;
+      childDivRef.current.className = classes.childActive;
     }
   };
 
   const onMouseOut = () => {
     if (childDivRef && childDivRef.current) {
-      childDivRef.current.className = classes.child;
+      childDivRef.current.className = classes.childInactive;
     }
   };
 
@@ -111,16 +123,10 @@ const DraggableDivider = ({
     }
   }, [onDividerDrag, onSidebarDividerDragEnd, resizeEvent]);
 
-  const forceOddThisWidth = thisWidth % 2 === 0 ? thisWidth + 1 : thisWidth;
-  const childDivWidth = (forceOddThisWidth - 1) / 2 + 1;
-  const childWidthOnHover = childDivWidth + 2;
-
-  const classes = useStyles({ forceOddThisWidth, display, childDivWidth, childWidthOnHover });
-
   return (
     <React.Fragment>
       <div className={classes.root} onMouseDown={onDividerDragStart} onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
-        <div ref={childDivRef} className={classes.child}></div>
+        <div ref={childDivRef} className={classes.childInactive}></div>
       </div>
     </React.Fragment>
   );
