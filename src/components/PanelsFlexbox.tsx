@@ -1,6 +1,5 @@
-import { Box, makeStyles, Typography, Theme } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
-import validateWidth from '../utils/validateWidth';
+import { Box, makeStyles, Theme } from '@material-ui/core';
+import React, { useEffect, Fragment } from 'react';
 import DraggableDivider from './DraggableDivider';
 import MsgPanel from './MsgPanel';
 import useWindowSize from '../hooks/useWindowSize';
@@ -8,6 +7,9 @@ import { connect } from 'react-redux';
 import { panelsSlice } from '../store/panels';
 import { RootState } from '../store';
 import Sidebar from './Sidebar';
+import ViewPanel from './ViewPanel';
+import ServerPanel from './ServerPanel';
+import { DraggablePanel } from '../types';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -19,15 +21,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const storageItems = {
-  sidebarWidth: 'sidebarWidth',
-  viewPaneWidth: 'viewPanelWidth',
-};
-
 interface IProps {
   sidebarOpen: boolean;
   msgPanelOpen: boolean;
   viewPanelOpen: boolean;
+  sidebarWidth: number;
+  viewPanelWidth: number;
   doOpenMsgPanel: typeof panelsSlice.actions.doOpenMsgPanel;
   doCloseMsgPanel: typeof panelsSlice.actions.doCloseMsgPanel;
   doOpenSidebar: typeof panelsSlice.actions.doOpenSidebar;
@@ -38,21 +37,18 @@ const PanelsFlexbox = ({
   sidebarOpen,
   msgPanelOpen,
   viewPanelOpen,
+  sidebarWidth,
+  viewPanelWidth,
   doOpenMsgPanel,
   doCloseMsgPanel,
   doOpenSidebar,
   doCloseSidebar,
 }: IProps) => {
-  const [sidebarWidth, setSidebarWidth] = useState(
-    validateWidth(localStorage.getItem(storageItems.sidebarWidth)) || 250
-  );
-  const [viewPanelWidth, setviewPanelWidth] = useState(
-    validateWidth(localStorage.getItem(storageItems.viewPaneWidth)) || 250
-  );
   const windowSize = useWindowSize();
 
   const minMsgPanelWidth = 300;
   const dividerWidth = 6;
+  const serverPanelWidth = 50;
 
   useEffect(() => {
     const totalDividerWidth = (viewPanelOpen ? 2 : 1) * dividerWidth;
@@ -94,54 +90,35 @@ const PanelsFlexbox = ({
 
   const classes = useStyles({ sidebar: { width: sidebarWidth }, viewPanel: { width: viewPanelWidth } });
 
-  return (
-    <Box width="100%" display="flex" height="100vh" className={classes.root}>
-      <Box
-        height="100%"
-        flexGrow={0}
-        flexShrink={0}
-        flexBasis={40}
-        width={40}
-        id="serverMenu"
-        className={classes.flexItem}
-      >
-        sm
-      </Box>
-      <Sidebar sidebarWidth={sidebarWidth} />
+  const sidebarDividerPosition = serverPanelWidth + sidebarWidth;
+  const viewPanelDividerPosition = windowSize.x - viewPanelWidth;
 
+  return (
+    <Fragment>
+      <Box id="mainContentFlexbox" width="100%" display="flex" height="100vh" className={classes.root}>
+        <ServerPanel width={serverPanelWidth} />
+        <Sidebar sidebarWidth={sidebarWidth} />
+        <MsgPanel />
+        <ViewPanel viewPanelWidth={viewPanelWidth} />
+      </Box>
       <DraggableDivider
         thisWidth={11}
-        panelWidth={sidebarWidth}
-        setWidth={setSidebarWidth}
-        storeLocal="sidebarWidth"
+        panel={DraggablePanel.sidebarWidth}
         minWidth={75}
         maxWidth={500}
-        display={sidebarOpen ? 'inline' : 'none'}
+        storeLocal
+        position={sidebarDividerPosition}
       />
-      <MsgPanel />
       <DraggableDivider
         thisWidth={11}
-        panelWidth={viewPanelWidth}
-        setWidth={setviewPanelWidth}
         openLeft
-        storeLocal="viewPanelWidth"
+        storeLocal
+        panel={DraggablePanel.viewPanelWidth}
         minWidth={150}
         maxWidth={900}
-        display={msgPanelOpen && viewPanelOpen ? 'inline' : 'none'}
+        position={viewPanelDividerPosition}
       />
-      <Box
-        height="100%"
-        flexGrow={0}
-        flexShrink={0}
-        flexBasis={viewPanelWidth}
-        width={viewPanelWidth}
-        id="viewPanel"
-        className={classes.flexItem}
-        display={viewPanelOpen ? 'inline' : 'none'}
-      >
-        <Typography>three</Typography>
-      </Box>
-    </Box>
+    </Fragment>
   );
 };
 
@@ -157,6 +134,8 @@ const mapStateToProps = (state: RootState) => {
     sidebarOpen: state.panels.sidebar,
     msgPanelOpen: state.panels.msgPanel,
     viewPanelOpen: state.panels.viewPanel,
+    sidebarWidth: state.panels.sidebarWidth,
+    viewPanelWidth: state.panels.viewPanelWidth,
   };
 };
 

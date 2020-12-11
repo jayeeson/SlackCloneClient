@@ -1,4 +1,4 @@
-import { Box, createStyles, Divider, Drawer, List, ListItem, ListItemIcon, makeStyles, Theme } from '@material-ui/core';
+import { Box, createStyles, Divider, List, ListItem, ListItemIcon, makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../store';
@@ -9,13 +9,15 @@ interface IProps {
   sidebarOpen: boolean;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(theme =>
   createStyles({
     toolbar: theme.mixins.toolbar,
     root: ({ sidebarWidth }: { sidebarWidth: number }) => ({
       width: sidebarWidth,
       background: theme.palette.background.default,
       height: '100%',
+      boxSizing: 'border-box',
+      borderRight: `1px solid ${theme.palette.divider}`,
     }),
     truncated: {
       whiteSpace: 'nowrap',
@@ -37,7 +39,7 @@ const Sidebar = ({ sidebarWidth, sidebarOpen }: IProps) => {
         <ListItem button key={text} className={classList.truncated}>
           <ListItemIcon>
             <FieldIcon name={text} />
-            <div className={classList.truncated}>{text}</div>
+            <Typography className={classList.truncated}>{text}</Typography>
           </ListItemIcon>
         </ListItem>
       ))}
@@ -46,7 +48,7 @@ const Sidebar = ({ sidebarWidth, sidebarOpen }: IProps) => {
 
   const drawer = (
     <div className={classList.root}>
-      <div className={classList.truncated}>Name of server</div>
+      <Typography className={classList.truncated}>Name of server</Typography>
       <Divider />
       {renderList(contentText.general)}
     </div>

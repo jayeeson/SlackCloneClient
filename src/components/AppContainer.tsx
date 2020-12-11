@@ -5,7 +5,16 @@ import SlackSocket from '../hooks/useSocket';
 const theme = createMuiTheme({
   palette: {
     background: {
-      default: 'linear-gradient(180deg, #636363 30%, #333333 90%)',
+      default: '#313134',
+    },
+    divider: '#838383',
+    text: {
+      primary: 'white',
+    },
+  },
+  typography: {
+    allVariants: {
+      color: 'white',
     },
   },
 });
