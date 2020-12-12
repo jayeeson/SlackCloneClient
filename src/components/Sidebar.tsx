@@ -1,17 +1,21 @@
 import { Box, createStyles, Divider, List, ListItem, ListItemIcon, makeStyles, Typography } from '@material-ui/core';
+import clsx from 'clsx';
 import React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../store';
 import FieldIcon from './FieldIcon';
+import { channelSlice } from '../store/channel';
+import { sidebarTheme } from './themes/sidebar';
 
 interface IProps {
   sidebarWidth: number;
   sidebarOpen: boolean;
+  activeChannelId: number;
+  setActiveChannelId: typeof channelSlice.actions.setActiveChannelId;
 }
 
 const useStyles = makeStyles(theme =>
   createStyles({
-    toolbar: theme.mixins.toolbar,
     root: ({ sidebarWidth }: { sidebarWidth: number }) => ({
       width: sidebarWidth,
       background: theme.palette.background.default,
@@ -24,33 +28,66 @@ const useStyles = makeStyles(theme =>
       textOverflow: 'ellipsis',
       overflow: 'hidden',
     },
+    serverNameContainer: {
+      height: '60px',
+      verticalAlign: 'middle',
+    },
+    serverNameContent: {
+      marginLeft: 18,
+      position: 'relative',
+      top: '50%',
+      transform: 'translateY(-50%)',
+    },
+    channellistItem: {},
   })
 );
 
-const Sidebar = ({ sidebarWidth, sidebarOpen }: IProps) => {
+const Sidebar = ({ sidebarWidth, sidebarOpen, activeChannelId, setActiveChannelId }: IProps) => {
   const classList = useStyles({ sidebarWidth });
-  const contentText = {
-    general: ['Threads', 'Mentions', 'More'],
+  const listItems = {
+    general: [
+      { text: 'Threads', channel: 1 },
+      { text: 'Mentions', channel: 2 },
+      { text: 'More', channel: 3 },
+    ],
   };
 
-  const renderList = (list: string[]) => (
+  const onListItemClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    item: { text: string; channel: number }
+  ) => {
+    if (item.channel && activeChannelId !== item.channel) {
+      setActiveChannelId({ channelId: item.channel });
+    }
+  };
+
+  const renderList = (list: { text: string; channel: number }[]) => (
     <List>
-      {list.map(text => (
-        <ListItem button key={text} className={classList.truncated}>
+      {list.map(item => (
+        <ListItem
+          button
+          disableRipple
+          key={item.text}
+          className={classList.truncated}
+          selected={activeChannelId === item.channel}
+          onClick={e => onListItemClick(e, item)}
+        >
           <ListItemIcon>
-            <FieldIcon name={text} />
-            <Typography className={classList.truncated}>{text}</Typography>
+            <FieldIcon name={item.text} />
+            <Typography className={clsx(classList.truncated)}>{item.text}</Typography>
           </ListItemIcon>
         </ListItem>
       ))}
     </List>
   );
 
-  const drawer = (
+  const sidebarContent = (
     <div className={classList.root}>
-      <Typography className={classList.truncated}>Name of server</Typography>
+      <div className={classList.serverNameContainer}>
+        <Typography className={clsx(classList.truncated, classList.serverNameContent)}>Name of server</Typography>
+      </div>
       <Divider />
-      {renderList(contentText.general)}
+      {renderList(listItems.general)}
     </div>
   );
 
@@ -64,13 +101,17 @@ const Sidebar = ({ sidebarWidth, sidebarOpen }: IProps) => {
       id="sidebar"
       display={sidebarOpen ? 'inline' : 'none'}
     >
-      {drawer}
+      {sidebarContent}
     </Box>
   );
 };
 
-const mapStateToProps = (state: RootState) => {
-  return { sidebarOpen: state.panels.sidebar };
+const mapDispatchToProps = {
+  setActiveChannelId: channelSlice.actions.setActiveChannelId,
 };
 
-export default React.memo(connect(mapStateToProps)(Sidebar));
+const mapStateToProps = (state: RootState) => {
+  return { sidebarOpen: state.panels.sidebar, activeChannelId: state.channel.activeChannelId };
+};
+
+export default React.memo(connect(mapStateToProps, mapDispatchToProps)(Sidebar));

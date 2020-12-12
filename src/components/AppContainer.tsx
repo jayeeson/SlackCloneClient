@@ -1,30 +1,16 @@
-import { createMuiTheme, CssBaseline, ThemeProvider } from '@material-ui/core';
+import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import React from 'react';
 import SlackSocket from '../hooks/useSocket';
-
-const theme = createMuiTheme({
-  palette: {
-    background: {
-      default: '#313134',
-    },
-    divider: '#838383',
-    text: {
-      primary: 'white',
-    },
-  },
-  typography: {
-    allVariants: {
-      color: 'white',
-    },
-  },
-});
+import { theme } from './themes/root';
 
 const AppContainer = ({ children }: { children: React.ReactChild }) => {
   return (
     <React.Fragment>
-      <CssBaseline />
       <SlackSocket />
-      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        {children}
+      </ThemeProvider>
     </React.Fragment>
   );
 };

@@ -6,6 +6,10 @@ export interface PanelState {
   viewPanelWidth: number;
 }
 
+export interface ChannelState {
+  activeChannelId: number;
+}
+
 export enum DraggablePanel {
   sidebarWidth = 'sidebarWidth',
   viewPanelWidth = 'viewPanelWidth',

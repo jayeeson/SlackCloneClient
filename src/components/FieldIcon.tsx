@@ -1,5 +1,7 @@
 import React from 'react';
-import { ChatOutlined, MoreVert, Notifications } from '@material-ui/icons';
+import { ChatOutlined, MoreVert } from '@material-ui/icons';
+import { At } from 'mdi-material-ui';
+
 import { createStyles, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(theme =>
@@ -12,7 +14,7 @@ const useStyles = makeStyles(theme =>
 
 const icons: { [idx: string]: any } = {
   threads: ChatOutlined,
-  mentions: Notifications,
+  mentions: At,
   more: MoreVert,
 };
 
