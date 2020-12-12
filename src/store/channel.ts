@@ -1,5 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ChannelState } from '../types';
+
+interface ChannelState {
+  activeChannelId: number;
+}
 
 const initialState: ChannelState = {
   activeChannelId: 2,

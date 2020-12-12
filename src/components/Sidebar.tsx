@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { RootState } from '../store';
 import FieldIcon from './FieldIcon';
 import { channelSlice } from '../store/channel';
-import { sidebarTheme } from './themes/sidebar';
 
 interface IProps {
   sidebarWidth: number;

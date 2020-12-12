@@ -1,13 +1,7 @@
-export interface PanelState {
-  sidebar: boolean;
-  msgPanel: boolean;
-  viewPanel: boolean;
-  sidebarWidth: number;
-  viewPanelWidth: number;
-}
-
-export interface ChannelState {
-  activeChannelId: number;
+export enum LoginStatus {
+  LoggedIn = 'LoggedIn',
+  LoggedOut = 'LoggedOut',
+  Unknown = 'Unknown',
 }
 
 export enum DraggablePanel {

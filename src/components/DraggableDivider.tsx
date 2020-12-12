@@ -68,7 +68,6 @@ const DraggableDivider = ({
     childWidthOnHover,
     positionCenterOfDivider: positionCenterOfDivider,
   });
-  console.log('center of divider', positionCenterOfDivider);
 
   useEffect(() => {
     if (storeLocal && panelWidth) {

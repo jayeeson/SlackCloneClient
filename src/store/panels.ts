@@ -1,7 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PanelState } from '../types';
 import validateWidth from '../utils/validateWidth';
 import { localStorageKey } from '../types';
+
+interface PanelState {
+  sidebar: boolean;
+  msgPanel: boolean;
+  viewPanel: boolean;
+  sidebarWidth: number;
+  viewPanelWidth: number;
+}
 
 const initialState: PanelState = {
   sidebar: true,
