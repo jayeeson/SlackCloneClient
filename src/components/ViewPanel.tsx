@@ -11,7 +11,6 @@ const useStyles = makeStyles(theme => ({
     padding: 0,
     margin: '0 0',
     boxSizing: 'border-box',
-    borderLeft: `1px solid ${theme.palette.divider}`,
   }),
 }));
 

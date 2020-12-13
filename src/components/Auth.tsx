@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { makeStyles, Theme, useTheme } from '@material-ui/core/styles';
-import { AppBar, Tabs, Tab, Button, TextField, Paper, Typography } from '@material-ui/core';
+import React, { Fragment, useState } from 'react';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+import { AppBar, Tabs, Tab, Button, TextField, Paper } from '@material-ui/core';
 import { RootState } from '../store';
 import { connect, useDispatch } from 'react-redux';
 import { login } from '../store/auth';
@@ -17,8 +17,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   formBox: {
     backgroundColor: '#444444',
     padding: '30px 10px',
-    borderRadius: '0 0 5px 5px',
     height: '210px',
+  },
+  loggedInFormBox: {
+    borderRadius: '0 0 5px 5px',
+  },
+  loggedOutFormBox: {
+    borderRadius: '5px',
   },
   appBar: {
     color: theme.palette.primary.contrastText,
@@ -60,7 +65,6 @@ const Auth = ({ loginStatus }: AuthProps) => {
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const history = useHistory();
-  const theme = useTheme();
 
   // eslint-disable-next-line @typescript-eslint/ban-types
   const onTabChange = (e: React.ChangeEvent<{}>, newValue: number) => {
@@ -72,21 +76,52 @@ const Auth = ({ loginStatus }: AuthProps) => {
     console.log('submitting login form');
 
     if (tab === tabValues.login) {
-      // do login. auth redux fetcher.
       dispatch(login({ username, password, history }));
     }
   };
 
-  return (
-    <div className={classes.root}>
-      <AppBar className={classes.appBar} position="static" color="default">
-        <Tabs className={classes.tabs} value={tab} onChange={onTabChange} variant="fullWidth">
-          <Tab classes={{ selected: classes.selected }} label="Login" />
-          <Tab classes={{ selected: classes.selected }} className={classes.tab} label="Register" />
-        </Tabs>
-      </AppBar>
-      <Paper className={classes.formBox}>
-        <form onSubmit={onFormSubmit}>
+  const renderLoggedOutState = () => {
+    return (
+      <Fragment>
+        <AppBar className={classes.appBar} position="static" color="default">
+          <Tabs className={classes.tabs} value={tab} onChange={onTabChange} variant="fullWidth">
+            <Tab classes={{ selected: classes.selected }} label="Login" />
+            <Tab classes={{ selected: classes.selected }} className={classes.tab} label="Register" />
+          </Tabs>
+        </AppBar>
+        <Paper className={clsx(classes.formBox, classes.loggedOutFormBox)}>
+          <form onSubmit={onFormSubmit}>
+            <TextField
+              label="Username"
+              type="username"
+              variant="outlined"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              className={classes.input}
+              fullWidth
+            />
+            <TextField
+              label="Password"
+              type="password"
+              variant="outlined"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              className={classes.input}
+              fullWidth
+            />
+            <Button className={classes.button} type="submit" color="secondary" variant="contained">
+              Submit
+            </Button>
+          </form>
+        </Paper>
+      </Fragment>
+    );
+  };
+
+  const renderLoggedInState = () => {
+    return (
+      <Fragment>
+        <Paper className={clsx(classes.formBox, classes.loggedInFormBox)}>
           <TextField
             label="Username"
             type="username"
@@ -108,8 +143,16 @@ const Auth = ({ loginStatus }: AuthProps) => {
           <Button className={classes.button} type="submit" color="secondary" variant="contained">
             Submit
           </Button>
-        </form>
-      </Paper>
+        </Paper>
+      </Fragment>
+    );
+  };
+
+  return (
+    <div className={classes.root}>
+      {loginStatus === LoginStatus.LoggedOut
+        ? renderLoggedOutState()
+        : loginStatus === LoginStatus.LoggedIn && renderLoggedInState()}
     </div>
   );
 };

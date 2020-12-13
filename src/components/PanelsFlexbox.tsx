@@ -1,4 +1,4 @@
-import { Box, makeStyles, Theme } from '@material-ui/core';
+import { Box, Divider, makeStyles, Theme } from '@material-ui/core';
 import React, { useEffect, Fragment } from 'react';
 import DraggableDivider from './DraggableDivider';
 import MsgPanel from './MsgPanel';
@@ -48,7 +48,7 @@ const PanelsFlexbox = ({
 
   const minMsgPanelWidth = 300;
   const dividerWidth = 6;
-  const serverPanelWidth = 50;
+  const serverPanelWidth = 60;
 
   useEffect(() => {
     const totalDividerWidth = (viewPanelOpen ? 2 : 1) * dividerWidth;
@@ -90,15 +90,18 @@ const PanelsFlexbox = ({
 
   const classes = useStyles({ sidebar: { width: sidebarWidth }, viewPanel: { width: viewPanelWidth } });
 
-  const sidebarDividerPosition = serverPanelWidth + sidebarWidth;
-  const viewPanelDividerPosition = windowSize.x - viewPanelWidth;
+  const sidebarDividerPosition = serverPanelWidth + sidebarWidth + 2; // +2 for 2 dividers 1 px each
+  const viewPanelDividerPosition = windowSize.x - viewPanelWidth - 1; // -1 for 1 divider 1 px
 
   return (
     <Fragment>
       <Box id="mainContentFlexbox" width="100%" display="flex" height="100vh" className={classes.root}>
         <ServerPanel width={serverPanelWidth} />
+        <Divider orientation="vertical" />
         <Sidebar sidebarWidth={sidebarWidth} />
+        <Divider orientation="vertical" /> {/*used for debugging layout*/}
         <MsgPanel />
+        <Divider orientation="vertical" /> {/*used for debugging layout*/}
         <ViewPanel viewPanelWidth={viewPanelWidth} />
       </Box>
       <DraggableDivider

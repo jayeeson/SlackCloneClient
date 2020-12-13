@@ -31,7 +31,6 @@ const useStyles = makeStyles(theme =>
       background: theme.palette.background.default,
       height: '100%',
       boxSizing: 'border-box',
-      borderRight: `1px solid ${theme.palette.divider}`,
     }),
     truncated: {
       whiteSpace: 'nowrap',

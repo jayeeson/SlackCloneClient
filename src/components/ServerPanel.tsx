@@ -1,23 +1,38 @@
-import { Box, makeStyles, Typography } from '@material-ui/core';
+import { Avatar, Box, Divider, makeStyles } from '@material-ui/core';
 import React, { memo } from 'react';
 
 const useStyles = makeStyles(theme => ({
   flexItem: ({ width }: { width: number }) => ({
     height: '100%',
     width: width,
-    flex: `0 0 50`,
+    flex: `0 0 ${width}`,
     padding: 0,
     margin: '0 0',
     boxSizing: 'border-box',
-    borderRight: `1px solid ${theme.palette.divider}`,
   }),
+  userAvatarContainer: ({ width }: { width: number }) => ({
+    height: width,
+    boxSizing: 'border-box',
+  }),
+  userAvatarButton: {
+    position: 'relative',
+    top: '50%',
+    transform: 'translate(-50%, -50%)',
+    left: '50%',
+    '&:hover': {
+      cursor: 'pointer',
+    },
+  },
 }));
 
 const ServerPanel = ({ width }: { width: number }) => {
   const classes = useStyles({ width });
   return (
     <Box id="serverPanel" className={classes.flexItem}>
-      <Typography>SM</Typography>
+      <div className={classes.userAvatarContainer}>
+        <Avatar className={classes.userAvatarButton} src="///\todoimplementimages.jpg" />
+      </div>
+      <Divider />
     </Box>
   );
 };
