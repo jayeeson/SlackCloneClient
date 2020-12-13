@@ -14,16 +14,23 @@ export const theme = createMuiTheme({
     },
     background: {
       default: '#313134',
+      paper: '#4444cc',
     },
     divider: '#838383',
     text: {
-      primary: 'white',
+      primary: '#d4d4d9',
       secondary: '#CECECE',
+    },
+    primary: {
+      main: '#deded9',
+    },
+    secondary: {
+      main: '#039be5',
     },
   },
   typography: {
     allVariants: {
-      color: 'white',
+      color: '#ffffff',
       fontFamily: [
         '-apple-system',
         'Roboto',

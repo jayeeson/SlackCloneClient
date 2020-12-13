@@ -1,4 +1,4 @@
-import { CssBaseline, ThemeProvider, useMediaQuery } from '@material-ui/core';
+import { CssBaseline, useMediaQuery } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { RootState } from '../store';
@@ -8,11 +8,12 @@ import PanelsFlexbox from './PanelsFlexbox';
 import PanelsSwipe from './PanelsSwipe';
 import SlackSocket from './SlackSocket';
 import { theme } from './themes/root';
-import history from '../utils/history';
 import Loading from './Loading';
+import { useHistory } from 'react-router';
 
 const MainApp = ({ loginStatus }: { loginStatus: LoginStatus }) => {
   const isDeviceXs = useMediaQuery(theme.breakpoints.only('xs'));
+  const history = useHistory();
   const dispatch = useDispatch();
 
   // ask server if im logged in
@@ -21,20 +22,14 @@ const MainApp = ({ loginStatus }: { loginStatus: LoginStatus }) => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (loginStatus === LoginStatus.LoggedIn) {
-      history.push('/app');
-    } else if (loginStatus === LoginStatus.LoggedOut) {
+    if (loginStatus === LoginStatus.LoggedOut) {
       history.push('/auth');
     }
-  }, [loginStatus]);
+  }, [history, loginStatus]);
 
   const renderLayout = () => {
-    if (loginStatus === LoginStatus.Unknown) {
-      return (
-        <ThemeProvider theme={theme}>
-          <Loading />
-        </ThemeProvider>
-      );
+    if (loginStatus !== LoginStatus.LoggedIn) {
+      return <Loading />;
     }
     if (isDeviceXs) {
       return <PanelsSwipe />;
@@ -45,10 +40,7 @@ const MainApp = ({ loginStatus }: { loginStatus: LoginStatus }) => {
   return (
     <React.Fragment>
       <SlackSocket />
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        {renderLayout()}
-      </ThemeProvider>
+      {renderLayout()}
     </React.Fragment>
   );
 };

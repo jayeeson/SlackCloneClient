@@ -11,6 +11,12 @@ class ServerApi {
     console.log(data);
     return data === 'logged out' ? LoginStatus.LoggedOut : LoginStatus.LoggedIn;
   };
+
+  login = async (username: string, password: string) => {
+    const { data } = await this.api.post('/login', { username, password });
+    console.log(data);
+    return data;
+  };
 }
 
 export default new ServerApi();

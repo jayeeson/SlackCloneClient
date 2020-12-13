@@ -1,18 +1,21 @@
 import React from 'react';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import MainApp from './MainApp';
 import Auth from './Auth';
+import { theme } from './themes/root';
+import { CssBaseline, ThemeProvider } from '@material-ui/core';
 
 const App = () => {
   return (
-    <React.Fragment>
-      <HashRouter>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Switch>
           <Route path="/" exact component={MainApp}></Route>
           <Route path="/auth" exact component={Auth}></Route>
         </Switch>
-      </HashRouter>
-    </React.Fragment>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 };
 
