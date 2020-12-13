@@ -1,4 +1,5 @@
-import { Box, Divider, makeStyles, Theme } from '@material-ui/core';
+import { Box, Divider, Theme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, Fragment } from 'react';
 import DraggableDivider from './DraggableDivider';
 import MsgPanel from './MsgPanel';

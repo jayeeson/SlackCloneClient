@@ -1,14 +1,6 @@
-import {
-  Box,
-  createStyles,
-  Divider,
-  List,
-  ListItem,
-  ListItemIcon,
-  makeStyles,
-  ThemeProvider,
-  Typography,
-} from '@material-ui/core';
+import { Box, Divider, List, ListItem, ListItemIcon, Typography } from '@material-ui/core';
+import { ThemeProvider, makeStyles, createStyles } from '@material-ui/core/styles';
+
 import clsx from 'clsx';
 import React from 'react';
 import { connect } from 'react-redux';

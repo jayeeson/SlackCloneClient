@@ -1,4 +1,5 @@
-import { Avatar, Box, Divider, makeStyles } from '@material-ui/core';
+import { Avatar, Box, Divider } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { memo } from 'react';
 
 const useStyles = makeStyles(theme => ({

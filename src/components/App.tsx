@@ -3,7 +3,8 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import MainApp from './MainApp';
 import Auth from './Auth';
 import { theme } from './themes/root';
-import { CssBaseline, ThemeProvider } from '@material-ui/core';
+import { CssBaseline } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
 import { fetchLoginStatus } from '../store/auth';
 
