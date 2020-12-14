@@ -13,7 +13,7 @@ interface PanelState {
 const initialState: PanelState = {
   sidebar: true,
   msgPanel: true,
-  viewPanel: true,
+  viewPanel: false,
   sidebarWidth: validateWidth(localStorage.getItem(localStorageKey.DraggablePanel.sidebarWidth)) || 250,
   viewPanelWidth: validateWidth(localStorage.getItem(localStorageKey.DraggablePanel.viewPanelWidth)) || 250,
 };

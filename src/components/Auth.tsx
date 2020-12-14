@@ -5,7 +5,6 @@ import { RootState } from '../store';
 import { connect, useDispatch } from 'react-redux';
 import { login } from '../store/auth';
 import { LoginStatus } from '../types';
-import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -64,7 +63,6 @@ const Auth = ({ loginStatus }: AuthProps) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
-  const history = useHistory();
 
   // eslint-disable-next-line @typescript-eslint/ban-types
   const onTabChange = (e: React.ChangeEvent<{}>, newValue: number) => {
@@ -76,7 +74,7 @@ const Auth = ({ loginStatus }: AuthProps) => {
     console.log('submitting login form');
 
     if (tab === tabValues.login) {
-      dispatch(login({ username, password, history }));
+      dispatch(login({ username, password }));
     }
   };
 

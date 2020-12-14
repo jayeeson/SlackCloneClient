@@ -4,7 +4,11 @@ import { theme } from './root';
 export const sidebarTheme = createMuiTheme(theme, {
   palette: {
     action: {
-      selected: '#2087EE',
+      selected: '#2087CC',
+    },
+    background: {
+      default: '#21212a',
+      paper: '#42424c',
     },
   },
 });

@@ -1,5 +1,5 @@
 import { Box, Divider, Theme } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import React, { useEffect, Fragment } from 'react';
 import DraggableDivider from './DraggableDivider';
 import MsgPanel from './MsgPanel';
@@ -11,6 +11,7 @@ import Sidebar from './Sidebar';
 import ViewPanel from './ViewPanel';
 import ServerPanel from './ServerPanel';
 import { DraggablePanel } from '../types';
+import { sidebarTheme } from './themes/sidebar';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -97,10 +98,12 @@ const PanelsFlexbox = ({
   return (
     <Fragment>
       <Box id="mainContentFlexbox" width="100%" display="flex" height="100vh" className={classes.root}>
-        <ServerPanel width={serverPanelWidth} />
-        <Divider orientation="vertical" />
-        <Sidebar sidebarWidth={sidebarWidth} />
-        <Divider orientation="vertical" /> {/*used for debugging layout*/}
+        <ThemeProvider theme={sidebarTheme}>
+          <ServerPanel width={serverPanelWidth} />
+          <Divider orientation="vertical" />
+          <Sidebar sidebarWidth={sidebarWidth} />
+          <Divider orientation="vertical" /> {/*used for debugging layout*/}
+        </ThemeProvider>
         <MsgPanel />
         <Divider orientation="vertical" /> {/*used for debugging layout*/}
         <ViewPanel viewPanelWidth={viewPanelWidth} />

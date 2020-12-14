@@ -13,10 +13,10 @@ export const theme = createMuiTheme({
       hover: '#44444C',
     },
     background: {
-      default: '#313134',
-      paper: '#4444cc',
+      default: '#24292f',
+      paper: '#3a3acc',
     },
-    divider: '#838383',
+    divider: '#474747',
     text: {
       primary: '#d4d4d9',
       secondary: '#CECECE',
@@ -25,7 +25,7 @@ export const theme = createMuiTheme({
       main: '#deded9',
     },
     secondary: {
-      main: '#039be5',
+      main: '#2087CC',
     },
   },
   typography: {

@@ -1,5 +1,5 @@
 import { Box, Divider, List, ListItem, ListItemIcon, Typography } from '@material-ui/core';
-import { ThemeProvider, makeStyles, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 import clsx from 'clsx';
 import React from 'react';
@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { RootState } from '../store';
 import FieldIcon from './FieldIcon';
 import { channelSlice } from '../store/channel';
-import { sidebarTheme } from './themes/sidebar';
 
 interface IProps {
   sidebarWidth: number;
@@ -93,19 +92,17 @@ const Sidebar = ({ sidebarWidth, sidebarOpen, activeChannelId, setActiveChannelI
   );
 
   return (
-    <ThemeProvider theme={sidebarTheme}>
-      <Box
-        height="100%"
-        flexGrow={0}
-        flexShrink={0}
-        flexBasis={sidebarWidth}
-        width={sidebarWidth}
-        id="sidebar"
-        display={sidebarOpen ? 'inline' : 'none'}
-      >
-        {sidebarContent}
-      </Box>
-    </ThemeProvider>
+    <Box
+      height="100%"
+      flexGrow={0}
+      flexShrink={0}
+      flexBasis={sidebarWidth}
+      width={sidebarWidth}
+      id="sidebar"
+      display={sidebarOpen ? 'inline' : 'none'}
+    >
+      {sidebarContent}
+    </Box>
   );
 };
 

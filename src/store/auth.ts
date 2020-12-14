@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { LoginStatus } from '../types';
 import ServerApi from '../apis/server';
-import { useHistory } from 'react-router-dom';
 
 interface AuthState {
   loginStatus: LoginStatus;
@@ -18,22 +17,9 @@ export const fetchLoginStatus = createAsyncThunk('auth/fetchLoginStatus', async 
 
 export const login = createAsyncThunk(
   'auth/login',
-  async ({
-    username,
-    password,
-    history,
-  }: {
-    username: string;
-    password: string;
-    history: ReturnType<typeof useHistory>;
-  }) => {
+  async ({ username, password }: { username: string; password: string }) => {
     const loggedInUser = await ServerApi.login(username, password);
-    console.log('response', loggedInUser);
-
     if (loggedInUser === username) {
-      console.log('rerouting  to root');
-
-      history.push('/');
       return { loginStatus: LoginStatus.LoggedIn };
     }
   }
