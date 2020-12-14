@@ -1,7 +1,8 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React, { memo, useCallback, useEffect, useRef } from 'react';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../store';
+
 import { DraggablePanel } from '../types';
 import usePanel from '../hooks/usePanel';
 
@@ -54,7 +55,7 @@ const DraggableDivider = ({
   const [dragStartElementWidth, setDragStartElementWidth] = useState(panelWidth);
   const [resizeEvent, setResizeEvent] = useState(false);
   const childDivRef = useRef<HTMLDivElement>(null);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const forceOddThisWidth = thisWidth % 2 === 0 ? thisWidth + 1 : thisWidth;
   const childDivWidth = (forceOddThisWidth - 1) / 2 + 1;

@@ -1,9 +1,9 @@
 import React, { Fragment, useState } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { AppBar, Tabs, Tab, Button, TextField, Paper } from '@material-ui/core';
-import { RootState } from '../store';
-import { connect, useDispatch } from 'react-redux';
-import { login } from '../store/auth';
+import { RootState, useAppDispatch } from '../store';
+import { connect } from 'react-redux';
+import { login, register } from '../store/auth';
 import { LoginStatus } from '../types';
 import clsx from 'clsx';
 
@@ -62,20 +62,20 @@ const Auth = ({ loginStatus }: AuthProps) => {
   const [tab, setTab] = useState(0);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // eslint-disable-next-line @typescript-eslint/ban-types
   const onTabChange = (e: React.ChangeEvent<{}>, newValue: number) => {
     setTab(newValue);
   };
 
-  const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('submitting login form');
 
     if (tab === tabValues.login) {
-      dispatch(login({ username, password }));
+      return dispatch(login({ username, password }));
     }
+    dispatch(register({ username, password }));
   };
 
   const renderLoggedOutState = () => {

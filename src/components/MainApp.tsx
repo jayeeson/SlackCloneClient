@@ -12,6 +12,7 @@ import Auth from './Auth';
 
 const MainApp = ({ loginStatus }: { loginStatus: LoginStatus }) => {
   const isDeviceXs = useMediaQuery(theme.breakpoints.only('xs'));
+
   const renderLayout = () => {
     if (loginStatus === LoginStatus.Unknown) {
       return <Loading />;

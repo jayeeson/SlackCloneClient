@@ -8,13 +8,22 @@ class ServerApi {
 
   getLoginStatus = async (): Promise<LoginStatus> => {
     const { data } = await this.api.get('/status');
-    console.log(data);
     return data === 'logged out' ? LoginStatus.LoggedOut : LoginStatus.LoggedIn;
+  };
+
+  register = async (username: string, password: string) => {
+    const { data } = await this.api.post('/register', { username, password });
+
+    return data;
   };
 
   login = async (username: string, password: string) => {
     const { data } = await this.api.post('/login', { username, password });
-    console.log(data);
+    return data;
+  };
+
+  logout = async () => {
+    const { data } = await this.api.get('/logout');
     return data;
   };
 }

@@ -1,6 +1,10 @@
-import { Avatar, Box, Divider, ListItem, Menu, MenuItem, MenuProps } from '@material-ui/core';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { Avatar, Box, Divider, ListItem } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { memo } from 'react';
+import { useAppDispatch } from '../store';
+import { logout } from '../store/auth';
+import StyledMenu from './subcomponents/StyledMenu';
+import StyledMenuItem from './subcomponents/StyledMenuItem';
 
 const useStyles = makeStyles(theme => ({
   root: ({ width }: { width: number }) => ({
@@ -27,36 +31,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const StyledMenu = withStyles(theme => ({
-  paper: {
-    border: `1px solid ${theme.palette.divider}`,
-  },
-}))((props: MenuProps) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'center',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
-    }}
-    {...props}
-  />
-));
-
-const StyledMenuItem = withStyles(theme => ({
-  root: {
-    '&:hover': {
-      backgroundColor: theme.palette.secondary.main,
-    },
-  },
-}))(MenuItem);
-
 const ServerPanel = ({ width }: { width: number }) => {
   const [menuAnchor, setMenuAnchor] = React.useState<HTMLElement | null>(null);
+  const dispatch = useAppDispatch();
   const classes = useStyles({ width });
 
   const onMenuClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -67,13 +44,17 @@ const ServerPanel = ({ width }: { width: number }) => {
     setMenuAnchor(null);
   };
 
+  const onSignOutClick = () => {
+    dispatch(logout());
+  };
+
   return (
     <Box id="serverPanel" className={classes.root}>
       <div className={classes.userAvatarContainer}>
         <Avatar className={classes.userAvatarButton} src="///\todoimplementimages.jpg" onClick={onMenuClick} />
         <StyledMenu open={Boolean(menuAnchor)} anchorEl={menuAnchor} onClose={onMenuClose}>
           <ListItem selected={false}>Currently signed in as:</ListItem>
-          <StyledMenuItem>Sign out of Sleck</StyledMenuItem>
+          <StyledMenuItem onClick={onSignOutClick}>Sign out</StyledMenuItem>
         </StyledMenu>
       </div>
       <Divider />
