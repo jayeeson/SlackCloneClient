@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ServerPanel = ({ width, username }: { width: number; username: string }) => {
+const ServerPanel = ({ width, username }: { width: number; username?: string }) => {
   const [menuAnchor, setMenuAnchor] = React.useState<HTMLElement | null>(null);
   const dispatch = useAppDispatch();
   const classes = useStyles({ width });
@@ -90,7 +90,7 @@ const ServerPanel = ({ width, username }: { width: number; username: string }) =
   );
 };
 const mapStateToProps = (state: RootState) => {
-  return { username: state.user.username };
+  return { username: state.chat.user?.username };
 };
 
 export default memo(connect(mapStateToProps)(ServerPanel));

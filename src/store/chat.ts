@@ -6,6 +6,7 @@ import { ChatChannel, ChatServer, ChatUser } from '../types';
 interface ChatState {
   servers: { [idx: string]: ChatServer };
   channels: { [idx: string]: ChatChannel };
+  user: ChatUser | null;
   activeChannelId: number;
   activeServerId: number;
   initialDataFetched: boolean;
@@ -14,6 +15,7 @@ interface ChatState {
 const initialState: ChatState = {
   servers: {},
   channels: {},
+  user: null,
   activeChannelId: 2,
   activeServerId: 1,
   initialDataFetched: false,
