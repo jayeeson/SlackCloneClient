@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import ServerApi from '../apis/server';
 import { ChatChannel, ChatServer, ChatUser } from '../types';
@@ -59,8 +60,8 @@ export const chatSlice = createSlice({
           return {
             ...state,
             initialDataFetched: true,
-            servers: Object.assign(payload.servers),
-            channels: Object.assign(payload.channels),
+            servers: { ..._.mapKeys(payload.servers, 'id') },
+            channels: { ..._.mapKeys(payload.channels, 'id') },
             user: payload.user,
           };
         }

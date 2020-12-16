@@ -7,10 +7,13 @@ import { connect } from 'react-redux';
 import { RootState } from '../store';
 import FieldIcon from './FieldIcon';
 import { chatSlice } from '../store/chat';
+import { ChatChannel, ChatServer } from '../types';
 
 interface IProps {
   sidebarWidth: number;
   sidebarOpen: boolean;
+  activeServer: ChatServer;
+  channels: ChatChannel[];
   activeChannelId: number;
   setActiveChannel: typeof chatSlice.actions.setActiveChannel;
 }
@@ -42,7 +45,7 @@ const useStyles = makeStyles(theme =>
   })
 );
 
-const Sidebar = ({ sidebarWidth, sidebarOpen, activeChannelId, setActiveChannel }: IProps) => {
+const Sidebar = ({ sidebarWidth, sidebarOpen, activeChannelId, setActiveChannel, activeServer, channels }: IProps) => {
   const classList = useStyles({ sidebarWidth });
   const listItems = {
     general: [
@@ -84,7 +87,9 @@ const Sidebar = ({ sidebarWidth, sidebarOpen, activeChannelId, setActiveChannel 
   const sidebarContent = (
     <div className={classList.root}>
       <div className={classList.serverNameContainer}>
-        <Typography className={clsx(classList.truncated, classList.serverNameContent)}>Name of server</Typography>
+        <Typography className={clsx(classList.truncated, classList.serverNameContent)} component="h2">
+          {activeServer?.name ?? ''}
+        </Typography>
       </div>
       <Divider />
       {renderList(listItems.general)}
@@ -111,7 +116,12 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = (state: RootState) => {
-  return { sidebarOpen: state.panels.sidebar, activeChannelId: state.chat.activeChannelId };
+  return {
+    sidebarOpen: state.panels.sidebar,
+    activeServer: state.chat.servers[state.chat.activeServerId],
+    activeChannelId: state.chat.activeChannelId,
+    channels: Object.values(state.chat.channels),
+  };
 };
 
 export default React.memo(connect(mapStateToProps, mapDispatchToProps)(Sidebar));
