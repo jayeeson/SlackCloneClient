@@ -4,8 +4,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { RootState, useAppDispatch } from '../store';
 import { ChatServer } from '../types';
-import toAcronym from '../utils/toAcronym';
+import { toAcronym } from '../utils/text';
 import { chatSlice } from '../store/chat';
+import clsx from 'clsx';
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -16,10 +17,12 @@ const useStyles = makeStyles(theme =>
       color: theme.palette.primary.contrastText,
       height: serverIconWidth,
       width: serverIconWidth,
+    }),
+    nonActiveServerAvatar: {
       '&:hover': {
         cursor: 'pointer',
       },
-    }),
+    },
   })
 );
 
@@ -42,12 +45,14 @@ const ServerList = ({
   };
 
   const renderServerItems = () => {
-    console.log('servers');
-    console.log(servers);
     return servers.map(server => {
       return (
         <ListItem>
-          <Avatar variant="rounded" className={classes.avatar} onClick={e => onServerClick(e, server.id)}>
+          <Avatar
+            variant="rounded"
+            className={clsx(classes.avatar, server.id !== activeServerId && classes.nonActiveServerAvatar)}
+            onClick={e => onServerClick(e, server.id)}
+          >
             {toAcronym(server.name)}
           </Avatar>
         </ListItem>

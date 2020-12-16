@@ -26,6 +26,11 @@ export const fetchInitialData = createAsyncThunk('chat/fetchInitialData', async 
   return data;
 });
 
+export const createServer = createAsyncThunk('chat/createServer', async ({ serverName }: { serverName: string }) => {
+  const data = await ServerApi.createServer(serverName);
+  return data;
+});
+
 export const chatSlice = createSlice({
   name: 'chat',
   initialState,

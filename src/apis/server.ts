@@ -31,6 +31,11 @@ class ServerApi {
     const { data } = await this.api.get('/getStartupData');
     return data;
   };
+
+  createServer = async (serverName: string) => {
+    const { data } = await this.api.post('/createServer', { serverName });
+    return data;
+  };
 }
 
 export default new ServerApi();

@@ -39,3 +39,14 @@ events that require notifying other users
 - [ ] channel created / deleted -> called by route...
 - [ ] message edited
 - [ ] message deleted
+
+# frontend
+
+- add channel / server menu
+- [x] dark backgroud modal looking menu
+- [x] menu name,
+- [x] menu close button
+- [x] menu description
+- [ ] menu form,
+- [ ] isPrivate toggle,
+- [ ] button that's greyed out if invalid entry

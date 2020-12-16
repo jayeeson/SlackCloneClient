@@ -8,7 +8,7 @@ export const sidebarTheme = createMuiTheme(theme, {
     },
     background: {
       default: '#21212a',
-      paper: '#42424c',
+      paper: '#35353c',
     },
   },
 });

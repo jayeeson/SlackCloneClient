@@ -1,13 +1,14 @@
-import { Avatar, Box, Divider, Button, List, ListItem, Typography } from '@material-ui/core';
+import { Avatar, Box, Divider, Button, ListItem, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { memo } from 'react';
+import { Add } from '@material-ui/icons';
+import React, { Fragment, memo, useState } from 'react';
 import { connect } from 'react-redux';
 import { RootState, useAppDispatch } from '../store';
 import { logout } from '../store/auth';
-import FieldIcon from './FieldIcon';
 import ServerList from './ServerList';
 import StyledMenu from './subcomponents/StyledMenu';
 import StyledMenuItem from './subcomponents/StyledMenuItem';
+import AddServerMenu from './AddServerMenu';
 
 const useStyles = makeStyles(theme => ({
   root: ({ width }: { width: number }) => ({
@@ -35,48 +36,51 @@ const useStyles = makeStyles(theme => ({
     position: 'relative',
     transform: 'translateX(-50%)',
     left: '50%',
-    width: '25px',
-    minWidth: '25px',
-    textAlign: 'center',
-    height: '25px',
+    cs: 'center',
+    width: '24px',
+    minWidth: '24px',
+    height: '24px',
   },
 }));
 
 const ServerPanel = ({ width, username }: { width: number; username?: string }) => {
-  const [menuAnchor, setMenuAnchor] = React.useState<HTMLElement | null>(null);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [addServerMenuOpen, setAddServerMenuOpen] = useState(false);
+
   const dispatch = useAppDispatch();
   const classes = useStyles({ width });
 
-  const onMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-    setMenuAnchor(event.currentTarget);
+  const onProfileMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+    setProfileMenuOpen(true);
   };
 
-  const onMenuClose = () => {
-    setMenuAnchor(null);
+  const onProfileMenuClose = () => {
+    setAnchorEl(null);
+    setProfileMenuOpen(false);
   };
 
   const onSignOutClick = () => {
     dispatch(logout());
   };
 
-  const onAddServerClick = () => {
-    console.log(1);
-    // todo: open menu, to set the minimum stuff before creating...
-  };
-
   const renderAddServerButton = () => {
     return (
-      <Button className={classes.addServerButton} onClick={onAddServerClick}>
-        <FieldIcon name="add" />
-      </Button>
+      <Fragment>
+        <Button className={classes.addServerButton} onClick={() => setAddServerMenuOpen(true)}>
+          <Add />
+        </Button>
+        <AddServerMenu addServerMenuOpen={addServerMenuOpen} setAddServerMenuOpen={setAddServerMenuOpen} />
+      </Fragment>
     );
   };
 
   return (
     <Box id="serverPanel" className={classes.root}>
       <div className={classes.userAvatarContainer}>
-        <Avatar className={classes.userAvatarButton} src="///\todoimplementimages.jpg" onClick={onMenuClick} />
-        <StyledMenu open={Boolean(menuAnchor)} anchorEl={menuAnchor} onClose={onMenuClose}>
+        <Avatar className={classes.userAvatarButton} src="///\todoimplementimages.jpg" onClick={onProfileMenuClick} />
+        <StyledMenu open={profileMenuOpen} anchorEl={anchorEl} onClose={onProfileMenuClose}>
           <ListItem selected={false}>
             <Typography>{`Currently signed in as: ${username}`}</Typography>
           </ListItem>
@@ -89,6 +93,7 @@ const ServerPanel = ({ width, username }: { width: number; username?: string }) 
     </Box>
   );
 };
+
 const mapStateToProps = (state: RootState) => {
   return { username: state.chat.user?.username };
 };

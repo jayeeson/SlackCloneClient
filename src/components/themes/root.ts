@@ -11,6 +11,8 @@ export const theme = createMuiTheme({
   palette: {
     action: {
       hover: '#44444C',
+      disabled: 'cccccc',
+      disabledBackground: '#50505a',
     },
     background: {
       default: '#24292f',
@@ -27,6 +29,9 @@ export const theme = createMuiTheme({
     secondary: {
       main: '#2087CC',
     },
+    // success: {
+    //   main: ''
+    // }
   },
   typography: {
     fontSize: 12,
