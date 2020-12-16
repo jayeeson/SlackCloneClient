@@ -1,8 +1,10 @@
-import { Avatar, Box, Divider, ListItem } from '@material-ui/core';
+import { Avatar, Box, Divider, ListItem, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { memo } from 'react';
-import { useAppDispatch } from '../store';
+import { connect } from 'react-redux';
+import { RootState, useAppDispatch } from '../store';
 import { logout } from '../store/auth';
+import ServerList from './ServerList';
 import StyledMenu from './subcomponents/StyledMenu';
 import StyledMenuItem from './subcomponents/StyledMenuItem';
 
@@ -31,7 +33,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ServerPanel = ({ width }: { width: number }) => {
+const ServerPanel = ({ width, username }: { width: number; username: string }) => {
   const [menuAnchor, setMenuAnchor] = React.useState<HTMLElement | null>(null);
   const dispatch = useAppDispatch();
   const classes = useStyles({ width });
@@ -53,13 +55,20 @@ const ServerPanel = ({ width }: { width: number }) => {
       <div className={classes.userAvatarContainer}>
         <Avatar className={classes.userAvatarButton} src="///\todoimplementimages.jpg" onClick={onMenuClick} />
         <StyledMenu open={Boolean(menuAnchor)} anchorEl={menuAnchor} onClose={onMenuClose}>
-          <ListItem selected={false}>Currently signed in as:</ListItem>
+          <ListItem selected={false}>
+            <Typography>{`Currently signed in as: ${username}`}</Typography>
+          </ListItem>
           <StyledMenuItem onClick={onSignOutClick}>Sign out</StyledMenuItem>
         </StyledMenu>
       </div>
       <Divider />
+      <ServerList width={width} />
+      {/* {renderAddServerButton()} */}
     </Box>
   );
 };
+const mapStateToProps = (state: RootState) => {
+  return { username: state.user.username };
+};
 
-export default memo(ServerPanel);
+export default memo(connect(mapStateToProps)(ServerPanel));

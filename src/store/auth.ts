@@ -25,9 +25,9 @@ export const register = createAsyncThunk(
 
 export const login = createAsyncThunk(
   'auth/login',
-  async ({ username, password }: { username: string; password: string }) => {
-    const loggedInUser = await ServerApi.login(username, password);
-    if (loggedInUser === username) {
+  async ({ username, password }: { username: string; password: string }, thunkAPI) => {
+    const loggedInUsername = await ServerApi.login(username, password);
+    if (loggedInUsername === username) {
       return { loginStatus: LoginStatus.LoggedIn };
     }
   }

@@ -1,7 +1,7 @@
 import { useMediaQuery } from '@material-ui/core';
 import React from 'react';
 import { connect } from 'react-redux';
-import { RootState } from '../store';
+import { RootState, useAppDispatch } from '../store';
 import { LoginStatus } from '../types';
 import PanelsFlexbox from './PanelsFlexbox';
 import PanelsSwipe from './PanelsSwipe';
@@ -9,8 +9,10 @@ import SlackSocket from './SlackSocket';
 import { theme } from './themes/root';
 import Loading from './Loading';
 import Auth from './Auth';
+import { fetchInitialData } from '../store/chat';
 
-const MainApp = ({ loginStatus }: { loginStatus: LoginStatus }) => {
+const MainApp = ({ loginStatus, initialDataFetched }: { loginStatus: LoginStatus; initialDataFetched: boolean }) => {
+  const dispatch = useAppDispatch();
   const isDeviceXs = useMediaQuery(theme.breakpoints.only('xs'));
 
   const renderLayout = () => {
@@ -19,6 +21,10 @@ const MainApp = ({ loginStatus }: { loginStatus: LoginStatus }) => {
     } else if (loginStatus === LoginStatus.LoggedOut) {
       return <Auth />;
     }
+    if (!initialDataFetched) {
+      dispatch(fetchInitialData());
+    }
+
     if (isDeviceXs) {
       return <PanelsSwipe />;
     }
@@ -34,7 +40,7 @@ const MainApp = ({ loginStatus }: { loginStatus: LoginStatus }) => {
 };
 
 const mapStateToProps = (state: RootState) => {
-  return { loginStatus: state.auth.loginStatus };
+  return { loginStatus: state.auth.loginStatus, initialDataFetched: state.chat.initialDataFetched };
 };
 
 export default connect(mapStateToProps)(MainApp);

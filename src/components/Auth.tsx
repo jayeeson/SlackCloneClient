@@ -1,10 +1,8 @@
 import React, { Fragment, useState } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { AppBar, Tabs, Tab, Button, TextField, Paper } from '@material-ui/core';
-import { RootState, useAppDispatch } from '../store';
-import { connect } from 'react-redux';
+import { useAppDispatch } from '../store';
 import { login, register } from '../store/auth';
-import { LoginStatus } from '../types';
 import clsx from 'clsx';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -53,11 +51,7 @@ enum tabValues {
   register,
 }
 
-interface AuthProps {
-  loginStatus: LoginStatus;
-}
-
-const Auth = ({ loginStatus }: AuthProps) => {
+const Auth = () => {
   const classes = useStyles();
   const [tab, setTab] = useState(0);
   const [username, setUsername] = useState('');
@@ -71,14 +65,13 @@ const Auth = ({ loginStatus }: AuthProps) => {
 
   const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (tab === tabValues.login) {
       return dispatch(login({ username, password }));
     }
     dispatch(register({ username, password }));
   };
 
-  const renderLoggedOutState = () => {
+  const renderLayout = () => {
     return (
       <Fragment>
         <AppBar className={classes.appBar} position="static" color="default">
@@ -116,47 +109,7 @@ const Auth = ({ loginStatus }: AuthProps) => {
     );
   };
 
-  const renderLoggedInState = () => {
-    return (
-      <Fragment>
-        <Paper className={clsx(classes.formBox, classes.loggedInFormBox)}>
-          <TextField
-            label="Username"
-            type="username"
-            variant="outlined"
-            value={username}
-            onChange={e => setUsername(e.target.value)}
-            className={classes.input}
-            fullWidth
-          />
-          <TextField
-            label="Password"
-            type="password"
-            variant="outlined"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            className={classes.input}
-            fullWidth
-          />
-          <Button className={classes.button} type="submit" color="secondary" variant="contained">
-            Submit
-          </Button>
-        </Paper>
-      </Fragment>
-    );
-  };
-
-  return (
-    <div className={classes.root}>
-      {loginStatus === LoginStatus.LoggedOut
-        ? renderLoggedOutState()
-        : loginStatus === LoginStatus.LoggedIn && renderLoggedInState()}
-    </div>
-  );
+  return <div className={classes.root}>{renderLayout()}</div>;
 };
 
-const mapStateToProps = (state: RootState) => {
-  return { loginStatus: state.auth.loginStatus };
-};
-
-export default connect(mapStateToProps)(Auth);
+export default Auth;

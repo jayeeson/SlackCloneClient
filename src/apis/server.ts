@@ -26,6 +26,11 @@ class ServerApi {
     const { data } = await this.api.get('/logout');
     return data;
   };
+
+  getStartupData = async () => {
+    const { data } = await this.api.get('/getStartupData');
+    return data;
+  };
 }
 
 export default new ServerApi();

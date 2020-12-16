@@ -6,13 +6,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../store';
 import FieldIcon from './FieldIcon';
-import { channelSlice } from '../store/channel';
+import { chatSlice } from '../store/chat';
 
 interface IProps {
   sidebarWidth: number;
   sidebarOpen: boolean;
   activeChannelId: number;
-  setActiveChannelId: typeof channelSlice.actions.setActiveChannelId;
+  setActiveChannel: typeof chatSlice.actions.setActiveChannel;
 }
 
 const useStyles = makeStyles(theme =>
@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme =>
   })
 );
 
-const Sidebar = ({ sidebarWidth, sidebarOpen, activeChannelId, setActiveChannelId }: IProps) => {
+const Sidebar = ({ sidebarWidth, sidebarOpen, activeChannelId, setActiveChannel }: IProps) => {
   const classList = useStyles({ sidebarWidth });
   const listItems = {
     general: [
@@ -57,7 +57,7 @@ const Sidebar = ({ sidebarWidth, sidebarOpen, activeChannelId, setActiveChannelI
     item: { text: string; channel: number }
   ) => {
     if (item.channel && activeChannelId !== item.channel) {
-      setActiveChannelId({ channelId: item.channel });
+      setActiveChannel({ channelId: item.channel });
     }
   };
 
@@ -107,11 +107,11 @@ const Sidebar = ({ sidebarWidth, sidebarOpen, activeChannelId, setActiveChannelI
 };
 
 const mapDispatchToProps = {
-  setActiveChannelId: channelSlice.actions.setActiveChannelId,
+  setActiveChannel: chatSlice.actions.setActiveChannel,
 };
 
 const mapStateToProps = (state: RootState) => {
-  return { sidebarOpen: state.panels.sidebar, activeChannelId: state.channel.activeChannelId };
+  return { sidebarOpen: state.panels.sidebar, activeChannelId: state.chat.activeChannelId };
 };
 
 export default React.memo(connect(mapStateToProps, mapDispatchToProps)(Sidebar));
