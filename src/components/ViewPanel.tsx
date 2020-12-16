@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../store';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
   flexItem: (props: any) => ({
     height: '100%',
     width: props.viewPanelWidth,
@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
     margin: '0 0',
     boxSizing: 'border-box',
   }),
-}));
+});
 
 interface IProps {
   viewPanelWidth: number;

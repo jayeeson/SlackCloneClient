@@ -1,9 +1,10 @@
-import { Avatar, Box, Divider, ListItem, Typography } from '@material-ui/core';
+import { Avatar, Box, Divider, Button, List, ListItem, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { memo } from 'react';
 import { connect } from 'react-redux';
 import { RootState, useAppDispatch } from '../store';
 import { logout } from '../store/auth';
+import FieldIcon from './FieldIcon';
 import ServerList from './ServerList';
 import StyledMenu from './subcomponents/StyledMenu';
 import StyledMenuItem from './subcomponents/StyledMenuItem';
@@ -12,7 +13,6 @@ const useStyles = makeStyles(theme => ({
   root: ({ width }: { width: number }) => ({
     height: '100%',
     width: width,
-    flex: `0 0 ${width}`,
     padding: 0,
     margin: '0 0',
     boxSizing: 'border-box',
@@ -30,6 +30,15 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
       cursor: 'pointer',
     },
+  },
+  addServerButton: {
+    position: 'relative',
+    transform: 'translateX(-50%)',
+    left: '50%',
+    width: '25px',
+    minWidth: '25px',
+    textAlign: 'center',
+    height: '25px',
   },
 }));
 
@@ -50,6 +59,19 @@ const ServerPanel = ({ width, username }: { width: number; username: string }) =
     dispatch(logout());
   };
 
+  const onAddServerClick = () => {
+    console.log(1);
+    // todo: open menu, to set the minimum stuff before creating...
+  };
+
+  const renderAddServerButton = () => {
+    return (
+      <Button className={classes.addServerButton} onClick={onAddServerClick}>
+        <FieldIcon name="add" />
+      </Button>
+    );
+  };
+
   return (
     <Box id="serverPanel" className={classes.root}>
       <div className={classes.userAvatarContainer}>
@@ -63,7 +85,7 @@ const ServerPanel = ({ width, username }: { width: number; username: string }) =
       </div>
       <Divider />
       <ServerList width={width} />
-      {/* {renderAddServerButton()} */}
+      {renderAddServerButton()}
     </Box>
   );
 };

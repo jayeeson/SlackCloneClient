@@ -41,7 +41,9 @@ const useStyles = makeStyles(theme =>
       top: '50%',
       transform: 'translateY(-50%)',
     },
-    channellistItem: {},
+    channelNames: {
+      marginLeft: '10px',
+    },
   })
 );
 
@@ -77,7 +79,7 @@ const Sidebar = ({ sidebarWidth, sidebarOpen, activeChannelId, setActiveChannel,
         >
           <ListItemIcon>
             <FieldIcon name={item.text} />
-            <Typography className={clsx(classList.truncated)}>{item.text}</Typography>
+            <Typography className={clsx(classList.truncated, classList.channelNames)}>{item.text}</Typography>
           </ListItemIcon>
         </ListItem>
       ))}
@@ -87,7 +89,7 @@ const Sidebar = ({ sidebarWidth, sidebarOpen, activeChannelId, setActiveChannel,
   const sidebarContent = (
     <div className={classList.root}>
       <div className={classList.serverNameContainer}>
-        <Typography className={clsx(classList.truncated, classList.serverNameContent)} component="h2">
+        <Typography className={clsx(classList.truncated, classList.serverNameContent)} variant="h6">
           {activeServer?.name ?? ''}
         </Typography>
       </div>

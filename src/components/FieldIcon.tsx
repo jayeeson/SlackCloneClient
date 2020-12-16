@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChatOutlined, MoreVert } from '@material-ui/icons';
+import { ChatOutlined, MoreVert, Add } from '@material-ui/icons';
 import { At } from 'mdi-material-ui';
 
 import { createStyles, makeStyles } from '@material-ui/core/styles';
@@ -16,6 +16,7 @@ const icons: { [idx: string]: any } = {
   threads: ChatOutlined,
   mentions: At,
   more: MoreVert,
+  add: Add,
 };
 
 const FieldIcon = ({ name }: { name: string }) => {

@@ -29,6 +29,7 @@ export const theme = createMuiTheme({
     },
   },
   typography: {
+    fontSize: 12,
     allVariants: {
       color: '#ffffff',
       fontFamily: [
