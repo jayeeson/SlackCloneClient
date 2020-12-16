@@ -44,6 +44,9 @@ export const chatSlice = createSlice({
       }
       return { ...state, activeServerId: serverId };
     },
+    clearFetchedData: () => {
+      return initialState;
+    },
   },
   extraReducers: builder => {
     builder.addCase(
