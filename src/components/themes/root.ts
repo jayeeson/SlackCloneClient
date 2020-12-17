@@ -7,6 +7,11 @@ export const theme = createMuiTheme({
         backgroundColor: '#66666C',
       },
     },
+    MuiListItemIcon: {
+      root: {
+        minWidth: 36,
+      },
+    },
   },
   palette: {
     action: {

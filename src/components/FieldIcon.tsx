@@ -1,8 +1,9 @@
 import React from 'react';
-import { ChatOutlined, MoreVert, Add } from '@material-ui/icons';
-import { At } from 'mdi-material-ui';
+import { ChatOutlined, MoreVert, Add, ExpandLess, ExpandMore } from '@material-ui/icons';
+import { At, Pound } from 'mdi-material-ui';
 
 import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { toCamelCase } from '../utils/text';
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -17,11 +18,14 @@ const icons: { [idx: string]: any } = {
   mentions: At,
   more: MoreVert,
   add: Add,
+  expandLess: ExpandLess,
+  expandMore: ExpandMore,
+  pound: Pound,
 };
 
 const FieldIcon = ({ name }: { name: string }) => {
   const classes = useStyles();
-  const IconComponent = icons[name.toLocaleLowerCase()];
+  const IconComponent = icons[toCamelCase(name)];
   return IconComponent ? <IconComponent className={classes.root} /> : null;
 };
 

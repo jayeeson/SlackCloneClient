@@ -12,3 +12,12 @@ export const capitalizeFirstLetter = (str: string) => {
   }
   return str.slice(0, 1).toLocaleUpperCase() + str.slice(1, str.length);
 };
+
+export const toCamelCase = (str: string) => {
+  if (!str.length) {
+    return str;
+  } else if (str.length == 1) {
+    return str.toLocaleLowerCase();
+  }
+  return str.slice(0, 1).toLocaleLowerCase() + str.slice(1, str.length);
+};

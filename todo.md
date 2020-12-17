@@ -51,7 +51,7 @@ events that require notifying other users
 - [x] button that's greyed out if invalid entry
 
 - add channel button
-- [ ] channel list (closeable) - icon and channel name list items.
+- [x] channel list (closeable) - icon and channel name list items.
 - [ ] add channel button below list
 - [ ] add channel button to right of top "channel" label
 
