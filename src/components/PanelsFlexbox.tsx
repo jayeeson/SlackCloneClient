@@ -102,10 +102,10 @@ const PanelsFlexbox = ({
           <ServerPanel width={serverPanelWidth} />
           <Divider orientation="vertical" />
           <Sidebar sidebarWidth={sidebarWidth} />
-          <Divider orientation="vertical" /> {/*used for debugging layout*/}
+          <Divider orientation="vertical" />
         </ThemeProvider>
         <MsgPanel />
-        <Divider orientation="vertical" /> {/*used for debugging layout*/}
+        <Divider orientation="vertical" />
         <ViewPanel viewPanelWidth={viewPanelWidth} />
       </Box>
       <DraggableDivider
