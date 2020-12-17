@@ -97,7 +97,7 @@ const PanelsFlexbox = ({
 
   return (
     <Fragment>
-      <Box id="mainContentFlexbox" width="100%" display="flex" height="100vh" className={classes.root}>
+      <Box id="mainContentFlexbox" width="100vw" display="flex" height="100vh" className={classes.root}>
         <ThemeProvider theme={sidebarTheme}>
           <ServerPanel width={serverPanelWidth} />
           <Divider orientation="vertical" />

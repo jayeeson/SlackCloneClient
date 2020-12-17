@@ -14,10 +14,10 @@
 ### routes
 
 - fetch initial data:
-- [ ] users servers ->
-- [ ] servers channels ->
+- [x] users servers ->
+- [x] servers channels ->
 - [ ] check last messages read / last message posted,
-- [ ] user info,
+- [x] user info,
 - other routes
 - [ ] info on other users (status, names...) => AS NEEDED
 - channel creation
@@ -25,7 +25,7 @@
 - [ ] -> frontend
 - server creation
 - [x] -> backend
-- [ ] -> frontend
+- [x] -> frontend
 
 ### socket events
 
@@ -50,4 +50,12 @@ events that require notifying other users
 - [x] menu form,
 - [x] button that's greyed out if invalid entry
 
+- add channel button
+- [ ] channel list (closeable) - icon and channel name list items.
+- [ ] add channel button below list
+- [ ] add channel button to right of top "channel" label
+
+- add channel menu
+- [ ] everything in server menu
+- [ ] channel description text field
 - [ ] isPrivate toggle, (channel creation)

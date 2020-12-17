@@ -28,13 +28,13 @@ const useStyles = makeStyles(theme => ({
     top: '0px',
   }),
   childInactive: (props: any) => ({
-    alignItems: 'left',
+    alignItems: 'center',
     borderRight: `1px solid ${theme.palette.divider}`,
     height: '100vh',
     width: props.childDivWidth,
   }),
   childActive: (props: any) => ({
-    alignItems: 'left',
+    alignItems: 'center',
     borderRight: '5px solid #22D2D2',
     height: '100vh',
     width: props.childWidthOnHover,
@@ -92,8 +92,6 @@ const DraggableDivider = ({
         const desiredNewWidth = openLeft
           ? dragStartElementWidth - e.clientX + dragStartClientStartPos
           : dragStartElementWidth + e.clientX - dragStartClientStartPos;
-        ///\todo: max width to be based on media query so nothing out of bounds of screen size
-        // minWidth
         const newWidth =
           minWidth && desiredNewWidth < minWidth
             ? minWidth

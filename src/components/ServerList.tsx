@@ -10,6 +10,10 @@ import clsx from 'clsx';
 
 const useStyles = makeStyles(theme =>
   createStyles({
+    root: {
+      maxHeight: '80vh',
+      overflowY: 'auto',
+    },
     avatar: ({ serverIconWidth }: { serverIconWidth: number }) => ({
       position: 'relative',
       transform: 'translateX(-50%)',
@@ -60,7 +64,7 @@ const ServerList = ({
     });
   };
 
-  return <List>{renderServerItems()}</List>;
+  return <List className={classes.root}>{renderServerItems()}</List>;
 };
 
 const mapStateToProps = (state: RootState) => {
