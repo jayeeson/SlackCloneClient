@@ -21,13 +21,14 @@ const initialState: ChatState = {
   initialDataFetched: false,
 };
 
-export const fetchInitialData = createAsyncThunk('chat/fetchInitialData', async () => {
+export const fetchStartupData = createAsyncThunk('chat/fetchInitialData', async () => {
   const data = await ServerApi.getStartupData();
   return data;
 });
 
 export const createServer = createAsyncThunk('chat/createServer', async ({ serverName }: { serverName: string }) => {
   const data = await ServerApi.createServer(serverName);
+  console.log(data);
   return data;
 });
 
@@ -55,7 +56,7 @@ export const chatSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(
-      fetchInitialData.fulfilled,
+      fetchStartupData.fulfilled,
       (
         state,
         {
@@ -78,5 +79,11 @@ export const chatSlice = createSlice({
         return state;
       }
     );
+    builder.addCase(createServer.fulfilled, (state, { payload }: PayloadAction<ChatServer>) => {
+      const { id, name, ownerUserId } = payload;
+      if (payload.id) {
+        return { ...state, servers: { ...state.servers, [id]: { id, name, ownerUserId } }, activeServerId: id };
+      }
+    });
   },
 });

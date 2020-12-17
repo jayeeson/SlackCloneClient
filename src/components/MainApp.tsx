@@ -9,7 +9,7 @@ import SlackSocket from './SlackSocket';
 import { theme } from './themes/root';
 import Loading from './Loading';
 import Auth from './Auth';
-import { fetchInitialData, chatSlice } from '../store/chat';
+import { fetchStartupData, chatSlice } from '../store/chat';
 
 const MainApp = ({ loginStatus, initialDataFetched }: { loginStatus: LoginStatus; initialDataFetched: boolean }) => {
   const dispatch = useAppDispatch();
@@ -28,7 +28,7 @@ const MainApp = ({ loginStatus, initialDataFetched }: { loginStatus: LoginStatus
       return <Auth />;
     }
     if (!initialDataFetched) {
-      dispatch(fetchInitialData());
+      dispatch(fetchStartupData());
     }
 
     if (isDeviceXs) {

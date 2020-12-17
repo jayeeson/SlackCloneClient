@@ -42,11 +42,12 @@ events that require notifying other users
 
 # frontend
 
-- add channel / server menu
+- add server menu
 - [x] dark backgroud modal looking menu
 - [x] menu name,
 - [x] menu close button
 - [x] menu description
-- [ ] menu form,
-- [ ] isPrivate toggle,
-- [ ] button that's greyed out if invalid entry
+- [x] menu form,
+- [x] button that's greyed out if invalid entry
+
+- [ ] isPrivate toggle, (channel creation)
