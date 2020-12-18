@@ -1,9 +1,10 @@
 import { Box, Divider } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { RootState } from '../store';
+import { RootState, useAppDispatch } from '../store';
+import { createChannel } from '../store/chat';
 import ChannelList from './ChannelList';
 import ServerName from './ServerName';
 
@@ -24,6 +25,7 @@ const useStyles = makeStyles(theme =>
 );
 
 const Sidebar = ({ sidebarWidth, sidebarOpen }: IProps) => {
+  const [addChannelMenuOpen, setAddChannelMenuOpen] = useState(false);
   const classes = useStyles({ sidebarWidth });
 
   return (
@@ -39,7 +41,7 @@ const Sidebar = ({ sidebarWidth, sidebarOpen }: IProps) => {
       <div className={classes.root}>
         <ServerName />
         <Divider />
-        <ChannelList />
+        <ChannelList addChannelMenuOpen={addChannelMenuOpen} setAddChannelMenuOpen={setAddChannelMenuOpen} />
       </div>
     </Box>
   );

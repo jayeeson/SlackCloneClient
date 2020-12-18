@@ -57,20 +57,9 @@ const IAddMenu = ({
   textFields,
   validation,
 }: IAddMenuProps) => {
-  const [textField1Content, setTextField1Content] = useState('');
-  const [textField2Content, setTextField2Content] = useState('');
-
   const classes = useStyles();
 
   const renderTextFields = () => {
-    const onChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, index: number) => {
-      if (index === 0) {
-        setTextField1Content(e.target.value);
-      } else if (index === 1) {
-        setTextField2Content(e.target.value);
-      }
-    };
-
     return (
       <Fragment>
         {textFields.map((textField, index) => (
@@ -82,15 +71,6 @@ const IAddMenu = ({
             fullWidth
             variant="outlined"
             label={textField?.label ?? `TextField${index + 1}`}
-            defaultValue={
-              textField?.defaultValue ?? index === 0
-                ? textField1Content
-                : index === 1
-                ? textField2Content
-                : 'implementation supports two text fields max'
-            }
-            onChange={e => onChange(e, index)}
-            value={index === 0 ? textField1Content : index === 1 ? textField2Content : ''}
             {...textField}
           />
         ))}
@@ -105,8 +85,8 @@ const IAddMenu = ({
       return validation;
     } else {
       return (
-        (validation.firstFieldRequired && !textField1Content.length) ||
-        (validation.secondFieldRequired && !textField2Content.length)
+        (validation.firstFieldRequired && !(textFields[0].value as string).length) ||
+        (validation.secondFieldRequired && !(textFields[1].value as string).length)
       );
     }
   };

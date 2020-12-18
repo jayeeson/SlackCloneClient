@@ -33,3 +33,13 @@ export interface ChatUser {
   username: string;
   displayName: string;
 }
+
+export interface CreateChannelRequest {
+  channelName: string;
+  serverId: number;
+  description?: string;
+  isPrivate?: boolean;
+  addEveryone?: boolean;
+  addTheseUsers?: string[];
+  autoAddNewMembers?: boolean;
+}

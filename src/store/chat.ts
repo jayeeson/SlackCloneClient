@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import ServerApi from '../apis/server';
-import { ChatChannel, ChatServer, ChatUser } from '../types';
+import { ChatChannel, ChatServer, ChatUser, CreateChannelRequest } from '../types';
 
 interface ChatState {
   servers: { [idx: string]: ChatServer };
@@ -16,8 +16,8 @@ const initialState: ChatState = {
   servers: {},
   channels: {},
   user: null,
-  activeChannelId: 2,
-  activeServerId: 1,
+  activeChannelId: 2, ///\todo: fix value
+  activeServerId: 1, ///\todo: fix value
   initialDataFetched: false,
 };
 
@@ -28,6 +28,12 @@ export const fetchStartupData = createAsyncThunk('chat/fetchInitialData', async 
 
 export const createServer = createAsyncThunk('chat/createServer', async ({ serverName }: { serverName: string }) => {
   const data = await ServerApi.createServer(serverName);
+  console.log(data);
+  return data;
+});
+
+export const createChannel = createAsyncThunk('chat/createChannel', async (payload: CreateChannelRequest) => {
+  const data = await ServerApi.createChannel(payload);
   console.log(data);
   return data;
 });

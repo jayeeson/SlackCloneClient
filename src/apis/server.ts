@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LoginStatus } from '../types';
+import { CreateChannelRequest, LoginStatus } from '../types';
 
 class ServerApi {
   private api = axios.create({
@@ -34,6 +34,11 @@ class ServerApi {
 
   createServer = async (serverName: string) => {
     const { data } = await this.api.post('/createServer', { serverName });
+    return data;
+  };
+
+  createChannel = async (payload: CreateChannelRequest) => {
+    const { data } = await this.api.post('/createChannel', payload);
     return data;
   };
 }

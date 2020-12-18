@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { RootState, useAppDispatch } from '../store';
 import { capitalizeFirstLetter } from '../utils/text';
 import { createServer } from '../store/chat';
-import IAddMenu from './IAddMenu';
+import IAddMenu from './subcomponents/IAddMenu';
 
 const AddServerMenu = ({
   addServerMenuOpen: menuOpen,
@@ -17,7 +17,7 @@ const AddServerMenu = ({
   const [serverNameField, setServerNameField] = useState(username ? `${capitalizeFirstLetter(username)}'s Server` : '');
 
   useEffect(() => {
-    setServerNameField(username ? `${capitalizeFirstLetter(username)}'s Server` : ''); // default value
+    setServerNameField(username ? `${capitalizeFirstLetter(username)}'s Server` : '');
   }, [username]);
 
   const dispatch = useAppDispatch();
@@ -37,7 +37,15 @@ const AddServerMenu = ({
         children:
           'Create your own server! Then you can invite whoever you like to join  Customize it now or later. Give it a good name!',
       }}
-      textFields={[{ label: 'Server Name' }]}
+      textFields={[
+        {
+          label: 'Server Name',
+          value: serverNameField,
+          onChange: e => {
+            setServerNameField(e.target.value);
+          },
+        },
+      ]}
       validation={{ firstFieldRequired: true }}
     />
   );
