@@ -45,7 +45,9 @@ const ServerList = ({
   const classes = useStyles({ serverIconWidth });
 
   const onServerClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, serverId: number) => {
-    dispatch(chatSlice.actions.setActiveServer({ serverId }));
+    if (activeServerId !== serverId) {
+      dispatch(chatSlice.actions.setActiveServer({ serverId }));
+    }
   };
 
   const renderServerItems = () => {

@@ -59,3 +59,7 @@ events that require notifying other users
 - [ ] everything in server menu
 - [ ] channel description text field
 - [ ] isPrivate toggle, (channel creation)
+
+# some items maybe to do at the end
+
+- check channel name conflict on channel creation

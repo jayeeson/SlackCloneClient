@@ -92,5 +92,10 @@ export const chatSlice = createSlice({
         return { ...state, servers: { ...state.servers, [id]: { id, name, ownerUserId } }, activeServerId: id };
       }
     });
+    builder.addCase(createChannel.fulfilled, (state, { payload }: PayloadAction<ChatChannel>) => {
+      console.log('payload', payload);
+      const { id } = payload;
+      return { ...state, channels: { ...state.channels, [id]: payload }, activeChannelId: id };
+    });
   },
 });

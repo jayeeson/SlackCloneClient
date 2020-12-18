@@ -69,7 +69,10 @@ const ChannelList = ({ channels, activeServer, addChannelMenuOpen, setAddChannel
 };
 
 const mapStateToProps = (state: RootState) => {
-  return { channels: Object.values(state.chat.channels), activeServer: state.chat.servers[state.chat.activeServerId] };
+  return {
+    channels: Object.values(state.chat.channels),
+    activeServer: state.chat.servers[state.chat.activeServerId],
+  };
 };
 
 export default connect(mapStateToProps)(ChannelList);
