@@ -90,6 +90,8 @@ const IAddMenu = ({
                 : 'implementation supports two text fields max'
             }
             onChange={e => onChange(e, index)}
+            value={index === 0 ? textField1Content : index === 1 ? textField2Content : ''}
+            {...textField}
           />
         ))}
       </Fragment>
