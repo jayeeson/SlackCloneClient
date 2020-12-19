@@ -61,25 +61,6 @@ const IAddMenu = ({
 }: IAddMenuProps) => {
   const classes = useStyles();
 
-  const renderTextFields = () => {
-    return (
-      <Fragment>
-        {textFields.map((textField, index) => (
-          <TextField
-            required={Array.isArray(validation) && validation.find(element => element === index + 1) !== undefined}
-            color="secondary"
-            autoFocus
-            margin="dense"
-            fullWidth
-            variant="outlined"
-            label={textField?.label ?? `TextField${index + 1}`}
-            {...textField}
-          />
-        ))}
-      </Fragment>
-    );
-  };
-
   const convertDisabled = () => {
     if (!validation) {
       return false;
@@ -94,6 +75,26 @@ const IAddMenu = ({
   };
 
   const disabled = convertDisabled();
+
+  const renderTextFields = () => {
+    return (
+      <Fragment>
+        {textFields.map((textField, index) => (
+          <TextField
+            required={Array.isArray(validation) && validation.find(element => element === index + 1) !== undefined}
+            color="secondary"
+            autoFocus
+            margin="dense"
+            fullWidth
+            variant="outlined"
+            label={textField?.label ?? `TextField${index + 1}`}
+            onKeyPressCapture={e => e.key === 'Enter' && !convertDisabled() && onSubmit()}
+            {...textField}
+          />
+        ))}
+      </Fragment>
+    );
+  };
 
   return (
     <Dialog maxWidth="xs" fullWidth open={menuOpen} onClose={() => setMenuOpen(false)}>
