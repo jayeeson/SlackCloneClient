@@ -10,7 +10,7 @@ const initialState: AuthState = {
   loginStatus: LoginStatus.Unknown,
 };
 
-export const fetchLoginStatus = createAsyncThunk('auth/fetchLoginStatus', async () => {
+export const getLoginStatus = createAsyncThunk('auth/getLoginStatus', async () => {
   const status = await ServerApi.getLoginStatus();
   return { status };
 });
@@ -43,7 +43,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(fetchLoginStatus.fulfilled, (state, action) => {
+    builder.addCase(getLoginStatus.fulfilled, (state, action) => {
       return { ...state, loginStatus: action.payload.status };
     });
     builder.addCase(login.fulfilled, (state, { payload }) => {

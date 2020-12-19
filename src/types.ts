@@ -34,6 +34,16 @@ export interface ChatUser {
   displayName: string;
 }
 
+export interface ChatMessage {
+  id: number;
+  contentType: number;
+  userId: number;
+  time: string;
+  content?: string;
+  originalMsgId?: number;
+  channelId: number;
+}
+
 export interface CreateChannelRequest {
   channelName: string;
   serverId: number;

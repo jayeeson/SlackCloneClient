@@ -3,8 +3,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { RootState, useAppDispatch } from '../store';
-import { createChannel } from '../store/chat';
+import { RootState } from '../store';
 import ChannelList from './ChannelList';
 import ServerName from './ServerName';
 

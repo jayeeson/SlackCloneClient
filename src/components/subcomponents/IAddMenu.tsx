@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Close } from '@material-ui/icons';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, ReactNode } from 'react';
 
 const useStyles = makeStyles(theme => ({
   closeButton: {
@@ -46,6 +46,7 @@ export interface IAddMenuProps {
   description: DialogContentTextProps;
   textFields: TextFieldProps[];
   validation?: boolean | { firstFieldRequired?: boolean; secondFieldRequired?: boolean };
+  extraContent?: ReactNode;
 }
 
 const IAddMenu = ({
@@ -56,6 +57,7 @@ const IAddMenu = ({
   description,
   textFields,
   validation,
+  extraContent,
 }: IAddMenuProps) => {
   const classes = useStyles();
 
@@ -108,6 +110,7 @@ const IAddMenu = ({
       <DialogContent>
         <DialogContentText {...description}>{description?.children}</DialogContentText>
         {renderTextFields()}
+        {extraContent}
       </DialogContent>
       <DialogActions>
         <Button disabled={disabled} variant="contained" className={classes.createButton} onClick={onSubmit}>

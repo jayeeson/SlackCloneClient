@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { Fragment, memo, useState } from 'react';
 import { connect } from 'react-redux';
 import { RootState, useAppDispatch } from '../store';
 import { createChannel } from '../store/chat';
@@ -19,7 +19,12 @@ const AddChannelMenu = ({
 
   const onChannelCreateSubmit = () => {
     setMenuOpen(false);
+    ///\todo:  private controlled by ui toggle
     dispatch(createChannel({ channelName, serverId: activeServerId, isPrivate: false }));
+  };
+
+  const renderExtraContent = () => {
+    return <Fragment></Fragment>;
   };
 
   return (
@@ -48,6 +53,7 @@ const AddChannelMenu = ({
         },
       ]}
       validation={{ firstFieldRequired: true }}
+      extraContent={renderExtraContent()}
     />
   );
 };

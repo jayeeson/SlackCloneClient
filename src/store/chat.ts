@@ -1,11 +1,12 @@
 import _ from 'lodash';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import ServerApi from '../apis/server';
-import { ChatChannel, ChatServer, ChatUser, CreateChannelRequest } from '../types';
+import { ChatChannel, ChatMessage, ChatServer, ChatUser, CreateChannelRequest } from '../types';
 
 interface ChatState {
   servers: { [idx: string]: ChatServer };
   channels: { [idx: string]: ChatChannel };
+  messages: { [idx: string]: ChatMessage };
   user: ChatUser | null;
   activeChannelId: number;
   activeServerId: number;
@@ -15,16 +16,25 @@ interface ChatState {
 const initialState: ChatState = {
   servers: {},
   channels: {},
+  messages: {},
   user: null,
   activeChannelId: 2, ///\todo: fix value
   activeServerId: 1, ///\todo: fix value
   initialDataFetched: false,
 };
 
-export const fetchStartupData = createAsyncThunk('chat/fetchInitialData', async () => {
+export const getStartupData = createAsyncThunk('chat/getInitialData', async () => {
   const data = await ServerApi.getStartupData();
   return data;
 });
+
+export const getOldestMessages = createAsyncThunk(
+  'chat/getOldestMessages',
+  async ({ quantity, offset }: { quantity: number; offset?: number }) => {
+    const data = await ServerApi.getOldestMessages(quantity, offset);
+    return data;
+  }
+);
 
 export const createServer = createAsyncThunk('chat/createServer', async ({ serverName }: { serverName: string }) => {
   const data = await ServerApi.createServer(serverName);
@@ -37,6 +47,12 @@ export const createChannel = createAsyncThunk('chat/createChannel', async (paylo
   console.log(data);
   return data;
 });
+
+// export const createMessage = createAsyncThunk('chat/createChannel', async (payload: CreateChannelRequest) => {
+//   const data = await ServerApi.createChannel(payload);
+//   console.log(data);
+//   return data;
+// });
 
 export const chatSlice = createSlice({
   name: 'chat',
@@ -62,7 +78,7 @@ export const chatSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(
-      fetchStartupData.fulfilled,
+      getStartupData.fulfilled,
       (
         state,
         {
@@ -93,9 +109,12 @@ export const chatSlice = createSlice({
       }
     });
     builder.addCase(createChannel.fulfilled, (state, { payload }: PayloadAction<ChatChannel>) => {
-      console.log('payload', payload);
       const { id } = payload;
       return { ...state, channels: { ...state.channels, [id]: payload }, activeChannelId: id };
+    });
+    builder.addCase(getOldestMessages.fulfilled, (state, { payload }: PayloadAction<ChatMessage[]>) => {
+      console.log('payload', payload);
+      return { ...state, messages: { ..._.mapKeys(payload, 'id') } };
     });
   },
 });

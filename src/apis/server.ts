@@ -41,6 +41,11 @@ class ServerApi {
     const { data } = await this.api.post('/createChannel', payload);
     return data;
   };
+
+  getOldestMessages = async (quantity: number, offset?: number) => {
+    const { data } = await this.api.post('/getOldestMessages', { quantity, offset });
+    return data;
+  };
 }
 
 export default new ServerApi();
