@@ -1,30 +1,24 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { connect } from 'react-redux';
 import { RootState, useAppDispatch } from '../store';
-import { capitalizeFirstLetter } from '../utils/text';
 import { createServer } from '../store/chat';
 import IAddMenu from './subcomponents/IAddMenu';
 
 const AddServerMenu = ({
   addServerMenuOpen: menuOpen,
   setAddServerMenuOpen: setMenuOpen,
-  username,
 }: {
   addServerMenuOpen: boolean;
   setAddServerMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   username?: string;
 }) => {
-  const [serverNameField, setServerNameField] = useState(username ? `${capitalizeFirstLetter(username)}'s Server` : '');
-
-  useEffect(() => {
-    setServerNameField(username ? `${capitalizeFirstLetter(username)}'s Server` : '');
-  }, [username]);
-
+  const [serverNameField, setServerNameField] = useState('');
   const dispatch = useAppDispatch();
 
   const onServerCreateSubmit = () => {
     setMenuOpen(false);
     dispatch(createServer({ serverName: serverNameField }));
+    setServerNameField('');
   };
 
   return (

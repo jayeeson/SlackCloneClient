@@ -21,6 +21,9 @@ const AddChannelMenu = ({
     setMenuOpen(false);
     ///\todo:  private controlled by ui toggle
     dispatch(createChannel({ channelName, serverId: activeServerId, isPrivate: false }));
+
+    setChannelName('');
+    setDescription('');
   };
 
   const renderExtraContent = () => {

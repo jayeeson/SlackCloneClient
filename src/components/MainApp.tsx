@@ -5,7 +5,7 @@ import { RootState, useAppDispatch } from '../store';
 import { LoginStatus } from '../types';
 import PanelsFlexbox from './PanelsFlexbox';
 import PanelsSwipe from './PanelsSwipe';
-import SlackSocket from './SlackSocket';
+import ChatSocket from './ChatSocket';
 import { theme } from './themes/root';
 import Loading from './Loading';
 import Auth from './Auth';
@@ -39,7 +39,7 @@ const MainApp = ({ loginStatus, initialDataFetched }: { loginStatus: LoginStatus
 
   return (
     <React.Fragment>
-      <SlackSocket />
+      <ChatSocket />
       {renderLayout()}
     </React.Fragment>
   );

@@ -96,7 +96,7 @@ export const chatSlice = createSlice({
             servers: { ..._.mapKeys(payload.servers, 'id') },
             channels: { ..._.mapKeys(payload.channels, 'id') },
             user: payload.user,
-            activeServerId: payload.servers[0].id,
+            activeServerId: payload.servers[0]?.id,
           };
         }
         return state;
