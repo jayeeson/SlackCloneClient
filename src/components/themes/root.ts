@@ -17,11 +17,11 @@ export const theme = createMuiTheme({
     action: {
       hover: '#44444C',
       disabled: 'cccccc',
-      disabledBackground: '#50505a',
+      disabledBackground: '#505055',
     },
     background: {
       default: '#24292f',
-      paper: '#3a3acc',
+      paper: '#515161',
     },
     divider: '#474747',
     text: {

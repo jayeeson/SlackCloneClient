@@ -94,6 +94,11 @@ const PanelsFlexbox = ({
 
   const sidebarDividerPosition = serverPanelWidth + sidebarWidth + 2; // +2 for 2 dividers 1 px each
   const viewPanelDividerPosition = windowSize.x - viewPanelWidth - 1; // -1 for 1 divider 1 px
+  const msgPanelWidth =
+    windowSize.x -
+    (serverPanelWidth + 1) -
+    (sidebarOpen ? sidebarWidth + 1 : 0) -
+    (viewPanelOpen ? viewPanelWidth + 1 : 0);
 
   return (
     <Fragment>
@@ -104,7 +109,7 @@ const PanelsFlexbox = ({
           <Sidebar sidebarWidth={sidebarWidth} />
           <Divider orientation="vertical" />
         </ThemeProvider>
-        <MsgPanel />
+        <MsgPanel width={msgPanelWidth} />
         <Divider orientation="vertical" />
         <ViewPanel viewPanelWidth={viewPanelWidth} />
       </Box>

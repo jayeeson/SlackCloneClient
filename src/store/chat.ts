@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import ServerApi from '../apis/server';
-import { ChatChannel, ChatMessage, ChatServer, ChatUser, CreateChannelRequest } from '../types';
+import { ChatChannel, ChatMessage, ChatServer, ChatUser, CreateChannelRequest, SendMessagePayload } from '../types';
 
 interface ChatState {
   servers: { [idx: string]: ChatServer };
@@ -38,21 +38,19 @@ export const getOldestMessages = createAsyncThunk(
 
 export const createServer = createAsyncThunk('chat/createServer', async ({ serverName }: { serverName: string }) => {
   const data = await ServerApi.createServer(serverName);
-  console.log(data);
   return data;
 });
 
 export const createChannel = createAsyncThunk('chat/createChannel', async (payload: CreateChannelRequest) => {
   const data = await ServerApi.createChannel(payload);
-  console.log(data);
   return data;
 });
 
-// export const createMessage = createAsyncThunk('chat/createChannel', async (payload: CreateChannelRequest) => {
-//   const data = await ServerApi.createChannel(payload);
-//   console.log(data);
-//   return data;
-// });
+export const sendMessage = createAsyncThunk('chat/sendMessage', async (payload: SendMessagePayload) => {
+  const data = await ServerApi.sendMessage(payload);
+  console.log(data);
+  return data;
+});
 
 export const chatSlice = createSlice({
   name: 'chat',

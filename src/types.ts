@@ -53,3 +53,21 @@ export interface CreateChannelRequest {
   addTheseUsers?: string[];
   autoAddNewMembers?: boolean;
 }
+
+export interface SendMessagePayload {
+  channelId: number;
+  text: string;
+}
+
+enum MessageContentTypeKey {
+  MESSAGE = 1,
+  QUOTE = 2,
+  THREAD = 4,
+}
+
+export enum MessageContentType {
+  MESSAGE = MessageContentTypeKey.MESSAGE,
+  QUOTE = MessageContentTypeKey.QUOTE,
+  THREAD_PARENT = MessageContentTypeKey.THREAD,
+  THREAD_REPLY = MessageContentTypeKey.THREAD + MessageContentTypeKey.MESSAGE,
+}

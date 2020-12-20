@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CreateChannelRequest, LoginStatus } from '../types';
+import { CreateChannelRequest, LoginStatus, SendMessagePayload } from '../types';
 
 class ServerApi {
   private api = axios.create({
@@ -44,6 +44,11 @@ class ServerApi {
 
   getOldestMessages = async (quantity: number, offset?: number) => {
     const { data } = await this.api.post('/getOldestMessages', { quantity, offset });
+    return data;
+  };
+
+  sendMessage = async (payload: SendMessagePayload) => {
+    const { data } = await this.api.post('/sendMessage', payload);
     return data;
   };
 }
