@@ -1,6 +1,6 @@
-import { Box, Paper, TextField, Typography } from '@material-ui/core';
+import { Box, List, ListItem, ListItemText, Paper, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { RootState, useAppDispatch } from '../store';
 import { getOldestMessages, sendMessage } from '../store/chat';
@@ -10,24 +10,23 @@ const useStyles = makeStyles({
   root: {
     width: '100%',
     flex: '1 0',
-    padding: 0,
-    margin: '0 0',
+    padding: 5,
+    margin: '0 0 0 0',
     boxSizing: 'border-box',
     display: 'flex',
   },
   messageFieldContainer: {
     width: '100%',
-    margin: '0 12px 12px',
   },
   messageField: {
     margin: '0 auto',
     width: '100%',
   },
+  messageItem: {},
 });
 
 const MsgPanel = ({
   msgPanelOpen,
-  width,
   messages,
   activeChannelId,
 }: {
@@ -49,15 +48,23 @@ const MsgPanel = ({
 
   const renderMessageItem = (message: ChatMessage) => {
     return (
-      <div>
-        <p>{new Date(message.time).toLocaleDateString()}</p>
-        <p>{message.content}</p>
-      </div>
+      <ListItem className={classes.messageItem}>
+        {/*\todo: getServerUsers {message.} */}
+        <ListItemText
+          primary={
+            <div>
+              <span>{new Date(message.time).toLocaleDateString()}</span>
+              <span>{`\tuserid: ${message.userId}`}</span>
+            </div>
+          }
+          secondary={message.content}
+        />
+      </ListItem>
     );
   };
 
   const renderMessageList = () => {
-    return <Fragment>{messages.map(renderMessageItem)}</Fragment>;
+    return <List>{messages.map(renderMessageItem)}</List>;
   };
 
   const onMessageFieldChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -80,11 +87,11 @@ const MsgPanel = ({
   };
 
   return (
-    <Box className={classes.root} id="msgPanel" display={display}>
-      <Box>
-        <Typography>{renderMessageList()}</Typography>
+    <Box className={classes.root} id="msgPanel" display={display} flexDirection="column">
+      <Box alignSelf="flex-start" flexGrow={1}>
+        {renderMessageList()}
       </Box>
-      <Box className={classes.messageFieldContainer} alignSelf="flex-end">
+      <Box className={classes.messageFieldContainer} flexDirection="column" alignSelf="flex-end">
         <Paper>
           <TextField
             className={classes.messageField}

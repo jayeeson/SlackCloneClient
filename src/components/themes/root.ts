@@ -21,7 +21,7 @@ export const theme = createMuiTheme({
     },
     background: {
       default: '#24292f',
-      paper: '#515161',
+      paper: '#515157',
     },
     divider: '#474747',
     text: {
