@@ -29,11 +29,13 @@ const MsgPanel = ({
   msgPanelOpen,
   messages,
   activeChannelId,
+  activeServerId,
 }: {
   msgPanelOpen: boolean;
   width: number;
   messages: ChatMessage[];
   activeChannelId: number;
+  activeServerId: number;
 }) => {
   const [messageText, setMessageText] = useState('');
 
@@ -82,7 +84,7 @@ const MsgPanel = ({
   };
 
   const onMessageSubmit = () => {
-    dispatch(sendMessage({ channelId: activeChannelId, text: messageText }));
+    dispatch(sendMessage({ channelId: activeChannelId, text: messageText, serverId: activeServerId }));
     setMessageText('');
   };
 
@@ -113,6 +115,7 @@ const mapStateToProps = (state: RootState) => {
     msgPanelOpen: state.panels.msgPanel,
     messages: Object.values(state.chat.messages).filter(message => message.channelId === state.chat.activeChannelId),
     activeChannelId: state.chat.activeChannelId,
+    activeServerId: state.chat.activeServerId,
   };
 };
 

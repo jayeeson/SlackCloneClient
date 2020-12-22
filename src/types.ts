@@ -57,6 +57,7 @@ export interface CreateChannelRequest {
 export interface SendMessagePayload {
   channelId: number;
   text: string;
+  serverId: number;
 }
 
 enum MessageContentTypeKey {

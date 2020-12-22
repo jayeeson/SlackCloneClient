@@ -1,24 +1,46 @@
+import { useMediaQuery } from '@material-ui/core';
 import React, { useEffect } from 'react';
-import MainApp from './MainApp';
+import { connect } from 'react-redux';
+import { RootState, useAppDispatch } from '../store';
+import { LoginStatus } from '../types';
+import PanelsFlexbox from './PanelsFlexbox';
+import PanelsSwipe from './PanelsSwipe';
 import { theme } from './themes/root';
-import { CssBaseline } from '@material-ui/core';
-import { ThemeProvider } from '@material-ui/core/styles';
-import { useAppDispatch } from '../store';
-import { getLoginStatus } from '../store/auth';
+import Loading from './Loading';
+import Auth from './Auth';
+import { getStartupData, chatSlice } from '../store/chat';
 
-const App = () => {
+const MainApp = ({ loginStatus, initialDataFetched }: { loginStatus: LoginStatus; initialDataFetched: boolean }) => {
   const dispatch = useAppDispatch();
+  const isDeviceXs = useMediaQuery(theme.breakpoints.only('xs'));
 
   useEffect(() => {
-    dispatch(getLoginStatus());
-  }, [dispatch]);
+    if (loginStatus !== LoginStatus.LoggedIn) {
+      dispatch(chatSlice.actions.clearFetchedData());
+    }
+  }, [dispatch, loginStatus]);
 
-  return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <MainApp />
-    </ThemeProvider>
-  );
+  const renderLayout = () => {
+    if (loginStatus === LoginStatus.Unknown) {
+      return <Loading />;
+    } else if (loginStatus === LoginStatus.LoggedOut) {
+      return <Auth />;
+    }
+    if (!initialDataFetched) {
+      dispatch(getStartupData());
+    }
+
+    if (isDeviceXs) {
+      return <PanelsSwipe />;
+    }
+    return <PanelsFlexbox />;
+  };
+
+  return <React.Fragment>{renderLayout()}</React.Fragment>;
 };
 
-export default App;
+const mapStateToProps = (state: RootState) => {
+  return { loginStatus: state.auth.loginStatus, initialDataFetched: state.chat.initialDataFetched };
+};
+
+export default connect(mapStateToProps)(MainApp);
