@@ -10,7 +10,7 @@ class SocketApi {
   };
 }
 
-export enum SocketEvents {
+export enum SocketEvent {
   NEW_MESSAGE = 'NEW_MESSAGE',
 }
 
