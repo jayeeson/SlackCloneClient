@@ -83,7 +83,6 @@ const IAddMenu = ({
           <TextField
             required={Array.isArray(validation) && validation.find(element => element === index + 1) !== undefined}
             color="secondary"
-            autoFocus
             margin="dense"
             fullWidth
             variant="outlined"

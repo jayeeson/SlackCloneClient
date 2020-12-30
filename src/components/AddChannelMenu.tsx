@@ -1,4 +1,4 @@
-import React, { Fragment, memo, useState } from 'react';
+import React, { Fragment, memo, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { RootState, useAppDispatch } from '../store';
 import { createChannel } from '../store/chat';
@@ -46,6 +46,7 @@ const AddChannelMenu = ({
           onChange: e => {
             setChannelName(e.target.value);
           },
+          autoFocus: true,
         },
         {
           label: 'Description (optional)',

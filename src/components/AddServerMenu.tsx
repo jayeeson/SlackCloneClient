@@ -38,6 +38,7 @@ const AddServerMenu = ({
           onChange: e => {
             setServerNameField(e.target.value);
           },
+          autoFocus: true,
         },
       ]}
       validation={{ firstFieldRequired: true }}
