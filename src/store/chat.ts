@@ -100,18 +100,28 @@ export const chatSlice = createSlice({
         return state;
       }
     );
-    builder.addCase(createServer.fulfilled, (state, { payload }: PayloadAction<ChatServer>) => {
-      const { id, name, ownerUserId } = payload;
-      if (payload.id) {
-        return { ...state, servers: { ...state.servers, [id]: { id, name, ownerUserId } }, activeServerId: id };
+    builder.addCase(
+      createServer.fulfilled,
+      (state, { payload }: PayloadAction<{ server: ChatServer; channels: ChatChannel[] }>) => {
+        const { id, name, ownerUserId } = payload?.server;
+        const defaultChannels: { [idx: string]: ChatChannel } = payload.channels.reduce((acc, cur) => {
+          return { ...acc, [cur.id]: cur };
+        }, {});
+        if (id) {
+          return {
+            ...state,
+            servers: { ...state.servers, [id]: { id, name, ownerUserId } },
+            activeServerId: id,
+            channels: { ...state.channels, ...defaultChannels },
+          };
+        }
       }
-    });
+    );
     builder.addCase(createChannel.fulfilled, (state, { payload }: PayloadAction<ChatChannel>) => {
       const { id } = payload;
       return { ...state, channels: { ...state.channels, [id]: payload }, activeChannelId: id };
     });
     builder.addCase(getOldestMessages.fulfilled, (state, { payload }: PayloadAction<ChatMessage[]>) => {
-      console.log('payload', payload);
       return { ...state, messages: { ..._.mapKeys(payload, 'id') } };
     });
   },
