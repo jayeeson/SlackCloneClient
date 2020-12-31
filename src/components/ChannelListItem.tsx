@@ -24,6 +24,7 @@ const useStyles = makeStyles(theme =>
 
 const ChannelListItem = ({ channel, activeChannelId, setActiveChannel }: IProps) => {
   const classes = useStyles();
+
   const onChannelItemClick = (channelId: number) => {
     if (activeChannelId !== channelId) {
       setActiveChannel({ channelId });

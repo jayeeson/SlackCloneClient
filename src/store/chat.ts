@@ -1,7 +1,15 @@
 import _ from 'lodash';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import ServerApi from '../apis/server';
-import { ChatChannel, ChatMessage, ChatServer, ChatUser, CreateChannelRequest, SendMessagePayload } from '../types';
+import {
+  ChatChannel,
+  ChatMessage,
+  ChatServer,
+  ChatUser,
+  CreateChannelRequest,
+  localStorageKey,
+  SendMessagePayload,
+} from '../types';
 
 interface ChatState {
   servers: { [idx: string]: ChatServer };
@@ -13,13 +21,14 @@ interface ChatState {
   initialDataFetched: boolean;
 }
 
+const activeServerInStorage = parseInt(localStorage.getItem(localStorageKey.ChatUiSettings.activeServer) ?? '0', 10);
 const initialState: ChatState = {
   servers: {},
   channels: {},
   messages: {},
   user: null,
-  activeChannelId: 2, ///\todo: fix value
-  activeServerId: 1, ///\todo: fix value
+  activeServerId: activeServerInStorage,
+  activeChannelId: parseInt(localStorage.getItem(`server#${activeServerInStorage}`) ?? '0', 10),
   initialDataFetched: false,
 };
 
@@ -61,6 +70,7 @@ export const chatSlice = createSlice({
       if (!channelId) {
         return state;
       }
+      localStorage.setItem(`server#${state.activeServerId}`, channelId.toString());
       return { ...state, activeChannelId: channelId };
     },
     setActiveServer: (state, { payload }: PayloadAction<{ serverId: number }>) => {
@@ -68,7 +78,14 @@ export const chatSlice = createSlice({
       if (!serverId) {
         return state;
       }
-      return { ...state, activeServerId: serverId };
+      localStorage.setItem(localStorageKey.ChatUiSettings.activeServer, state.activeChannelId.toString());
+      const storedActiveChannel = localStorage.getItem(`server#${serverId}`);
+      const randomChannelInServer = Object.values(state.channels).find(channel => channel.serverId === serverId);
+      return {
+        ...state,
+        activeServerId: serverId,
+        activeChannelId: storedActiveChannel ? parseInt(storedActiveChannel, 10) : randomChannelInServer?.id ?? 0,
+      };
     },
     clearFetchedData: () => {
       return initialState;
@@ -88,13 +105,18 @@ export const chatSlice = createSlice({
         }>
       ) => {
         if (payload) {
+          const serverId = state.activeServerId || payload.servers[0]?.id;
           return {
             ...state,
             initialDataFetched: true,
             servers: { ..._.mapKeys(payload.servers, 'id') },
             channels: { ..._.mapKeys(payload.channels, 'id') },
             user: payload.user,
-            activeServerId: payload.servers[0]?.id,
+            activeServerId: serverId,
+            activeChannelId:
+              (state.activeChannelId ||
+                Object.values(state.channels).find(channel => channel.serverId === serverId)?.id) ??
+              0,
           };
         }
         return state;

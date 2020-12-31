@@ -9,8 +9,12 @@ export enum DraggablePanel {
   viewPanelWidth = 'viewPanelWidth',
 }
 
-export const localStorageKey = { DraggablePanel };
-export type localStorageKey = typeof DraggablePanel;
+export enum ChatUiSettings {
+  activeServer = 'activeServer',
+}
+
+export const localStorageKey = { DraggablePanel, ChatUiSettings };
+// export type localStorageKey = typeof DraggablePanel;
 
 export interface ChatServer {
   id: number;

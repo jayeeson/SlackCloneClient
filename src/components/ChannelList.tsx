@@ -26,7 +26,6 @@ const useStyles = makeStyles({
 
 const ChannelList = ({ channels, activeServer, addChannelMenuOpen, setAddChannelMenuOpen }: ChannelListProps) => {
   const [channelCollapseOpen, setChannelCollapseOpen] = useState(true);
-
   const classes = useStyles();
 
   const renderChannelList = () => {
