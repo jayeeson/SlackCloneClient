@@ -10,12 +10,16 @@ class SocketApi {
   };
 
   login = (username: string) => {
-    socket.emit('login', username);
+    socket.emit('login', { username });
   };
 
   logout = () => {
     console.log('emitting logout event');
     socket.emit('logout');
+  };
+
+  setActiveServer = (newServer: number, oldServer?: number) => {
+    socket.emit('setActiveServer', { newServer, oldServer });
   };
 }
 

@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import ServerApi from '../apis/server';
+import SocketApi from '../apis/socket';
 import {
   ChatChannel,
   ChatMessage,
@@ -78,6 +79,7 @@ export const chatSlice = createSlice({
       if (!serverId) {
         return state;
       }
+      SocketApi.setActiveServer(serverId, state.activeServerId);
       localStorage.setItem(localStorageKey.ChatUiSettings.activeServer, state.activeChannelId.toString());
       const storedActiveChannel = localStorage.getItem(`server#${serverId}`);
       const randomChannelInServer = Object.values(state.channels).find(channel => channel.serverId === serverId);
@@ -130,6 +132,8 @@ export const chatSlice = createSlice({
           return { ...acc, [cur.id]: cur };
         }, {});
         if (id) {
+          SocketApi.setActiveServer(id);
+
           return {
             ...state,
             servers: { ...state.servers, [id]: { id, name, ownerUserId } },
