@@ -8,6 +8,15 @@ class SocketApi {
       console.log('Connected to server socket successfully.');
     });
   };
+
+  login = (username: string) => {
+    socket.emit('login', username);
+  };
+
+  logout = () => {
+    console.log('emitting logout event');
+    socket.emit('logout');
+  };
 }
 
 export enum SocketEvent {

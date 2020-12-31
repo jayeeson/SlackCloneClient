@@ -9,12 +9,14 @@ import { theme } from './themes/root';
 import Loading from './Loading';
 import Auth from './Auth';
 import { getStartupData, chatSlice } from '../store/chat';
+import SocketApi from '../apis/socket';
 
-const MainApp = ({ loginStatus, initialDataFetched }: { loginStatus: LoginStatus; initialDataFetched: boolean }) => {
+const App = ({ loginStatus, initialDataFetched }: { loginStatus: LoginStatus; initialDataFetched: boolean }) => {
   const dispatch = useAppDispatch();
   const isDeviceXs = useMediaQuery(theme.breakpoints.only('xs'));
 
   useEffect(() => {
+    SocketApi.connect();
     if (loginStatus !== LoginStatus.LoggedIn) {
       dispatch(chatSlice.actions.clearFetchedData());
     }
@@ -43,4 +45,4 @@ const mapStateToProps = (state: RootState) => {
   return { loginStatus: state.auth.loginStatus, initialDataFetched: state.chat.initialDataFetched };
 };
 
-export default connect(mapStateToProps)(MainApp);
+export default connect(mapStateToProps)(App);

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { LoginStatus } from '../types';
 import ServerApi from '../apis/server';
+import SocketApi from '../apis/socket';
 
 interface AuthState {
   loginStatus: LoginStatus;
@@ -27,6 +28,7 @@ export const login = createAsyncThunk(
   'auth/login',
   async ({ username, password }: { username: string; password: string }) => {
     const loggedInUsername = await ServerApi.login(username, password);
+    SocketApi.login(username);
     if (loggedInUsername === username) {
       return { loginStatus: LoginStatus.LoggedIn };
     }
@@ -35,6 +37,7 @@ export const login = createAsyncThunk(
 
 export const logout = createAsyncThunk('auth/logout', async () => {
   await ServerApi.logout();
+  SocketApi.logout();
   return { loginStatus: LoginStatus.LoggedOut };
 });
 
