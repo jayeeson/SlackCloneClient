@@ -45,7 +45,7 @@ const MsgPanel = ({
 
   useEffect(() => {
     ///todo: make more efficient, less calls to db
-    dispatch(getOldestMessages({ quantity: 20 }));
+    dispatch(getOldestMessages({ quantity: 100 }));
   }, [activeChannelId, dispatch]);
 
   const renderMessageItem = (message: ChatMessage) => {
@@ -55,7 +55,7 @@ const MsgPanel = ({
         <ListItemText
           primary={
             <div>
-              <span>{new Date(message.time).toLocaleDateString()}</span>
+              <span>{new Date(message.timestamp).toLocaleDateString()}</span>
               <span>{`\tuserid: ${message.userId}`}</span>
             </div>
           }

@@ -1,5 +1,7 @@
 import socketio from 'socket.io-client';
 import { asyncEmit } from '../helpers/promisify';
+import { store } from '../store';
+import { chatSlice } from '../store/chat';
 import {
   ChatChannel,
   ChatMessage,
@@ -20,6 +22,10 @@ class SocketApi {
       console.log('disconnect received');
       this.socket.connect();
     });
+    this.socket.on('newmessage', (payload: ChatMessage) => {
+      console.log('message received', payload);
+      store.dispatch(chatSlice.actions.receivedMessage(payload));
+    });
   };
 
   login = (username: string) => {
@@ -27,7 +33,6 @@ class SocketApi {
   };
 
   logout = () => {
-    console.log('emitting logout event');
     this.socket.emit('logout');
   };
 
@@ -35,17 +40,17 @@ class SocketApi {
     this.socket.emit('setActiveServer', { newServer, oldServer });
   };
 
+  setActiveChannel = (newChannel: number, oldChannel?: number) => {
+    this.socket.emit('setActiveChannel', { newChannel, oldChannel });
+  };
+
   getStartupData = async () => {
-    console.log('about to await');
     const data = await asyncEmit<StartupData>(this.socket, 'getStartupData', {});
-    console.log('received startup response');
     return data;
   };
 
   createServer = async (serverName: string) => {
-    console.log('about to await create server');
     const data = await asyncEmit<CreateServerResponse | undefined>(this.socket, 'createServer', { serverName });
-    console.log('create server data', data);
     return data;
   };
 
@@ -60,10 +65,7 @@ class SocketApi {
   };
 
   sendMessage = async (payload: SendMessagePayload) => {
-    this.socket.emit('message', payload, (status: string) => {
-      console.log('response to sendMessage received');
-      console.log(status);
-    });
+    this.socket.emit('sendMessage', payload);
   };
 }
 

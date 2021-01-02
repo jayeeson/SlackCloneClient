@@ -1,4 +1,4 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { Action, combineReducers, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import { panelsSlice } from './panels';
 import { authSlice } from './auth';
 import { useDispatch } from 'react-redux';
@@ -19,3 +19,4 @@ export const store = configureStore({
 export type RootState = ReturnType<typeof reducers>;
 export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch = () => useDispatch<AppDispatch>();
+export type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;

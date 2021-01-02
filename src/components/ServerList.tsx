@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { RootState, useAppDispatch } from '../store';
 import { ChatServer } from '../types';
 import { toAcronym } from '../utils/text';
-import { chatSlice } from '../store/chat';
 import clsx from 'clsx';
+import { setActiveServer } from '../store/chat';
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -46,7 +46,7 @@ const ServerList = ({
 
   const onServerClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, serverId: number) => {
     if (activeServerId !== serverId) {
-      dispatch(chatSlice.actions.setActiveServer({ serverId }));
+      dispatch(setActiveServer({ serverId }));
     }
   };
 

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AnyAction, createAsyncThunk, createSlice, PayloadAction, ThunkDispatch } from '@reduxjs/toolkit';
 import SocketApi from '../apis/socket';
 import {
   ChatChannel,
@@ -11,7 +11,8 @@ import {
   SendMessagePayload,
   StartupData,
 } from '../types';
-import { getLocalStorageActiveChannel, getLocalStorageActiveServer } from '../helpers/localStorage';
+import { getLocalStorageActiveServer } from '../helpers/localStorage';
+import { AppThunk, RootState } from '.';
 
 interface ChatState {
   servers: { [idx: string]: ChatServer };
@@ -33,8 +34,10 @@ const initialState: ChatState = {
   initialDataFetched: false,
 };
 
-export const getStartupData = createAsyncThunk('chat/getInitialData', async () => {
+export const getStartupData = createAsyncThunk('chat/getInitialData', async (unusedParam, thunkAPI) => {
   const data = await SocketApi.getStartupData();
+  const serverId = getLocalStorageActiveServer();
+  (thunkAPI.dispatch as ThunkDispatch<RootState, unknown, AnyAction>)(setActiveServer({ serverId }));
   return data;
 });
 
@@ -61,9 +64,21 @@ export const createChannel = createAsyncThunk('chat/createChannel', async (paylo
 
 export const sendMessage = createAsyncThunk('chat/sendMessage', async (payload: SendMessagePayload) => {
   const data = await SocketApi.sendMessage(payload);
-  console.log(data);
   return data;
 });
+
+export const setActiveServer = ({ serverId }: { serverId: number }): AppThunk => (dispatch, getState) => {
+  const state = getState();
+  dispatch(chatSlice.actions.setActiveServerImpl({ serverId }));
+
+  const storedActiveChannel = localStorage.getItem(`server#${serverId}`);
+  const randomChannelInServer = Object.values(state.chat.channels).find(channel => channel.serverId === serverId);
+  dispatch(
+    chatSlice.actions.setActiveChannel({
+      channelId: storedActiveChannel ? parseInt(storedActiveChannel, 10) : randomChannelInServer?.id ?? 0,
+    })
+  );
+};
 
 export const chatSlice = createSlice({
   name: 'chat',
@@ -74,73 +89,65 @@ export const chatSlice = createSlice({
       if (!channelId) {
         return state;
       }
+      SocketApi.setActiveChannel(channelId, state.activeChannelId);
       localStorage.setItem(`server#${state.activeServerId}`, channelId.toString());
       return { ...state, activeChannelId: channelId };
     },
-    setActiveServer: (state, { payload }: PayloadAction<{ serverId: number }>) => {
+    setActiveServerImpl: (state, { payload }: PayloadAction<{ serverId: number }>) => {
       const { serverId } = payload;
       if (!serverId) {
         return state;
       }
       SocketApi.setActiveServer(serverId, state.activeServerId);
       localStorage.setItem(localStorageKey.ChatUiSettings.activeServer, serverId.toString());
-      const storedActiveChannel = localStorage.getItem(`server#${serverId}`);
-      const randomChannelInServer = Object.values(state.channels).find(channel => channel.serverId === serverId);
-      return {
-        ...state,
-        activeServerId: serverId,
-        activeChannelId: storedActiveChannel ? parseInt(storedActiveChannel, 10) : randomChannelInServer?.id ?? 0,
-      };
+      return { ...state, activeServerId: serverId };
     },
     clearFetchedData: () => {
       return initialState;
     },
+    receivedMessage: (state, { payload }: PayloadAction<ChatMessage>) => {
+      const { content, serverId, timestamp, userId } = payload;
+      return { ...state, content, serverId, timestamp, userId };
+    },
   },
-  extraReducers: builder => {
-    builder.addCase(getStartupData.fulfilled, (state, { payload }: PayloadAction<StartupData>) => {
+  extraReducers: {
+    [getStartupData.fulfilled.type]: (state, { payload }: PayloadAction<StartupData>) => {
       if (payload) {
-        const serverId = state.activeServerId || payload.servers[0]?.id;
-        const localStorageActiveServer = getLocalStorageActiveServer();
         return {
           ...state,
           servers: { ..._.mapKeys(payload.servers, 'id') },
           channels: { ..._.mapKeys(payload.channels, 'id') },
           initialDataFetched: true,
           user: payload.user,
-          activeServerId: localStorageActiveServer,
-          activeChannelId:
-            (getLocalStorageActiveChannel(localStorageActiveServer) ||
-              Object.values(state.channels).find(channel => channel.serverId === serverId)?.id) ??
-            0,
         };
       }
       return state;
-    });
-    builder.addCase(
-      createServer.fulfilled,
-      (state, { payload }: PayloadAction<{ server: ChatServer; channels: ChatChannel[] }>) => {
-        const { id, name, ownerUserId } = payload?.server;
-        const defaultChannels: { [idx: string]: ChatChannel } = payload.channels.reduce((acc, cur) => {
-          return { ...acc, [cur.id]: cur };
-        }, {});
-        if (id) {
-          SocketApi.setActiveServer(id);
+    },
+    [createServer.fulfilled.type]: (
+      state,
+      { payload }: PayloadAction<{ server: ChatServer; channels: ChatChannel[] }>
+    ) => {
+      const { id, name, ownerUserId } = payload?.server;
+      const defaultChannels: { [idx: string]: ChatChannel } = payload.channels.reduce((acc, cur) => {
+        return { ...acc, [cur.id]: cur };
+      }, {});
+      if (id) {
+        SocketApi.setActiveServer(id);
 
-          return {
-            ...state,
-            servers: { ...state.servers, [id]: { id, name, ownerUserId } },
-            activeServerId: id,
-            channels: { ...state.channels, ...defaultChannels },
-          };
-        }
+        return {
+          ...state,
+          servers: { ...state.servers, [id]: { id, name, ownerUserId } },
+          activeServerId: id,
+          channels: { ...state.channels, ...defaultChannels },
+        };
       }
-    );
-    builder.addCase(createChannel.fulfilled, (state, { payload }: PayloadAction<ChatChannel>) => {
+    },
+    [createChannel.fulfilled.type]: (state, { payload }: PayloadAction<ChatChannel>) => {
       const { id } = payload;
       return { ...state, channels: { ...state.channels, [id]: payload }, activeChannelId: id };
-    });
-    builder.addCase(getOldestMessages.fulfilled, (state, { payload }: PayloadAction<ChatMessage[]>) => {
+    },
+    [getOldestMessages.fulfilled.type]: (state, { payload }: PayloadAction<ChatMessage[]>) => {
       return { ...state, messages: { ..._.mapKeys(payload, 'id') } };
-    });
+    },
   },
 });

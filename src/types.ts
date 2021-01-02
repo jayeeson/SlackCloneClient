@@ -42,10 +42,11 @@ export interface ChatMessage {
   id: number;
   contentType: number;
   userId: number;
-  time: string;
-  content?: string;
+  timestamp: number;
+  content: string;
   originalMsgId?: number;
   channelId: number;
+  serverId: number;
 }
 
 export interface CreateChannelRequest {
