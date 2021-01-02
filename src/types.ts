@@ -76,3 +76,14 @@ export enum MessageContentType {
   THREAD_PARENT = MessageContentTypeKey.THREAD,
   THREAD_REPLY = MessageContentTypeKey.THREAD + MessageContentTypeKey.MESSAGE,
 }
+
+export interface StartupData {
+  servers: ChatServer[];
+  channels: ChatChannel[];
+  user: ChatUser;
+}
+
+export interface CreateServerResponse {
+  server: ChatServer;
+  channels: ChatChannel[];
+}

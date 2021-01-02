@@ -14,7 +14,6 @@ import SocketApi from '../apis/socket';
 const App = ({ loginStatus, initialDataFetched }: { loginStatus: LoginStatus; initialDataFetched: boolean }) => {
   const dispatch = useAppDispatch();
   const isDeviceXs = useMediaQuery(theme.breakpoints.only('xs'));
-
   useEffect(() => {
     SocketApi.connect();
     if (loginStatus !== LoginStatus.LoggedIn) {

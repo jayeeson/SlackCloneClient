@@ -28,6 +28,8 @@ export const login = createAsyncThunk(
   'auth/login',
   async ({ username, password }: { username: string; password: string }) => {
     const loggedInUsername = await ServerApi.login(username, password);
+    SocketApi.socket.disconnect();
+    SocketApi.socket.connect();
     SocketApi.login(username);
     if (loggedInUsername === username) {
       return { loginStatus: LoginStatus.LoggedIn };
