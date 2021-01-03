@@ -26,7 +26,7 @@ class SocketApi {
       console.log('disconnect received');
       this.socket.connect();
     });
-    this.socket.on('newmessage', (payload: ChatMessage) => {
+    this.socket.on('message', (payload: ChatMessage) => {
       console.log('message received', payload);
       store.dispatch(chatSlice.actions.receivedMessage(payload));
     });
@@ -83,7 +83,7 @@ class SocketApi {
   };
 
   sendMessage = async (payload: SendMessagePayload) => {
-    this.socket.emit('sendMessage', payload);
+    this.socket.emit('message', payload);
   };
 }
 
