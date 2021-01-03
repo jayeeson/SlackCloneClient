@@ -1,6 +1,6 @@
-import { Box, List, ListItem, ListItemText } from '@material-ui/core';
+import { Avatar, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../store';
 import { ChatMessage } from '../types';
@@ -15,34 +15,77 @@ const useStyles = makeStyles({
     marginBottom: '1px',
     scrollbarWidth: 'thin',
     scrollbarGutter: 'stable',
+    flexGrow: 1,
+    alignSelf: 'flex-start',
+  },
+  displayName: {},
+  timestamp: {
+    paddingLeft: '2rem',
   },
   messageItem: {},
 });
 
-const MessageList = ({ messages }: { messages: ChatMessage[] }) => {
+const MsgList = ({ messages }: { messages: ChatMessage[] }) => {
+  const [listHeightBeforeNewMessageAdded, setListHeightBeforeNewMessageAdded] = useState(0);
+
   const classes = useStyles();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    if (containerRef?.current && listRef?.current) {
+      const { height: containerHeight } = containerRef.current.getBoundingClientRect();
+      const { height: listHeight } = listRef.current.getBoundingClientRect();
+      const { scrollTop } = containerRef.current;
+      const tolerance = 12; //px
+      if (scrollTop + tolerance >= listHeightBeforeNewMessageAdded - containerHeight) {
+        containerRef.current.scrollBy(0, listHeight - listHeightBeforeNewMessageAdded);
+      }
+    }
+  }, [messages, listHeightBeforeNewMessageAdded]);
+
+  useEffect(() => {
+    if (listRef?.current) {
+      setListHeightBeforeNewMessageAdded(listRef.current.getBoundingClientRect().height);
+    }
+  }, [messages]);
 
   const renderMessageItem = (message: ChatMessage) => {
     return (
       <ListItem className={classes.messageItem}>
-        {/*\todo: getServerUsers {message.} */}
+        <ListItemAvatar>
+          <Avatar variant="rounded">
+            {message.displayName.length ? message.displayName.slice(0, 1).toLocaleUpperCase() : '?'}
+          </Avatar>
+        </ListItemAvatar>
         <ListItemText
+          disableTypography
           primary={
             <div>
-              <span>{new Date(message.timestamp).toLocaleDateString()}</span>
-              <span>{`\tuserid: ${message.displayName}`}</span>
+              <Typography variant="h6" component="span" className={classes.displayName}>
+                {message.displayName}
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="span" className={classes.timestamp}>
+                {new Date(message.timestamp).toLocaleTimeString().split(/(?<=\d+:\d{2}):\d\d/)}
+              </Typography>
             </div>
           }
-          secondary={message.content}
+          secondary={
+            <Typography variant="body2" color="textSecondary">
+              {message.content}
+            </Typography>
+          }
         />
       </ListItem>
     );
   };
 
   return (
-    <Box alignSelf="flex-start" flexGrow={1} className={classes.root}>
-      <List>{messages.map(renderMessageItem)}</List>
-    </Box>
+    <div id="messageListContainer" ref={containerRef} className={classes.root}>
+      <List id="messageList" ref={listRef}>
+        {messages.map(renderMessageItem)}
+      </List>
+    </div>
   );
 };
 
@@ -52,4 +95,4 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-export default connect(mapStateToProps)(MessageList);
+export default connect(mapStateToProps)(MsgList);
