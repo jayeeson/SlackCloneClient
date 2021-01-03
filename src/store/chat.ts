@@ -106,8 +106,8 @@ export const chatSlice = createSlice({
       return initialState;
     },
     receivedMessage: (state, { payload }: PayloadAction<ChatMessage>) => {
-      const { content, serverId, timestamp, userId } = payload;
-      return { ...state, content, serverId, timestamp, userId };
+      const { id } = payload;
+      return { ...state, messages: { ...state.messages, [id]: { ...payload } } };
     },
   },
   extraReducers: {

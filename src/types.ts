@@ -40,13 +40,14 @@ export interface ChatUser {
 
 export interface ChatMessage {
   id: number;
-  contentType: number;
-  userId: number;
-  timestamp: number;
   content: string;
-  originalMsgId?: number;
   channelId: number;
   serverId: number;
+  userId: number;
+  timestamp: number;
+  originalMsgId?: number;
+  // contentType?: number;
+  // deleted: boolean;
 }
 
 export interface CreateChannelRequest {
