@@ -79,6 +79,7 @@ export interface StartupData {
   servers: ChatServer[];
   channels: ChatChannel[];
   user: ChatUser;
+  users: ChatUser[];
 }
 
 export interface CreateServerResponse {

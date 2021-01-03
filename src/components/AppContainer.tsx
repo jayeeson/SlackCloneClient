@@ -14,7 +14,7 @@ const AppContainer = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    // localStorage.debug = 'socket.io-client:socket';
+    localStorage.debug = 'socket.io-client:socket';
     // localStorage.debug = '';
   }, []);
 

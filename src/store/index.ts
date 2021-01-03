@@ -2,13 +2,11 @@ import { Action, combineReducers, configureStore, ThunkAction } from '@reduxjs/t
 import { panelsSlice } from './panels';
 import { authSlice } from './auth';
 import { useDispatch } from 'react-redux';
-import { userSlice } from './user';
 import { chatSlice } from './chat';
 
 export const reducers = combineReducers({
   panels: panelsSlice.reducer,
   auth: authSlice.reducer,
-  user: userSlice.reducer,
   chat: chatSlice.reducer,
 });
 

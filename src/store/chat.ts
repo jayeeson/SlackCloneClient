@@ -18,6 +18,7 @@ interface ChatState {
   channels: { [idx: string]: ChatChannel };
   messages: { [idx: string]: ChatMessage };
   user: ChatUser | null;
+  users: { [idx: string]: ChatUser };
   activeChannelId: number;
   activeServerId: number;
   initialDataFetched: boolean;
@@ -28,12 +29,13 @@ const initialState: ChatState = {
   channels: {},
   messages: {},
   user: null,
+  users: {},
   activeServerId: 0,
   activeChannelId: 0,
   initialDataFetched: false,
 };
 
-export const getStartupData = createAsyncThunk('chat/getInitialData', async (unusedParam, thunkAPI) => {
+export const getStartupData = createAsyncThunk('chat/getStartupData', async (unusedParam, thunkAPI) => {
   const data = await SocketApi.getStartupData();
   const { username } = data.user;
   const serverId = getLocalStorageActiveServer(username);
@@ -133,10 +135,11 @@ export const chatSlice = createSlice({
       if (payload) {
         return {
           ...state,
-          servers: { ..._.mapKeys(payload.servers, 'id') },
-          channels: { ..._.mapKeys(payload.channels, 'id') },
+          servers: _.mapKeys(payload.servers, 'id'),
+          channels: _.mapKeys(payload.channels, 'id'),
           initialDataFetched: true,
           user: payload.user,
+          users: _.mapKeys(payload.users, 'id'),
         };
       }
       return state;
