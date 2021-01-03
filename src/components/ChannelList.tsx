@@ -33,7 +33,7 @@ const ChannelList = ({ channels, activeServer, addChannelMenuOpen, setAddChannel
     return (
       <Fragment>
         {channelsInThisServer.map(channel => {
-          return <ChannelListItem channel={channel} />;
+          return <ChannelListItem channel={channel} key={channel.id} />;
         })}
       </Fragment>
     );

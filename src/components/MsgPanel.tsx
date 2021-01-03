@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { RootState, useAppDispatch } from '../store';
-import { getOldestMessages, sendMessage } from '../store/chat';
+import { getLatestMessagesForChannel, sendMessage } from '../store/chat';
 import { ChatMessage } from '../types';
 
 const useStyles = makeStyles({
@@ -56,7 +56,10 @@ const MsgPanel = ({
 
   useEffect(() => {
     ///todo: make more efficient, less calls to db
-    dispatch(getOldestMessages({ quantity: 100 }));
+    // make call to get messages form this channel.... later only if needed (at top of oldest messages)
+    if (activeChannelId > 0) {
+      dispatch(getLatestMessagesForChannel({ channelId: activeChannelId, quantity: 500 }));
+    }
   }, [activeChannelId, dispatch]);
 
   const renderMessageItem = (message: ChatMessage) => {
@@ -67,7 +70,7 @@ const MsgPanel = ({
           primary={
             <div>
               <span>{new Date(message.timestamp).toLocaleDateString()}</span>
-              <span>{`\tuserid: ${message.userId}`}</span>
+              <span>{`\tuserid: ${message.displayName}`}</span>
             </div>
           }
           secondary={message.content}

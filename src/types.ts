@@ -44,6 +44,7 @@ export interface ChatMessage {
   channelId: number;
   serverId: number;
   userId: number;
+  displayName: string;
   timestamp: number;
   originalMsgId?: number;
   // contentType?: number;

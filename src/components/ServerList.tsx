@@ -54,7 +54,7 @@ const ServerList = ({
   const renderServerItems = () => {
     return servers.map(server => {
       return (
-        <ListItem>
+        <ListItem key={server.id}>
           <Avatar
             variant="rounded"
             className={clsx(classes.avatar, server.id !== activeServerId && classes.nonActiveServerAvatar)}

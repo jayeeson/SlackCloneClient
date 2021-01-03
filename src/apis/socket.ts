@@ -12,7 +12,11 @@ import {
 } from '../types';
 
 class SocketApi {
-  socket = socketio('/');
+  socket: SocketIOClient.Socket;
+
+  constructor() {
+    this.socket = socketio('/');
+  }
 
   connect = () => {
     this.socket.on('connect', () => {
@@ -61,6 +65,20 @@ class SocketApi {
 
   getOldestMessages = async (quantity: number, offset?: number) => {
     const data = await asyncEmit<ChatMessage[]>(this.socket, 'getOldestMessages', { quantity, offset });
+    return data;
+  };
+
+  getNewestMessages = async (quantity: number, offset?: number) => {
+    const data = await asyncEmit<ChatMessage[]>(this.socket, 'getNewestMessages', { quantity, offset });
+    return data;
+  };
+
+  getLatestMessagesForChannel = async (channelId: number, quantity: number, offset?: number) => {
+    const data = await asyncEmit<ChatMessage[]>(this.socket, 'getLatestMessagesForChannel', {
+      channelId,
+      quantity,
+      offset,
+    });
     return data;
   };
 

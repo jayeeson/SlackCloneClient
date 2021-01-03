@@ -49,6 +49,22 @@ export const getOldestMessages = createAsyncThunk(
   }
 );
 
+export const getNewestMessages = createAsyncThunk(
+  'chat/getNewestMessages',
+  async ({ quantity, offset }: { quantity: number; offset?: number }) => {
+    const data = await SocketApi.getNewestMessages(quantity, offset);
+    return data;
+  }
+);
+
+export const getLatestMessagesForChannel = createAsyncThunk(
+  'chat/getLatestMessagesForChannel',
+  async ({ channelId, quantity, offset }: { channelId: number; quantity: number; offset?: number }) => {
+    const data = await SocketApi.getLatestMessagesForChannel(channelId, quantity, offset);
+    return data;
+  }
+);
+
 export const createServer = createAsyncThunk('chat/createServer', async ({ serverName }: { serverName: string }) => {
   const data = await SocketApi.createServer(serverName);
   if (!data) {
@@ -147,6 +163,12 @@ export const chatSlice = createSlice({
       return { ...state, channels: { ...state.channels, [id]: payload }, activeChannelId: id };
     },
     [getOldestMessages.fulfilled.type]: (state, { payload }: PayloadAction<ChatMessage[]>) => {
+      return { ...state, messages: { ..._.mapKeys(payload, 'id') } };
+    },
+    [getNewestMessages.fulfilled.type]: (state, { payload }: PayloadAction<ChatMessage[]>) => {
+      return { ...state, messages: { ..._.mapKeys(payload, 'id') } };
+    },
+    [getLatestMessagesForChannel.fulfilled.type]: (state, { payload }: PayloadAction<ChatMessage[]>) => {
       return { ...state, messages: { ..._.mapKeys(payload, 'id') } };
     },
   },
