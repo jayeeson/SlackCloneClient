@@ -20,7 +20,7 @@ const useStyles = makeStyles({
   },
   displayName: {},
   timestamp: {
-    paddingLeft: '2rem',
+    paddingLeft: '1rem',
   },
   messageItem: {},
 });
@@ -38,7 +38,10 @@ const MsgList = ({ messages }: { messages: ChatMessage[] }) => {
       const { height: listHeight } = listRef.current.getBoundingClientRect();
       const { scrollTop } = containerRef.current;
       const tolerance = 12; //px
-      if (scrollTop + tolerance >= listHeightBeforeNewMessageAdded - containerHeight) {
+      if (
+        scrollTop + tolerance >= listHeightBeforeNewMessageAdded - containerHeight &&
+        listHeightBeforeNewMessageAdded > 100
+      ) {
         containerRef.current.scrollBy(0, listHeight - listHeightBeforeNewMessageAdded);
       }
     }
@@ -71,7 +74,7 @@ const MsgList = ({ messages }: { messages: ChatMessage[] }) => {
             </div>
           }
           secondary={
-            <Typography variant="body2" color="textSecondary">
+            <Typography variant="body1" color="textPrimary">
               {message.content}
             </Typography>
           }

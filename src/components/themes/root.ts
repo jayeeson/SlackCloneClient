@@ -26,7 +26,7 @@ export const theme = createMuiTheme({
     divider: '#474747',
     text: {
       primary: '#d4d4d9',
-      secondary: '#CECECE',
+      secondary: '#bcbcbc',
     },
     primary: {
       main: '#deded9',

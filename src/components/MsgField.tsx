@@ -33,7 +33,7 @@ const MsgField = ({ activeChannelId, activeServerId }: { activeChannelId: number
     ///todo: make more efficient, less calls to db
     // make call to get messages form this channel.... later only if needed (at top of oldest messages)
     if (activeChannelId > 0) {
-      dispatch(getLatestMessagesForChannel({ channelId: activeChannelId, quantity: 500 }));
+      dispatch(getLatestMessagesForChannel({ channelId: activeChannelId, quantity: 10 }));
     }
   }, [activeChannelId, dispatch]);
 
