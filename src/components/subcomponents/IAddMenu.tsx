@@ -81,6 +81,7 @@ const IAddMenu = ({
       <Fragment>
         {textFields.map((textField, index) => (
           <TextField
+            key={index}
             required={Array.isArray(validation) && validation.find(element => element === index + 1) !== undefined}
             color="secondary"
             margin="dense"

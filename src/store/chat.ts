@@ -7,11 +7,10 @@ import {
   ChatServer,
   ChatUser,
   CreateChannelRequest,
-  localStorageKey,
   SendMessagePayload,
   StartupData,
 } from '../types';
-import { getLocalStorageActiveServer } from '../helpers/localStorage';
+import { getLocalStorageActiveChannel, getLocalStorageActiveServer } from '../helpers/localStorage';
 import { AppThunk, RootState } from '.';
 
 interface ChatState {
@@ -36,7 +35,8 @@ const initialState: ChatState = {
 
 export const getStartupData = createAsyncThunk('chat/getInitialData', async (unusedParam, thunkAPI) => {
   const data = await SocketApi.getStartupData();
-  const serverId = getLocalStorageActiveServer();
+  const { username } = data.user;
+  const serverId = getLocalStorageActiveServer(username);
   (thunkAPI.dispatch as ThunkDispatch<RootState, unknown, AnyAction>)(setActiveServer({ serverId }));
   return data;
 });
@@ -85,13 +85,15 @@ export const sendMessage = createAsyncThunk('chat/sendMessage', async (payload: 
 
 export const setActiveServer = ({ serverId }: { serverId: number }): AppThunk => (dispatch, getState) => {
   const state = getState();
-  dispatch(chatSlice.actions.setActiveServerImpl({ serverId }));
+  const username = state.chat.user?.username;
+  dispatch(chatSlice.actions.setActiveServerImpl({ serverId, username }));
 
-  const storedActiveChannel = localStorage.getItem(`server#${serverId}`);
+  const storedActiveChannel = getLocalStorageActiveChannel(serverId, username ?? '');
   const randomChannelInServer = Object.values(state.chat.channels).find(channel => channel.serverId === serverId);
   dispatch(
     chatSlice.actions.setActiveChannel({
-      channelId: storedActiveChannel ? parseInt(storedActiveChannel, 10) : randomChannelInServer?.id ?? 0,
+      channelId: (storedActiveChannel || randomChannelInServer?.id) ?? 0,
+      username,
     })
   );
 };
@@ -100,22 +102,22 @@ export const chatSlice = createSlice({
   name: 'chat',
   initialState,
   reducers: {
-    setActiveChannel: (state, { payload }: PayloadAction<{ channelId: number }>) => {
-      const { channelId } = payload;
-      if (!channelId) {
+    setActiveChannel: (state, { payload }: PayloadAction<{ channelId: number; username: string | undefined }>) => {
+      const { channelId, username } = payload;
+      if (!(channelId && username)) {
         return state;
       }
       SocketApi.setActiveChannel(channelId, state.activeChannelId);
-      localStorage.setItem(`server#${state.activeServerId}`, channelId.toString());
+      localStorage.setItem(`chatClient#activeChannel@${username}:${state.activeServerId}`, channelId.toString());
       return { ...state, activeChannelId: channelId };
     },
-    setActiveServerImpl: (state, { payload }: PayloadAction<{ serverId: number }>) => {
-      const { serverId } = payload;
-      if (!serverId) {
+    setActiveServerImpl: (state, { payload }: PayloadAction<{ serverId: number; username?: string }>) => {
+      const { serverId, username } = payload;
+      if (!(serverId && username)) {
         return state;
       }
       SocketApi.setActiveServer(serverId, state.activeServerId);
-      localStorage.setItem(localStorageKey.ChatUiSettings.activeServer, serverId.toString());
+      localStorage.setItem(`chatClient#activeServer@${username}`, serverId.toString());
       return { ...state, activeServerId: serverId };
     },
     clearFetchedData: () => {

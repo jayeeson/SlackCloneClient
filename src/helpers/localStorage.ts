@@ -1,9 +1,7 @@
-import { localStorageKey } from '../types';
-
-export const getLocalStorageActiveServer = () => {
-  return parseInt(localStorage.getItem(localStorageKey.ChatUiSettings.activeServer) ?? '0', 10);
+export const getLocalStorageActiveServer = (username: string) => {
+  return parseInt(localStorage.getItem(`chatClient#activeServer@${username}`) ?? '0', 10);
 };
 
-export const getLocalStorageActiveChannel = (server: number) => {
-  return parseInt(localStorage.getItem(`server#${server}`) ?? '0', 10);
+export const getLocalStorageActiveChannel = (server: number, username: string) => {
+  return parseInt(localStorage.getItem(`chatClient#activeChannel@${username}:${server}`) ?? '0', 10);
 };

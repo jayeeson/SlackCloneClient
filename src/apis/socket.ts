@@ -27,7 +27,6 @@ class SocketApi {
       this.socket.connect();
     });
     this.socket.on('message', (payload: ChatMessage) => {
-      console.log('message received', payload);
       store.dispatch(chatSlice.actions.receivedMessage(payload));
     });
   };

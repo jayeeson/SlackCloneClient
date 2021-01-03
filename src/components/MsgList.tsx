@@ -52,7 +52,7 @@ const MsgList = ({ messages }: { messages: ChatMessage[] }) => {
 
   const renderMessageItem = (message: ChatMessage) => {
     return (
-      <ListItem className={classes.messageItem}>
+      <ListItem className={classes.messageItem} key={message.id}>
         <ListItemAvatar>
           <Avatar variant="rounded">
             {message.displayName.length ? message.displayName.slice(0, 1).toLocaleUpperCase() : '?'}

@@ -5,16 +5,11 @@ export enum LoginStatus {
 }
 
 export enum DraggablePanel {
-  sidebarWidth = 'sidebarWidth',
-  viewPanelWidth = 'viewPanelWidth',
+  sidebarWidth = 'chatClient@sidebarWidth',
+  viewPanelWidth = 'chatClient@viewPanelWidth',
 }
 
-export enum ChatUiSettings {
-  activeServer = 'activeServer',
-}
-
-export const localStorageKey = { DraggablePanel, ChatUiSettings };
-// export type localStorageKey = typeof DraggablePanel;
+export const localStorageKey = { DraggablePanel };
 
 export interface ChatServer {
   id: number;
