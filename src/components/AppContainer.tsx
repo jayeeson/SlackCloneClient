@@ -13,6 +13,10 @@ const AppContainer = () => {
     dispatch(getLoginStatus());
   }, [dispatch]);
 
+  useEffect(() => {
+    localStorage.debug = 'socket.io-client:socket';
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

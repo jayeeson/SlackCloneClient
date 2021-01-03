@@ -63,3 +63,7 @@ events that require notifying other users
 # some items maybe to do at the end
 
 - check channel name conflict on channel creation
+
+# production
+
+- [] exclude socketio debug from browser bundle with webpack-remove-debug
