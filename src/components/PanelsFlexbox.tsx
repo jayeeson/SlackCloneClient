@@ -16,6 +16,7 @@ import { sidebarTheme } from './themes/sidebar';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     background: theme.palette.background.default,
+    overflow: 'hidden',
   },
   flexItem: {
     margin: '0 0',

@@ -13,6 +13,7 @@ const useStyles = makeStyles(theme =>
     root: {
       maxHeight: '80vh',
       overflowY: 'auto',
+      scrollbarWidth: 'thin',
     },
     avatar: ({ serverIconWidth }: { serverIconWidth: number }) => ({
       position: 'relative',

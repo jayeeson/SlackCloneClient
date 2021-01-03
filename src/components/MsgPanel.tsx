@@ -14,12 +14,23 @@ const useStyles = makeStyles({
     margin: '0 0 0 0',
     boxSizing: 'border-box',
     display: 'flex',
+    overflow: 'hidden',
+  },
+  messageListContainer: {
+    maxHeight: '100%',
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    maxWidth: '100%',
+    width: '100%',
+    marginBottom: '1px',
+    scrollbarWidth: 'thin',
+    scrollbarGutter: 'stable',
   },
   messageFieldContainer: {
     width: '100%',
+    padding: '0 10px 10px',
   },
   messageField: {
-    margin: '0 auto',
     width: '100%',
   },
   messageItem: {},
@@ -90,7 +101,7 @@ const MsgPanel = ({
 
   return (
     <Box className={classes.root} id="msgPanel" display={display} flexDirection="column">
-      <Box alignSelf="flex-start" flexGrow={1}>
+      <Box alignSelf="flex-start" flexGrow={1} className={classes.messageListContainer}>
         {renderMessageList()}
       </Box>
       <Box className={classes.messageFieldContainer} flexDirection="column" alignSelf="flex-end">
