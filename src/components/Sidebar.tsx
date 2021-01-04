@@ -4,7 +4,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../store';
-import ChannelList from './ChannelList';
+import ChannelPanel from './ChannelPanel';
 import ServerName from './ServerName';
 
 interface IProps {
@@ -40,7 +40,7 @@ const Sidebar = ({ sidebarWidth, sidebarOpen }: IProps) => {
       <div className={classes.root}>
         <ServerName />
         <Divider />
-        <ChannelList addChannelMenuOpen={addChannelMenuOpen} setAddChannelMenuOpen={setAddChannelMenuOpen} />
+        <ChannelPanel addChannelMenuOpen={addChannelMenuOpen} setAddChannelMenuOpen={setAddChannelMenuOpen} />
       </div>
     </Box>
   );
