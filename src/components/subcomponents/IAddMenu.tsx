@@ -68,8 +68,8 @@ const IAddMenu = ({
       return validation;
     } else {
       return (
-        (validation.firstFieldRequired && !(textFields[0].value as string).length) ||
-        (validation.secondFieldRequired && !(textFields[1].value as string).length)
+        (validateTextFields.firstFieldRequired && (!textFields[0] || !(textFields[0].value as string).length)) ||
+        (validateTextFields.secondFieldRequired && (!textFields[1] || !(textFields[1]?.value as string).length))
       );
     }
   };
