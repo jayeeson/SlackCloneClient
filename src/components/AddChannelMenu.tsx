@@ -56,7 +56,7 @@ const AddChannelMenu = ({
           },
         },
       ]}
-      validation={{ firstFieldRequired: true }}
+      validateTextFields={{ firstFieldRequired: true }}
       extraContent={renderExtraContent()}
     />
   );

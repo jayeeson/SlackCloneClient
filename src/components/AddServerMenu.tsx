@@ -41,7 +41,7 @@ const AddServerMenu = ({
           autoFocus: true,
         },
       ]}
-      validation={{ firstFieldRequired: true }}
+      validateTextFields={{ firstFieldRequired: true }}
     />
   );
 };

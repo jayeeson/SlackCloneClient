@@ -43,10 +43,11 @@ export interface IAddMenuProps {
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmit: () => void;
   titleProps: DialogTitleProps;
-  description: DialogContentTextProps;
-  textFields: TextFieldProps[];
-  validation?: boolean | { firstFieldRequired?: boolean; secondFieldRequired?: boolean };
+  description?: DialogContentTextProps;
+  textFields?: TextFieldProps[];
+  validateTextFields?: { firstFieldRequired?: boolean; secondFieldRequired?: boolean };
   extraContent?: ReactNode;
+  extraValidationFunc?: () => boolean;
 }
 
 const IAddMenu = ({
@@ -56,16 +57,15 @@ const IAddMenu = ({
   titleProps,
   description,
   textFields,
-  validation,
+  validateTextFields,
   extraContent,
+  extraValidationFunc,
 }: IAddMenuProps) => {
   const classes = useStyles();
 
-  const convertDisabled = () => {
-    if (!validation) {
+  const isSubmitDisabled = () => {
+    if (!validateTextFields || !textFields) {
       return false;
-    } else if (typeof validation === 'boolean') {
-      return validation;
     } else {
       return (
         (validateTextFields.firstFieldRequired && (!textFields[0] || !(textFields[0].value as string).length)) ||
@@ -74,21 +74,27 @@ const IAddMenu = ({
     }
   };
 
-  const disabled = convertDisabled();
-
   const renderTextFields = () => {
+    if (!textFields) {
+      return null;
+    }
+
     return (
       <Fragment>
         {textFields.map((textField, index) => (
           <TextField
             key={index}
-            required={Array.isArray(validation) && validation.find(element => element === index + 1) !== undefined}
+            required={
+              validateTextFields &&
+              ((index === 0 && validateTextFields.firstFieldRequired) ||
+                (index === 1 && validateTextFields.secondFieldRequired))
+            }
             color="secondary"
             margin="dense"
             fullWidth
             variant="outlined"
             label={textField?.label ?? `TextField${index + 1}`}
-            onKeyPressCapture={e => e.key === 'Enter' && !convertDisabled() && onSubmit()}
+            onKeyPressCapture={e => e.key === 'Enter' && !isSubmitDisabled() && onSubmit()}
             {...textField}
           />
         ))}
@@ -114,7 +120,12 @@ const IAddMenu = ({
         {extraContent}
       </DialogContent>
       <DialogActions>
-        <Button disabled={disabled} variant="contained" className={classes.createButton} onClick={onSubmit}>
+        <Button
+          disabled={isSubmitDisabled() || (extraValidationFunc && extraValidationFunc())}
+          variant="contained"
+          className={classes.createButton}
+          onClick={onSubmit}
+        >
           Create
         </Button>
       </DialogActions>
