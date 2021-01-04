@@ -12,6 +12,7 @@ import {
 } from '../types';
 import { getLocalStorageActiveChannel, getLocalStorageActiveServer } from '../helpers/localStorage';
 import { AppThunk, RootState } from '.';
+import config from '../config';
 
 interface ChatState {
   servers: { [idx: string]: ChatServer };
@@ -38,7 +39,10 @@ const initialState: ChatState = {
 export const getStartupData = createAsyncThunk('chat/getStartupData', async (unusedParam, thunkAPI) => {
   const data = await SocketApi.getStartupData();
   const { username } = data.user;
-  const serverId = getLocalStorageActiveServer(username);
+  const serverId =
+    getLocalStorageActiveServer(username) || data.servers.find(server => server.id === config.defaultServer.id)
+      ? config.defaultServer.id
+      : 0;
   (thunkAPI.dispatch as ThunkDispatch<RootState, unknown, AnyAction>)(setActiveServer({ serverId }));
   return data;
 });
