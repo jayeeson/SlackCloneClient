@@ -12,7 +12,7 @@ interface IProps {
   channel: ChatChannel;
   activeChannelId: number;
   setActiveChannel: typeof chatSlice.actions.setActiveChannel;
-  username: string | undefined;
+  userId: number | null;
 }
 
 const useStyles = makeStyles(theme =>
@@ -23,12 +23,12 @@ const useStyles = makeStyles(theme =>
   })
 );
 
-const ChannelListItem = ({ channel, activeChannelId, setActiveChannel, username }: IProps) => {
+const ChannelListItem = ({ channel, activeChannelId, setActiveChannel, userId }: IProps) => {
   const classes = useStyles();
 
   const onChannelItemClick = (channelId: number) => {
-    if (activeChannelId !== channelId && username) {
-      setActiveChannel({ channelId, username });
+    if (activeChannelId !== channelId && userId) {
+      setActiveChannel({ channelId, userId });
     }
   };
 
@@ -52,7 +52,7 @@ const mapStateToProps = (state: RootState) => {
     channels: state.chat.channels,
     activeChannelId: state.chat.activeChannelId,
     activeServer: state.chat.servers[state.chat.activeServerId],
-    username: state.chat.user?.username,
+    userId: state.chat.userId,
   };
 };
 export default connect(mapStateToProps, { setActiveChannel: chatSlice.actions.setActiveChannel })(ChannelListItem);

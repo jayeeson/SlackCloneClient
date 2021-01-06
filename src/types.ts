@@ -15,6 +15,7 @@ export interface ChatServer {
   id: number;
   name: string;
   ownerUserId: number;
+  userIds: number[];
 }
 
 export interface ChatChannel {
@@ -39,7 +40,6 @@ export interface ChatMessage {
   channelId: number;
   serverId: number;
   userId: number;
-  displayName: string;
   timestamp: number;
   originalMsgId?: number;
   // contentType?: number;
@@ -78,7 +78,7 @@ export enum MessageContentType {
 export interface StartupData {
   servers: ChatServer[];
   channels: ChatChannel[];
-  user: ChatUser;
+  userId: number;
   users: ChatUser[];
 }
 

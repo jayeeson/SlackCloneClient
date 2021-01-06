@@ -18,7 +18,7 @@ interface ChatState {
   servers: { [idx: string]: ChatServer };
   channels: { [idx: string]: ChatChannel };
   messages: { [idx: string]: ChatMessage };
-  user: ChatUser | null;
+  userId: number | null;
   users: { [idx: string]: ChatUser };
   activeChannelId: number;
   activeServerId: number;
@@ -29,7 +29,7 @@ const initialState: ChatState = {
   servers: {},
   channels: {},
   messages: {},
-  user: null,
+  userId: null,
   users: {},
   activeServerId: 0,
   activeChannelId: 0,
@@ -38,11 +38,10 @@ const initialState: ChatState = {
 
 export const getStartupData = createAsyncThunk('chat/getStartupData', async (unusedParam, thunkAPI) => {
   const data = await SocketApi.getStartupData();
-  const { username } = data.user;
+  const { userId } = data;
   const serverId =
-    getLocalStorageActiveServer(username) || data.servers.find(server => server.id === config.defaultServer.id)
-      ? config.defaultServer.id
-      : 0;
+    getLocalStorageActiveServer(userId) ||
+    (data.servers.find(server => server.id === config.defaultServer.id) ? config.defaultServer.id : 0);
   (thunkAPI.dispatch as ThunkDispatch<RootState, unknown, AnyAction>)(setActiveServer({ serverId }));
   return data;
 });
@@ -91,15 +90,15 @@ export const sendMessage = createAsyncThunk('chat/sendMessage', async (payload: 
 
 export const setActiveServer = ({ serverId }: { serverId: number }): AppThunk => (dispatch, getState) => {
   const state = getState();
-  const username = state.chat.user?.username;
-  dispatch(chatSlice.actions.setActiveServerImpl({ serverId, username }));
+  const { userId } = state.chat;
+  dispatch(chatSlice.actions.setActiveServerImpl({ serverId, userId }));
 
-  const storedActiveChannel = getLocalStorageActiveChannel(serverId, username ?? '');
+  const storedActiveChannel = getLocalStorageActiveChannel(serverId, userId ?? 0);
   const randomChannelInServer = Object.values(state.chat.channels).find(channel => channel.serverId === serverId);
   dispatch(
     chatSlice.actions.setActiveChannel({
       channelId: (storedActiveChannel || randomChannelInServer?.id) ?? 0,
-      username,
+      userId,
     })
   );
 };
@@ -108,22 +107,22 @@ export const chatSlice = createSlice({
   name: 'chat',
   initialState,
   reducers: {
-    setActiveChannel: (state, { payload }: PayloadAction<{ channelId: number; username: string | undefined }>) => {
-      const { channelId, username } = payload;
-      if (!(channelId && username)) {
+    setActiveChannel: (state, { payload }: PayloadAction<{ channelId: number; userId: number | null }>) => {
+      const { channelId, userId } = payload;
+      if (!(channelId && userId)) {
         return state;
       }
       SocketApi.setActiveChannel(channelId, state.activeChannelId);
-      localStorage.setItem(`chatClient#activeChannel@${username}:${state.activeServerId}`, channelId.toString());
+      localStorage.setItem(`chatClient#activeChannel@${userId}:${state.activeServerId}`, channelId.toString());
       return { ...state, activeChannelId: channelId };
     },
-    setActiveServerImpl: (state, { payload }: PayloadAction<{ serverId: number; username?: string }>) => {
-      const { serverId, username } = payload;
-      if (!(serverId && username)) {
+    setActiveServerImpl: (state, { payload }: PayloadAction<{ serverId: number; userId: number | null }>) => {
+      const { serverId, userId } = payload;
+      if (!(serverId && userId)) {
         return state;
       }
       SocketApi.setActiveServer(serverId, state.activeServerId);
-      localStorage.setItem(`chatClient#activeServer@${username}`, serverId.toString());
+      localStorage.setItem(`chatClient#activeServer@${userId}`, serverId.toString());
       return { ...state, activeServerId: serverId };
     },
     clearFetchedData: () => {
@@ -142,7 +141,7 @@ export const chatSlice = createSlice({
           servers: _.mapKeys(payload.servers, 'id'),
           channels: _.mapKeys(payload.channels, 'id'),
           initialDataFetched: true,
-          user: payload.user,
+          userId: payload.userId,
           users: _.mapKeys(payload.users, 'id'),
         };
       }

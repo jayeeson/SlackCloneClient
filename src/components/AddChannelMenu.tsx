@@ -20,7 +20,7 @@ const AddChannelMenu = ({
   const onChannelCreateSubmit = () => {
     setMenuOpen(false);
     ///\todo:  private controlled by ui toggle
-    dispatch(createChannel({ channelName, serverId: activeServerId, isPrivate: false }));
+    dispatch(createChannel({ channelName, serverId: activeServerId, isPrivate: false, description: description }));
 
     setChannelName('');
     setDescription('');
@@ -37,7 +37,8 @@ const AddChannelMenu = ({
       onSubmit={onChannelCreateSubmit}
       titleProps={{ children: 'Create a new Channel' }}
       description={{
-        children: 'Here you can create your own channel! You can invite anyone you like, now or later.',
+        children:
+          'Here you can create your own channel! You can invite anyone you like, now or later. Public channels can be joined later by anyone in the server.',
       }}
       textFields={[
         {

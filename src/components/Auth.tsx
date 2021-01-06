@@ -16,11 +16,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: '30px 10px',
     height: '210px',
   },
-  loggedInFormBox: {
-    borderRadius: '0 0 5px 5px',
-  },
   loggedOutFormBox: {
-    borderRadius: '5px',
+    borderRadius: '0 0 5px 5px',
   },
   appBar: {
     color: theme.palette.primary.contrastText,
@@ -38,6 +35,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     textAlign: 'center',
   },
   button: {
+    marginTop: 6,
     float: 'right',
   },
   selected: {

@@ -1,7 +1,7 @@
 import { Box, Divider } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../store';
 import ChannelPanel from './ChannelPanel';
@@ -20,11 +20,13 @@ const useStyles = makeStyles(theme =>
       height: '100%',
       boxSizing: 'border-box',
     }),
+    verticalFlexbox: {
+      height: '100%',
+    },
   })
 );
 
 const Sidebar = ({ sidebarWidth, sidebarOpen }: IProps) => {
-  const [addChannelMenuOpen, setAddChannelMenuOpen] = useState(false);
   const classes = useStyles({ sidebarWidth });
 
   return (
@@ -36,12 +38,13 @@ const Sidebar = ({ sidebarWidth, sidebarOpen }: IProps) => {
       width={sidebarWidth}
       id="sidebar"
       display={sidebarOpen ? 'inline' : 'none'}
+      className={classes.root}
     >
-      <div className={classes.root}>
+      <Box display="flex" flexDirection="column" flexGrow={1} flexShrink={0} className={classes.verticalFlexbox}>
         <ServerName />
         <Divider />
-        <ChannelPanel addChannelMenuOpen={addChannelMenuOpen} setAddChannelMenuOpen={setAddChannelMenuOpen} />
-      </div>
+        <ChannelPanel />
+      </Box>
     </Box>
   );
 };

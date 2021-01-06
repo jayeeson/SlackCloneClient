@@ -1,5 +1,5 @@
 import socketio from 'socket.io-client';
-import { asyncEmit } from '../helpers/promisify';
+import { asyncEmit } from '../helpers/asyncEmit';
 import { store } from '../store';
 import { chatSlice } from '../store/chat';
 import {
@@ -21,10 +21,6 @@ class SocketApi {
   connect = () => {
     this.socket.on('connect', () => {
       console.log('Connected to server socket successfully.');
-    });
-    this.socket.on('disconnect', () => {
-      console.log('disconnect received');
-      this.socket.connect();
     });
     this.socket.on('message', (payload: ChatMessage) => {
       store.dispatch(chatSlice.actions.receivedMessage(payload));

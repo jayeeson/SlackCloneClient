@@ -7,17 +7,22 @@ import { RootState } from '../store';
 import { ChatChannel, ChatServer } from '../types';
 import { colorHexAdder } from '../utils/colorTransform';
 import AddChannelMenu from './AddChannelMenu';
+import AddMemberToServerMenu from './AddMemberToServerMenu';
 import ChannelListItem from './ChannelListItem';
 import ListItemTextNoWrap from './subcomponents/ListItemTextNoWrap';
 
 interface ChannelListProps {
   channels: ChatChannel[];
   activeServer: ChatServer;
-  addChannelMenuOpen: boolean;
-  setAddChannelMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    flex: '1 0 0',
+    maxHeight: '100%',
+    overflowY: 'auto',
+    scrollbarWidth: 'thin',
+  },
   button: {
     width: 40,
     minWidth: 40,
@@ -39,7 +44,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ChannelPanel = ({ channels, activeServer, addChannelMenuOpen, setAddChannelMenuOpen }: ChannelListProps) => {
+const ChannelPanel = ({ channels, activeServer }: ChannelListProps) => {
+  const [addChannelMenuOpen, setAddChannelMenuOpen] = useState(false);
+  const [addMemberMenuOpen, setAddMemberMenuOpen] = useState(false);
   const [channelCollapseOpen, setChannelCollapseOpen] = useState(true);
   const classes = useStyles();
 
@@ -86,22 +93,25 @@ const ChannelPanel = ({ channels, activeServer, addChannelMenuOpen, setAddChanne
 
   const renderAddMemberButton = () => {
     return (
-      <ListItem button style={{ display: 'flex' }} disableRipple>
-        <ListItemIcon>
-          <Avatar
-            classes={{ root: classes.addMembersButtonRoot, colorDefault: classes.addMembersButtonColorDefault }}
-            variant="rounded"
-          >
-            <Add fontSize="small" />
-          </Avatar>
-        </ListItemIcon>
-        <ListItemTextNoWrap style={{ flexGrow: 1 }}>Add members</ListItemTextNoWrap>
-      </ListItem>
+      <Fragment>
+        <ListItem button style={{ display: 'flex' }} disableRipple onClick={() => setAddMemberMenuOpen(true)}>
+          <ListItemIcon>
+            <Avatar
+              classes={{ root: classes.addMembersButtonRoot, colorDefault: classes.addMembersButtonColorDefault }}
+              variant="rounded"
+            >
+              <Add fontSize="small" />
+            </Avatar>
+          </ListItemIcon>
+          <ListItemTextNoWrap style={{ flexGrow: 1 }}>Add members</ListItemTextNoWrap>
+        </ListItem>
+        <AddMemberToServerMenu menuOpen={addMemberMenuOpen} setMenuOpen={setAddMemberMenuOpen} />
+      </Fragment>
     );
   };
 
   return (
-    <List>
+    <List className={classes.root}>
       {channelList()}
       {renderAddMemberButton()}
     </List>

@@ -47,7 +47,7 @@ const AddServerMenu = ({
 };
 
 const mapStateToProps = (state: RootState) => {
-  return { username: state.chat.user?.username };
+  return { username: Object.values(state.chat.users)?.find(user => user.id === state.chat.userId)?.username };
 };
 
 export default memo(connect(mapStateToProps)(AddServerMenu));

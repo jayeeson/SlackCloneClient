@@ -1,7 +1,7 @@
-export const getLocalStorageActiveServer = (username: string) => {
-  return parseInt(localStorage.getItem(`chatClient#activeServer@${username}`) ?? '0', 10);
+export const getLocalStorageActiveServer = (userId: number) => {
+  return parseInt(localStorage.getItem(`chatClient#activeServer@${userId}`) ?? '0', 10);
 };
 
-export const getLocalStorageActiveChannel = (server: number, username: string) => {
-  return parseInt(localStorage.getItem(`chatClient#activeChannel@${username}:${server}`) ?? '0', 10);
+export const getLocalStorageActiveChannel = (server: number, userId: number | null) => {
+  return parseInt(localStorage.getItem(`chatClient#activeChannel@${userId}:${server}`) ?? '0', 10);
 };
