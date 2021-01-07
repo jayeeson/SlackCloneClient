@@ -58,7 +58,7 @@ const MsgField = ({ activeChannelId, activeServerId }: { activeChannelId: number
 
   return (
     <Box className={classes.messageFieldContainer} flexDirection="column" alignSelf="flex-end">
-      <Paper>
+      <Paper elevation={0}>
         <TextField
           className={classes.messageField}
           multiline
