@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, NativeSelect, TextField } from '@material-ui/core';
+import { Chip, FormControl, InputLabel, NativeSelect, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Autocomplete } from '@material-ui/lab';
 import React, { Fragment, memo, useState } from 'react';
@@ -12,7 +12,15 @@ const useStyles = makeStyles({
     paddingTop: '2rem',
     width: '100%',
   },
+  iconColorPrimary: {
+    color: '#ffff55',
+  },
 });
+
+interface SelectedUsers {
+  userId: number;
+  username: string;
+}
 
 const AddMemberToServerMenu = ({
   menuOpen,
@@ -28,11 +36,14 @@ const AddMemberToServerMenu = ({
   users: ChatUser[];
 }) => {
   const [addFromServer, setAddFromServer] = useState<number>(0);
+  const [selectedUsers, setSelectedUsers] = React.useState<SelectedUsers[]>([]);
+  const [inputValue, setInputValue] = React.useState('');
   const dispatch = useAppDispatch();
   const classes = useStyles();
 
   const onFormSubmit = () => {
     setMenuOpen(false);
+    ///\todo: dispatch invite to server DM to selected users
     // dispatch(createChannel({ channelName, serverId: activeServerId, isPrivate: false }));
 
     setAddFromServer(0);
@@ -41,8 +52,6 @@ const AddMemberToServerMenu = ({
   const onServerSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setAddFromServer(parseInt(e.target.value, 10));
   };
-
-  const userOptions = addFromServer && users.filter(user => user);
 
   const renderExtraContent = () => {
     return (
@@ -63,10 +72,38 @@ const AddMemberToServerMenu = ({
             ))}
           </NativeSelect>
           <Autocomplete
+            getOptionSelected={(option, value) => option.userId === value.userId}
+            value={selectedUsers}
+            onChange={(event: any, newValue: SelectedUsers[]) => {
+              setSelectedUsers(newValue);
+            }}
+            inputValue={inputValue}
+            onInputChange={(event, newInputValue) => {
+              setInputValue(newInputValue);
+            }}
+            multiple
             id="combo-box-demo"
             className={classes.userComboBox}
-            options={[]}
-            getOptionLabel={option => option}
+            options={
+              servers
+                .find(server => server.id === addFromServer)
+                ?.userIds.map(userId => {
+                  const thisUser = users.find(user => user.id === userId);
+                  return { username: thisUser?.username || '', userId: thisUser?.id || 0 };
+                }) || []
+            }
+            getOptionLabel={option => option.username || ''}
+            renderTags={(value, getTagProps) =>
+              value.map((option, index) => (
+                <Chip
+                  key={option.userId}
+                  label={`${option.username}#${option.userId}`}
+                  color="primary"
+                  size="small"
+                  {...getTagProps({ index })}
+                />
+              ))
+            }
             renderInput={params => <TextField {...params} label="user" variant="outlined" />}
           />
         </FormControl>
@@ -82,6 +119,7 @@ const AddMemberToServerMenu = ({
       titleProps={{ children: `Invite users to ${activeServer?.name}` }}
       description={{ children: 'Select which server to invite from' }}
       extraContent={renderExtraContent()}
+      buttonText="INVITE"
     />
   );
 };

@@ -48,6 +48,7 @@ export interface IAddMenuProps {
   validateTextFields?: { firstFieldRequired?: boolean; secondFieldRequired?: boolean };
   extraContent?: ReactNode;
   extraValidationFunc?: () => boolean;
+  buttonText?: string;
 }
 
 const IAddMenu = ({
@@ -60,6 +61,7 @@ const IAddMenu = ({
   validateTextFields,
   extraContent,
   extraValidationFunc,
+  buttonText,
 }: IAddMenuProps) => {
   const classes = useStyles();
 
@@ -126,7 +128,7 @@ const IAddMenu = ({
           className={classes.createButton}
           onClick={onSubmit}
         >
-          Create
+          {buttonText ? buttonText : 'Create'}
         </Button>
       </DialogActions>
     </Dialog>
