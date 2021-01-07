@@ -1,35 +1,38 @@
 import { Avatar, List, ListItem } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { RootState, useAppDispatch } from '../store';
 import { ChatServer } from '../types';
 import { toAcronym } from '../utils/text';
 import clsx from 'clsx';
 import { setActiveServer } from '../store/chat';
+import useWindowSize from '../hooks/useWindowSize';
 
-const useStyles = makeStyles(theme =>
-  createStyles({
-    root: {
-      maxHeight: '80vh',
+const useStyles = makeStyles(theme => ({
+  root: (props: any) => ({
+    maxHeight: '80vh',
+    overflowY: 'hidden',
+    scrollbarWidth: 'thin',
+    '&:hover': {
       overflowY: 'auto',
-      scrollbarWidth: 'thin',
+      marginLeft: props.isOverflown ? 8 : 0,
     },
-    avatar: ({ serverIconWidth }: { serverIconWidth: number }) => ({
-      position: 'relative',
-      transform: 'translateX(-50%)',
-      left: '50%',
-      color: theme.palette.primary.contrastText,
-      height: serverIconWidth,
-      width: serverIconWidth,
-    }),
-    nonActiveServerAvatar: {
-      '&:hover': {
-        cursor: 'pointer',
-      },
+  }),
+  avatar: (props: any) => ({
+    position: 'relative',
+    transform: 'translateX(-50%)',
+    left: '50%',
+    color: theme.palette.primary.contrastText,
+    height: props.serverIconWidth,
+    width: props.serverIconWidth,
+  }),
+  nonActiveServerAvatar: {
+    '&:hover': {
+      cursor: 'pointer',
     },
-  })
-);
+  },
+}));
 
 const ServerList = ({
   width,
@@ -40,10 +43,19 @@ const ServerList = ({
   servers: ChatServer[];
   activeServerId: number;
 }) => {
+  const [isOverflown, setIsOverflown] = useState(false);
+  const rootRef = useRef<HTMLUListElement | null>(null);
   const dispatch = useAppDispatch();
-
   const serverIconWidth = width * 0.55;
-  const classes = useStyles({ serverIconWidth });
+  const windowSize = useWindowSize();
+  const classes = useStyles({ serverIconWidth, isOverflown });
+
+  useEffect(() => {
+    const container = rootRef.current;
+    if (container) {
+      setIsOverflown(container.scrollHeight > container.getBoundingClientRect().height);
+    }
+  }, [windowSize.y]);
 
   const onServerClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, serverId: number) => {
     if (activeServerId !== serverId) {
@@ -67,7 +79,11 @@ const ServerList = ({
     });
   };
 
-  return <List className={classes.root}>{renderServerItems()}</List>;
+  return (
+    <List id="serverList" ref={rootRef} className={classes.root}>
+      {renderServerItems()}
+    </List>
+  );
 };
 
 const mapStateToProps = (state: RootState) => {

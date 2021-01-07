@@ -10,7 +10,6 @@ const useStyles = makeStyles({
   root: {
     width: '100%',
     flex: '1 0',
-    padding: 5,
     margin: '0 0 0 0',
     boxSizing: 'border-box',
     display: 'flex',

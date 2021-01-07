@@ -20,8 +20,11 @@ const useStyles = makeStyles(theme => ({
   root: {
     flex: '1 0 0',
     maxHeight: '100%',
-    overflowY: 'auto',
+    overflowY: 'hidden',
     scrollbarWidth: 'thin',
+    '&:hover': {
+      overflowY: 'auto',
+    },
   },
   button: {
     width: 40,
