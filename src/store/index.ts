@@ -3,11 +3,13 @@ import { panelsSlice } from './panels';
 import { authSlice } from './auth';
 import { useDispatch } from 'react-redux';
 import { chatSlice } from './chat';
+import { msgPanelSlice } from './msgPanel';
 
 export const reducers = combineReducers({
   panels: panelsSlice.reducer,
   auth: authSlice.reducer,
   chat: chatSlice.reducer,
+  msgPanel: msgPanelSlice.reducer,
 });
 
 export const store = configureStore({

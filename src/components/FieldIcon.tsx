@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChatOutlined, MoreVert, Add, ExpandLess, ExpandMore } from '@material-ui/icons';
-import { At, Pound } from 'mdi-material-ui';
+import { At, Pound, Forum } from 'mdi-material-ui';
 
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { toCamelCase } from '../utils/text';
@@ -21,6 +21,7 @@ const icons: { [idx: string]: any } = {
   expandLess: ExpandLess,
   expandMore: ExpandMore,
   pound: Pound,
+  forum: Forum,
 };
 
 const FieldIcon = ({ name }: { name: string }) => {

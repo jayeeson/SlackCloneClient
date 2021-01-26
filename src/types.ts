@@ -86,3 +86,8 @@ export interface CreateServerResponse {
   server: ChatServer;
   channels: ChatChannel[];
 }
+
+export enum MsgPanelType {
+  ChannelMessageList = 'ChannelMessageList',
+  DirectMessageIndex = 'DirectMessageIndex',
+}

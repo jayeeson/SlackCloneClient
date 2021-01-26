@@ -3,12 +3,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Add, ExpandLess, ExpandMore } from '@material-ui/icons';
 import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
-import { RootState } from '../store';
+import { RootState, useAppDispatch } from '../store';
+import { msgPanelSlice } from '../store/msgPanel';
 import { ChatChannel, ChatServer } from '../types';
 import { colorHexAdder } from '../utils/colorTransform';
 import AddChannelMenu from './AddChannelMenu';
 import AddMemberToServerMenu from './AddMemberToServerMenu';
 import ChannelListItem from './ChannelListItem';
+import FieldIcon from './FieldIcon';
 import ListItemTextNoWrap from './subcomponents/ListItemTextNoWrap';
 
 interface ChannelListProps {
@@ -52,10 +54,17 @@ const ChannelPanel = ({ channels, activeServer }: ChannelListProps) => {
   const [addMemberMenuOpen, setAddMemberMenuOpen] = useState(false);
   const [channelCollapseOpen, setChannelCollapseOpen] = useState(true);
   const classes = useStyles();
+  const dispatch = useAppDispatch();
 
   const channelList = () => {
     return (
       <Fragment>
+        <ListItem button disableRipple onClick={() => dispatch(msgPanelSlice.actions.openDirectMessageIndex())}>
+          <ListItemIcon>
+            <FieldIcon name="forum"></FieldIcon>
+          </ListItemIcon>
+          <ListItemTextNoWrap>All DMs</ListItemTextNoWrap>
+        </ListItem>
         <ListItem
           button
           style={{ display: 'flex' }}

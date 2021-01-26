@@ -80,6 +80,10 @@ class SocketApi {
   sendMessage = async (payload: SendMessagePayload) => {
     this.socket.emit('message', payload);
   };
+
+  sendDirectMessage = async (payload: SendMessagePayload) => {
+    this.socket.emit('directMessage', payload);
+  };
 }
 
 export default new SocketApi();

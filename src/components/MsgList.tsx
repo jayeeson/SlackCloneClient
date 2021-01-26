@@ -1,35 +1,30 @@
 import { Avatar, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { createRef, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../store';
-import { ChatMessage, ChatUser } from '../types';
+import { ChatChannel, ChatMessage, ChatUser } from '../types';
+import IMsgPanel from './IMsgPanel';
 
 const useStyles = makeStyles({
-  root: {
-    maxHeight: '100%',
-    overflowY: 'auto',
-    overflowX: 'hidden',
-    maxWidth: '100%',
-    width: '100%',
-    marginBottom: '1px',
-    scrollbarWidth: 'thin',
-    scrollbarGutter: 'stable',
-    flexGrow: 1,
-    alignSelf: 'flex-start',
-  },
-  displayName: {},
   timestamp: {
     paddingLeft: '1rem',
   },
-  messageItem: {},
 });
 
-const MsgList = ({ messages, users }: { messages: ChatMessage[]; users: ChatUser[] }) => {
+const MsgList = ({
+  messages,
+  users,
+  activeChannel,
+}: {
+  messages: ChatMessage[];
+  users: ChatUser[];
+  activeChannel: ChatChannel | undefined;
+}) => {
   const [listHeightBeforeNewMessageAdded, setListHeightBeforeNewMessageAdded] = useState(0);
 
   const classes = useStyles();
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = createRef<HTMLDivElement>();
   const listRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
@@ -45,7 +40,7 @@ const MsgList = ({ messages, users }: { messages: ChatMessage[]; users: ChatUser
         containerRef.current.scrollBy(0, listHeight - listHeightBeforeNewMessageAdded);
       }
     }
-  }, [messages, listHeightBeforeNewMessageAdded]);
+  }, [messages, listHeightBeforeNewMessageAdded, containerRef]);
 
   useEffect(() => {
     if (listRef?.current) {
@@ -56,7 +51,7 @@ const MsgList = ({ messages, users }: { messages: ChatMessage[]; users: ChatUser
   const renderMessageItem = (message: ChatMessage) => {
     const displayName = users.find(user => user.id === message.userId)?.displayName;
     return (
-      <ListItem className={classes.messageItem} key={message.id}>
+      <ListItem key={message.id}>
         <ListItemAvatar>
           <Avatar variant="rounded">{displayName?.length ? displayName.slice(0, 1).toLocaleUpperCase() : '?'}</Avatar>
         </ListItemAvatar>
@@ -64,7 +59,7 @@ const MsgList = ({ messages, users }: { messages: ChatMessage[]; users: ChatUser
           disableTypography
           primary={
             <div>
-              <Typography variant="h6" component="span" className={classes.displayName}>
+              <Typography variant="h6" component="span">
                 {displayName}
               </Typography>
               <Typography variant="body2" color="textSecondary" component="span" className={classes.timestamp}>
@@ -83,11 +78,11 @@ const MsgList = ({ messages, users }: { messages: ChatMessage[]; users: ChatUser
   };
 
   return (
-    <div id="messageListContainer" ref={containerRef} className={classes.root}>
+    <IMsgPanel header={`#${activeChannel?.name}`} setRef={containerRef}>
       <List id="messageList" ref={listRef}>
         {messages.map(renderMessageItem)}
       </List>
-    </div>
+    </IMsgPanel>
   );
 };
 
@@ -95,6 +90,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     messages: Object.values(state.chat.messages).filter(message => message.channelId === state.chat.activeChannelId),
     users: Object.values(state.chat.users),
+    activeChannel: Object.values(state.chat.channels).find(channel => channel.id === state.chat.activeChannelId),
   };
 };
 

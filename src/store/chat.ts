@@ -88,6 +88,11 @@ export const sendMessage = createAsyncThunk('chat/sendMessage', async (payload: 
   return data;
 });
 
+export const sendDirectMessage = createAsyncThunk('chat/sendMessage', async (payload: any) => {
+  const data = await SocketApi.sendDirectMessage(payload);
+  return data;
+});
+
 export const setActiveServer = ({ serverId }: { serverId: number }): AppThunk => (dispatch, getState) => {
   const state = getState();
   const { userId } = state.chat;

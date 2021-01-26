@@ -3,16 +3,18 @@ import { ListItem, ListItemIcon } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import FieldIcon from './FieldIcon';
 import ListItemTextNoWrap from './subcomponents/ListItemTextNoWrap';
-import { ChatChannel } from '../types';
+import { ChatChannel, MsgPanelType } from '../types';
 import { chatSlice } from '../store/chat';
-import { RootState } from '../store';
+import { RootState, useAppDispatch } from '../store';
 import { connect } from 'react-redux';
+import { msgPanelSlice } from '../store/msgPanel';
 
 interface IProps {
   channel: ChatChannel;
   activeChannelId: number;
   setActiveChannel: typeof chatSlice.actions.setActiveChannel;
   userId: number | null;
+  openPanel: MsgPanelType;
 }
 
 const useStyles = makeStyles(theme =>
@@ -23,10 +25,14 @@ const useStyles = makeStyles(theme =>
   })
 );
 
-const ChannelListItem = ({ channel, activeChannelId, setActiveChannel, userId }: IProps) => {
+const ChannelListItem = ({ channel, activeChannelId, setActiveChannel, userId, openPanel }: IProps) => {
   const classes = useStyles();
+  const dispatch = useAppDispatch();
 
   const onChannelItemClick = (channelId: number) => {
+    if (openPanel !== MsgPanelType.ChannelMessageList) {
+      dispatch(msgPanelSlice.actions.openChannelMessageList());
+    }
     if (activeChannelId !== channelId && userId) {
       setActiveChannel({ channelId, userId });
     }
@@ -53,6 +59,8 @@ const mapStateToProps = (state: RootState) => {
     activeChannelId: state.chat.activeChannelId,
     activeServer: state.chat.servers[state.chat.activeServerId],
     userId: state.chat.userId,
+    openPanel: state.msgPanel.openPanel,
   };
 };
+
 export default connect(mapStateToProps, { setActiveChannel: chatSlice.actions.setActiveChannel })(ChannelListItem);
