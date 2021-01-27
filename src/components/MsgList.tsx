@@ -17,12 +17,16 @@ const MsgList = ({ messages, activeChannel }: { messages: ChatMessage[]; activeC
       const { height: containerHeight } = containerRef.current.getBoundingClientRect();
       const { height: listHeight } = listRef.current.getBoundingClientRect();
       const { scrollTop } = containerRef.current;
-      const tolerance = 12; //px, defines zone where autoscroll occurs on new message
+      const tolerance = 40; //px, defines zone where autoscroll occurs on new message
+      console.log('scrollTop', scrollTop);
+      console.log('tolerance', tolerance);
+      console.log('listHeightBeforeNewMessageAdded', listHeightBeforeNewMessageAdded);
+      console.log('containerHeight', containerHeight);
       if (
         scrollTop + tolerance >= listHeightBeforeNewMessageAdded - containerHeight &&
         listHeightBeforeNewMessageAdded > 100
       ) {
-        containerRef.current.scrollBy(0, listHeight - listHeightBeforeNewMessageAdded);
+        containerRef.current.scrollBy(0, listHeight - listHeightBeforeNewMessageAdded + tolerance);
       }
     }
   }, [messages, listHeightBeforeNewMessageAdded, containerRef]);

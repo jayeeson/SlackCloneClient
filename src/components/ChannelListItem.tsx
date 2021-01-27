@@ -7,7 +7,7 @@ import { ChatChannel, MainPanelType } from '../types';
 import { chatSlice } from '../store/chat';
 import { RootState, useAppDispatch } from '../store';
 import { connect } from 'react-redux';
-import { msgPanelSlice } from '../store/msgPanel';
+import { mainPanelSlice } from '../store/mainPanel';
 
 interface IProps {
   channel: ChatChannel;
@@ -31,7 +31,7 @@ const ChannelListItem = ({ channel, activeChannelId, setActiveChannel, userId, o
 
   const onChannelItemClick = (channelId: number) => {
     if (openPanel !== MainPanelType.ChannelMessageList) {
-      dispatch(msgPanelSlice.actions.openChannelMessageList());
+      dispatch(mainPanelSlice.actions.openChannelMessageList());
     }
     if (activeChannelId !== channelId && userId) {
       setActiveChannel({ channelId, userId });

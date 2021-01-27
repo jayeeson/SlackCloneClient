@@ -4,7 +4,7 @@ import { Add, ExpandLess, ExpandMore } from '@material-ui/icons';
 import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { RootState, useAppDispatch } from '../store';
-import { msgPanelSlice } from '../store/msgPanel';
+import { mainPanelSlice } from '../store/mainPanel';
 import { ChatChannel, ChatServer } from '../types';
 import { colorHexAdder } from '../utils/colorTransform';
 import AddChannelMenu from './AddChannelMenu';
@@ -59,7 +59,7 @@ const ChannelPanel = ({ channels, activeServer }: ChannelListProps) => {
   const channelList = () => {
     return (
       <Fragment>
-        <ListItem button disableRipple onClick={() => dispatch(msgPanelSlice.actions.openDirectMessageIndex())}>
+        <ListItem button disableRipple onClick={() => dispatch(mainPanelSlice.actions.openDirectMessageIndex())}>
           <ListItemIcon>
             <FieldIcon name="forum"></FieldIcon>
           </ListItemIcon>

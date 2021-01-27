@@ -9,8 +9,8 @@ const initialState: PanelState = {
   openPanel: MainPanelType.ChannelMessageList,
 };
 
-export const msgPanelSlice = createSlice({
-  name: 'msgPanel',
+export const mainPanelSlice = createSlice({
+  name: 'mainPanel',
   initialState,
   reducers: {
     openChannelMessageList: state => ({ ...state, openPanel: MainPanelType.ChannelMessageList }),
