@@ -3,7 +3,7 @@ import React, { createRef, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../store';
 import { ChatChannel, ChatMessage } from '../types';
-import IMsgPanel from './IMsgPanel';
+import IMainPanelContent from './subcomponents/IMainPanelContent';
 import MsgItem from './MsgItem';
 
 const MsgList = ({ messages, activeChannel }: { messages: ChatMessage[]; activeChannel: ChatChannel | undefined }) => {
@@ -38,11 +38,11 @@ const MsgList = ({ messages, activeChannel }: { messages: ChatMessage[]; activeC
   };
 
   return (
-    <IMsgPanel header={`#${activeChannel?.name}`} setRef={containerRef}>
+    <IMainPanelContent header={`#${activeChannel?.name}`} setRef={containerRef}>
       <List id="messageList" ref={listRef}>
         {renderMessageList()}
       </List>
-    </IMsgPanel>
+    </IMainPanelContent>
   );
 };
 

@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../store';
 import { ChatUser } from '../types';
-import IMsgPanel from './IMsgPanel';
+import IMainPanelContent from './subcomponents/IMainPanelContent';
 
 const useStyles = makeStyles({
   displayName: {},
@@ -18,9 +18,9 @@ const MsgList = ({ users }: { users: ChatUser[] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <IMsgPanel header="All direct messages" setRef={containerRef}>
+    <IMainPanelContent header="All direct messages" setRef={containerRef}>
       <div id="messageListContainer">{`DM!!!!!!!!!!`}</div>
-    </IMsgPanel>
+    </IMainPanelContent>
   );
 };
 

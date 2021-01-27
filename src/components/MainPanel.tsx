@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
 });
 
-const MsgPanel = ({
+const MainPanel = ({
   msgPanelOpen,
   msgPanelType,
 }: {
@@ -57,4 +57,4 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-export default React.memo(connect(mapStateToProps)(MsgPanel));
+export default React.memo(connect(mapStateToProps)(MainPanel));

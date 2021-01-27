@@ -24,8 +24,8 @@ export const panelsSlice = createSlice({
   reducers: {
     doOpenSidebar: state => ({ ...state, sidebar: true }),
     doCloseSidebar: state => ({ ...state, sidebar: false }),
-    doOpenMsgPanel: state => ({ ...state, msgPanel: true }),
-    doCloseMsgPanel: state => ({ ...state, msgPanel: false }),
+    doOpenMainPanel: state => ({ ...state, msgPanel: true }),
+    doCloseMainPanel: state => ({ ...state, msgPanel: false }),
     doOpenViewPanel: state => ({ ...state, viewPanel: true }),
     doCloseViewPanel: state => ({ ...state, viewPanel: false }),
     setSidebarWidth: (state, { payload }: PayloadAction<{ width: number }>) => {

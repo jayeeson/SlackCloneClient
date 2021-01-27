@@ -3,7 +3,7 @@ import { ListItem, ListItemIcon } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import FieldIcon from './FieldIcon';
 import ListItemTextNoWrap from './subcomponents/ListItemTextNoWrap';
-import { ChatChannel, MsgPanelType } from '../types';
+import { ChatChannel, MainPanelType } from '../types';
 import { chatSlice } from '../store/chat';
 import { RootState, useAppDispatch } from '../store';
 import { connect } from 'react-redux';
@@ -14,7 +14,7 @@ interface IProps {
   activeChannelId: number;
   setActiveChannel: typeof chatSlice.actions.setActiveChannel;
   userId: number | null;
-  openPanel: MsgPanelType;
+  openPanel: MainPanelType;
 }
 
 const useStyles = makeStyles(theme =>
@@ -30,7 +30,7 @@ const ChannelListItem = ({ channel, activeChannelId, setActiveChannel, userId, o
   const dispatch = useAppDispatch();
 
   const onChannelItemClick = (channelId: number) => {
-    if (openPanel !== MsgPanelType.ChannelMessageList) {
+    if (openPanel !== MainPanelType.ChannelMessageList) {
       dispatch(msgPanelSlice.actions.openChannelMessageList());
     }
     if (activeChannelId !== channelId && userId) {

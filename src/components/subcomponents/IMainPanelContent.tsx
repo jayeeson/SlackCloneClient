@@ -29,13 +29,13 @@ const useStyles = makeStyles({
   },
 });
 
-export interface IMsgPanelProps {
+export interface IMainPanelProps {
   header: string;
   children: ReactElement;
   setRef: RefObject<HTMLDivElement>;
 }
 
-const IMsgPanel = ({ header, children, setRef }: IMsgPanelProps) => {
+const IMainPanelContent = ({ header, children, setRef }: IMainPanelProps) => {
   const classes = useStyles();
 
   return (
@@ -51,4 +51,4 @@ const IMsgPanel = ({ header, children, setRef }: IMsgPanelProps) => {
   );
 };
 
-export default connect()(IMsgPanel);
+export default connect()(IMainPanelContent);

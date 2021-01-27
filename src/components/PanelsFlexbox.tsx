@@ -2,7 +2,7 @@ import { Box, Divider, Theme } from '@material-ui/core';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import React, { useEffect, Fragment } from 'react';
 import DraggableDivider from './DraggableDivider';
-import MsgPanel from './MsgPanel';
+import MainPanel from './MainPanel';
 import useWindowSize from '../hooks/useWindowSize';
 import { connect } from 'react-redux';
 import { panelsSlice } from '../store/panels';
@@ -30,8 +30,8 @@ interface IProps {
   viewPanelOpen: boolean;
   sidebarWidth: number;
   viewPanelWidth: number;
-  doOpenMsgPanel: typeof panelsSlice.actions.doOpenMsgPanel;
-  doCloseMsgPanel: typeof panelsSlice.actions.doCloseMsgPanel;
+  doOpenMainPanel: typeof panelsSlice.actions.doOpenMainPanel;
+  doCloseMainPanel: typeof panelsSlice.actions.doCloseMainPanel;
   doOpenSidebar: typeof panelsSlice.actions.doOpenSidebar;
   doCloseSidebar: typeof panelsSlice.actions.doCloseSidebar;
 }
@@ -42,14 +42,14 @@ const PanelsFlexbox = ({
   viewPanelOpen,
   sidebarWidth,
   viewPanelWidth,
-  doOpenMsgPanel,
-  doCloseMsgPanel,
+  doOpenMainPanel,
+  doCloseMainPanel,
   doOpenSidebar,
   doCloseSidebar,
 }: IProps) => {
   const windowSize = useWindowSize();
 
-  const minMsgPanelWidth = 300;
+  const minMainPanelWidth = 300;
   const dividerWidth = 6;
   const serverPanelWidth = 60;
 
@@ -58,11 +58,11 @@ const PanelsFlexbox = ({
     const viewPanelWidthIfOpen = viewPanelOpen ? viewPanelWidth : 0;
 
     if (msgPanelOpen) {
-      if (sidebarOpen && windowSize.x - sidebarWidth - viewPanelWidthIfOpen - totalDividerWidth < minMsgPanelWidth) {
+      if (sidebarOpen && windowSize.x - sidebarWidth - viewPanelWidthIfOpen - totalDividerWidth < minMainPanelWidth) {
         doCloseSidebar();
       } else if (
         !sidebarOpen &&
-        sidebarWidth + minMsgPanelWidth + viewPanelWidthIfOpen + totalDividerWidth < windowSize.x
+        sidebarWidth + minMainPanelWidth + viewPanelWidthIfOpen + totalDividerWidth < windowSize.x
       ) {
         doOpenSidebar();
       }
@@ -82,14 +82,14 @@ const PanelsFlexbox = ({
     if (
       viewPanelOpen &&
       msgPanelOpen &&
-      windowSize.x - viewPanelWidth - dividerWidth < minMsgPanelWidth &&
+      windowSize.x - viewPanelWidth - dividerWidth < minMainPanelWidth &&
       !sidebarOpen
     ) {
-      doCloseMsgPanel();
-    } else if (!viewPanelOpen || (!msgPanelOpen && windowSize.x > viewPanelWidth + minMsgPanelWidth + dividerWidth)) {
-      doOpenMsgPanel();
+      doCloseMainPanel();
+    } else if (!viewPanelOpen || (!msgPanelOpen && windowSize.x > viewPanelWidth + minMainPanelWidth + dividerWidth)) {
+      doOpenMainPanel();
     }
-  }, [doCloseMsgPanel, doOpenMsgPanel, msgPanelOpen, sidebarOpen, viewPanelOpen, viewPanelWidth, windowSize.x]);
+  }, [doCloseMainPanel, doOpenMainPanel, msgPanelOpen, sidebarOpen, viewPanelOpen, viewPanelWidth, windowSize.x]);
 
   const classes = useStyles({ sidebar: { width: sidebarWidth }, viewPanel: { width: viewPanelWidth } });
 
@@ -110,7 +110,7 @@ const PanelsFlexbox = ({
           <Sidebar sidebarWidth={sidebarWidth} />
           <Divider orientation="vertical" />
         </ThemeProvider>
-        <MsgPanel width={msgPanelWidth} />
+        <MainPanel width={msgPanelWidth} />
         <Divider orientation="vertical" />
         <ViewPanel viewPanelWidth={viewPanelWidth} />
       </Box>
@@ -136,8 +136,8 @@ const PanelsFlexbox = ({
 };
 
 const mapDispatchToProps = {
-  doOpenMsgPanel: panelsSlice.actions.doOpenMsgPanel,
-  doCloseMsgPanel: panelsSlice.actions.doCloseMsgPanel,
+  doOpenMainPanel: panelsSlice.actions.doOpenMainPanel,
+  doCloseMainPanel: panelsSlice.actions.doCloseMainPanel,
   doOpenSidebar: panelsSlice.actions.doOpenSidebar,
   doCloseSidebar: panelsSlice.actions.doCloseSidebar,
 };
