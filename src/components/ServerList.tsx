@@ -31,7 +31,11 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.primary.contrastText,
     height: serverIconWidth,
     width: serverIconWidth,
+    boxSizing: 'content-box',
   }),
+  activeServerAvatar: {
+    border: `4px ${theme.palette.primary.main} solid`,
+  },
   nonActiveServerAvatar: {
     '&:hover': {
       cursor: 'pointer',
@@ -80,7 +84,10 @@ const ServerList = ({
         <ListItem key={server.id}>
           <Avatar
             variant="rounded"
-            className={clsx(classes.avatar, server.id !== activeServerId && classes.nonActiveServerAvatar)}
+            className={clsx(
+              classes.avatar,
+              server.id == activeServerId ? classes.activeServerAvatar : classes.nonActiveServerAvatar
+            )}
             onClick={e => onServerClick(e, server.id)}
           >
             {toAcronym(server.name)}
