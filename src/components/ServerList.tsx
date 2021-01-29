@@ -9,23 +9,28 @@ import clsx from 'clsx';
 import { setActiveServer } from '../store/chat';
 import useWindowSize from '../hooks/useWindowSize';
 
+interface useStyleProps {
+  maxListHeight: number;
+  serverIconWidth: number;
+  isOverflown: boolean;
+}
 const useStyles = makeStyles(theme => ({
-  root: (props: any) => ({
-    maxHeight: '80vh',
+  root: ({ maxListHeight, isOverflown }: useStyleProps) => ({
+    maxHeight: maxListHeight,
     overflowY: 'hidden',
     scrollbarWidth: 'thin',
     '&:hover': {
       overflowY: 'auto',
-      marginLeft: props.isOverflown ? 8 : 0,
+      marginLeft: isOverflown ? 8 : 0,
     },
   }),
-  avatar: (props: any) => ({
+  avatar: ({ serverIconWidth }: useStyleProps) => ({
     position: 'relative',
     transform: 'translateX(-50%)',
     left: '50%',
     color: theme.palette.primary.contrastText,
-    height: props.serverIconWidth,
-    width: props.serverIconWidth,
+    height: serverIconWidth,
+    width: serverIconWidth,
   }),
   nonActiveServerAvatar: {
     '&:hover': {
@@ -38,24 +43,30 @@ const ServerList = ({
   width,
   servers,
   activeServerId,
+  addServerButtonHeight,
 }: {
   width: number;
   servers: ChatServer[];
   activeServerId: number;
+  addServerButtonHeight: number;
 }) => {
   const [isOverflown, setIsOverflown] = useState(false);
+  const [maxListHeight, setMaxListHeight] = useState(1000);
+
   const rootRef = useRef<HTMLUListElement | null>(null);
   const dispatch = useAppDispatch();
-  const serverIconWidth = width * 0.55;
   const windowSize = useWindowSize();
-  const classes = useStyles({ serverIconWidth, isOverflown });
+  const serverIconWidth = width * 0.55;
+  const classes = useStyles({ serverIconWidth, isOverflown, maxListHeight });
 
   useEffect(() => {
     const container = rootRef.current;
     if (container) {
       setIsOverflown(container.scrollHeight > container.getBoundingClientRect().height);
     }
-  }, [windowSize.y]);
+
+    setMaxListHeight(windowSize.y - addServerButtonHeight - width - 1 - 20);
+  }, [addServerButtonHeight, width, windowSize.y]);
 
   const onServerClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, serverId: number) => {
     if (activeServerId !== serverId) {

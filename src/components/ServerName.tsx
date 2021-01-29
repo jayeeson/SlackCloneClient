@@ -7,7 +7,8 @@ import { ChatServer } from '../types';
 
 const useStyles = makeStyles({
   root: {
-    height: '60px',
+    height: 60,
+    minHeight: 60,
     verticalAlign: 'middle',
   },
   content: {

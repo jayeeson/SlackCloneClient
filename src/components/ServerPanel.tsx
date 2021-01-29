@@ -10,8 +10,12 @@ import StyledMenu from './subcomponents/StyledMenu';
 import StyledMenuItem from './subcomponents/StyledMenuItem';
 import AddServerMenu from './AddServerMenu';
 
+interface useStylesProps {
+  width: number;
+  addServerButtonHeight: number;
+}
 const useStyles = makeStyles(theme => ({
-  root: ({ width }: { width: number }) => ({
+  root: ({ width }: useStylesProps) => ({
     height: '100%',
     width: width,
     padding: 0,
@@ -19,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     boxSizing: 'border-box',
     background: theme.palette.background.default,
   }),
-  userAvatarContainer: ({ width }: { width: number }) => ({
+  userAvatarContainer: ({ width }: useStylesProps) => ({
     height: width,
     boxSizing: 'border-box',
   }),
@@ -32,15 +36,15 @@ const useStyles = makeStyles(theme => ({
       cursor: 'pointer',
     },
   },
-  addServerButton: {
+  addServerButton: ({ addServerButtonHeight }: useStylesProps) => ({
     position: 'relative',
     transform: 'translateX(-50%)',
     left: '50%',
     cs: 'center',
-    width: '24px',
-    minWidth: '24px',
-    height: '24px',
-  },
+    width: `${addServerButtonHeight}px`,
+    minWidth: `${addServerButtonHeight}px`,
+    height: `${addServerButtonHeight}px`,
+  }),
 }));
 
 const ServerPanel = ({ width, username }: { width: number; username?: string }) => {
@@ -49,7 +53,8 @@ const ServerPanel = ({ width, username }: { width: number; username?: string }) 
   const [addServerMenuOpen, setAddServerMenuOpen] = useState(false);
 
   const dispatch = useAppDispatch();
-  const classes = useStyles({ width });
+  const addServerButtonHeight = 24;
+  const classes = useStyles({ width, addServerButtonHeight });
 
   const onProfileMenuClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -88,8 +93,10 @@ const ServerPanel = ({ width, username }: { width: number; username?: string }) 
         </StyledMenu>
       </div>
       <Divider />
-      <ServerList width={width} />
-      {renderAddServerButton()}
+      <div id="test1234">
+        <ServerList width={width} addServerButtonHeight={addServerButtonHeight} />
+        {renderAddServerButton()}
+      </div>
     </Box>
   );
 };
