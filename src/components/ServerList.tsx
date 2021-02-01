@@ -21,7 +21,8 @@ const useStyles = makeStyles(theme => ({
     scrollbarWidth: 'thin',
     '&:hover': {
       overflowY: 'auto',
-      marginLeft: isOverflown ? 8 : 0,
+      ///\todo: fix how the panel moves when a scrollbar is added
+      // marginLeft: isOverflown ? 8 : 0,
     },
   }),
   avatar: ({ serverIconWidth }: useStyleProps) => ({

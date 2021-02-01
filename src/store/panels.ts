@@ -4,7 +4,7 @@ import { localStorageKey } from '../types';
 
 interface PanelState {
   sidebar: boolean;
-  msgPanel: boolean;
+  mainPanel: boolean;
   viewPanel: boolean;
   sidebarWidth: number;
   viewPanelWidth: number;
@@ -12,7 +12,7 @@ interface PanelState {
 
 const initialState: PanelState = {
   sidebar: true,
-  msgPanel: true,
+  mainPanel: true,
   viewPanel: false,
   sidebarWidth: validateWidth(localStorage.getItem(localStorageKey.DraggablePanel.sidebarWidth)) || 250,
   viewPanelWidth: validateWidth(localStorage.getItem(localStorageKey.DraggablePanel.viewPanelWidth)) || 250,
@@ -24,8 +24,8 @@ export const panelsSlice = createSlice({
   reducers: {
     doOpenSidebar: state => ({ ...state, sidebar: true }),
     doCloseSidebar: state => ({ ...state, sidebar: false }),
-    doOpenMainPanel: state => ({ ...state, msgPanel: true }),
-    doCloseMainPanel: state => ({ ...state, msgPanel: false }),
+    doOpenMainPanel: state => ({ ...state, mainPanel: true }),
+    doCloseMainPanel: state => ({ ...state, mainPanel: false }),
     doOpenViewPanel: state => ({ ...state, viewPanel: true }),
     doCloseViewPanel: state => ({ ...state, viewPanel: false }),
     setSidebarWidth: (state, { payload }: PayloadAction<{ width: number }>) => {

@@ -111,6 +111,7 @@ const AddMemberToServerMenu = ({
     );
   };
 
+  ///\ todo: perform validation, so INVITE can only be clicked when a user has been selected. Also indicate the required fields using (color, * character)
   return (
     <IAddMenu
       menuOpen={menuOpen}

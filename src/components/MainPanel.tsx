@@ -20,31 +20,31 @@ const useStyles = makeStyles({
 });
 
 const MainPanel = ({
-  msgPanelOpen,
-  msgPanelType,
+  mainPanelOpen,
+  mainPanelType,
 }: {
-  msgPanelOpen: boolean;
-  msgPanelType: MainPanelType;
+  mainPanelOpen: boolean;
+  mainPanelType: MainPanelType;
   width: number;
 }) => {
   const classes = useStyles();
-  const display = msgPanelOpen ? 'inline' : 'none';
+  const display = mainPanelOpen ? 'inline' : 'none';
 
   const renderContent = () => {
-    if (msgPanelType === MainPanelType.ChannelMessageList) {
+    if (mainPanelType === MainPanelType.ChannelMessageList) {
       return (
         <Fragment>
           <MsgList />
           <MsgField />
         </Fragment>
       );
-    } else if (msgPanelType === MainPanelType.DirectMessageIndex) {
+    } else if (mainPanelType === MainPanelType.DirectMessageIndex) {
       return <DirectMessageIndex />;
     }
   };
 
   return (
-    <Box className={classes.root} id="msgPanel" display={display} flexDirection="column">
+    <Box className={classes.root} id="mainPanel" display={display} flexDirection="column">
       {renderContent()}
     </Box>
   );
@@ -52,8 +52,8 @@ const MainPanel = ({
 
 const mapStateToProps = (state: RootState) => {
   return {
-    msgPanelOpen: state.panels.msgPanel,
-    msgPanelType: state.msgPanel.openPanel,
+    mainPanelOpen: state.panels.mainPanel,
+    mainPanelType: state.mainPanel.openPanel,
   };
 };
 

@@ -80,11 +80,20 @@ export interface StartupData {
   channels: ChatChannel[];
   userId: number;
   users: ChatUser[];
+  dmChannels: DmChannel[];
 }
 
 export interface CreateServerResponse {
   server: ChatServer;
   channels: ChatChannel[];
+}
+
+export interface DmChannel {
+  id: number;
+  users: {
+    userId: number;
+    username: string;
+  }[];
 }
 
 export enum MainPanelType {

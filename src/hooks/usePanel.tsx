@@ -12,7 +12,7 @@ const usePanel = (
     viewPanelWidth: state.panels.viewPanelWidth,
     sidebarOpen: state.panels.sidebar,
     viewPanelOpen: state.panels.viewPanel,
-    msgPanelOpen: state.panels.msgPanel,
+    mainPanelOpen: state.panels.mainPanel,
   }));
   if (panel === DraggablePanel.sidebarWidth) {
     const display = sidebarOpen ? 'inline' : 'none';

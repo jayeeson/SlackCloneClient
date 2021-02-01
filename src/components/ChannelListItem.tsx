@@ -59,7 +59,7 @@ const mapStateToProps = (state: RootState) => {
     activeChannelId: state.chat.activeChannelId,
     activeServer: state.chat.servers[state.chat.activeServerId],
     userId: state.chat.userId,
-    openPanel: state.msgPanel.openPanel,
+    openPanel: state.mainPanel.openPanel,
   };
 };
 

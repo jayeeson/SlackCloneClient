@@ -50,6 +50,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ChannelPanel = ({ channels, activeServer }: ChannelListProps) => {
+  ///\ todo: allow the blue "active selected channel" to extend to the other types of panels (ie. All DMs channel)
   const [addChannelMenuOpen, setAddChannelMenuOpen] = useState(false);
   const [addMemberMenuOpen, setAddMemberMenuOpen] = useState(false);
   const [channelCollapseOpen, setChannelCollapseOpen] = useState(true);

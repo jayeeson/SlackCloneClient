@@ -7,6 +7,7 @@ import {
   ChatServer,
   ChatUser,
   CreateChannelRequest,
+  DmChannel,
   SendMessagePayload,
   StartupData,
 } from '../types';
@@ -17,6 +18,7 @@ import config from '../config';
 interface ChatState {
   servers: { [idx: string]: ChatServer };
   channels: { [idx: string]: ChatChannel };
+  dmChannels: { [idx: string]: DmChannel };
   messages: { [idx: string]: ChatMessage };
   userId: number | null;
   users: { [idx: string]: ChatUser };
@@ -28,6 +30,7 @@ interface ChatState {
 const initialState: ChatState = {
   servers: {},
   channels: {},
+  dmChannels: {},
   messages: {},
   userId: null,
   users: {},
@@ -148,6 +151,7 @@ export const chatSlice = createSlice({
           initialDataFetched: true,
           userId: payload.userId,
           users: _.mapKeys(payload.users, 'id'),
+          dmChannels: _.mapKeys(payload.dmChannels, 'id'),
         };
       }
       return state;

@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface IProps {
   sidebarOpen: boolean;
-  msgPanelOpen: boolean;
+  mainPanelOpen: boolean;
   viewPanelOpen: boolean;
   sidebarWidth: number;
   viewPanelWidth: number;
@@ -38,7 +38,7 @@ interface IProps {
 
 const PanelsFlexbox = ({
   sidebarOpen,
-  msgPanelOpen,
+  mainPanelOpen,
   viewPanelOpen,
   sidebarWidth,
   viewPanelWidth,
@@ -57,7 +57,7 @@ const PanelsFlexbox = ({
     const totalDividerWidth = (viewPanelOpen ? 2 : 1) * dividerWidth;
     const viewPanelWidthIfOpen = viewPanelOpen ? viewPanelWidth : 0;
 
-    if (msgPanelOpen) {
+    if (mainPanelOpen) {
       if (sidebarOpen && windowSize.x - sidebarWidth - viewPanelWidthIfOpen - totalDividerWidth < minMainPanelWidth) {
         doCloseSidebar();
       } else if (
@@ -70,7 +70,7 @@ const PanelsFlexbox = ({
   }, [
     doCloseSidebar,
     doOpenSidebar,
-    msgPanelOpen,
+    mainPanelOpen,
     sidebarOpen,
     sidebarWidth,
     viewPanelOpen,
@@ -81,21 +81,21 @@ const PanelsFlexbox = ({
   useEffect(() => {
     if (
       viewPanelOpen &&
-      msgPanelOpen &&
+      mainPanelOpen &&
       windowSize.x - viewPanelWidth - dividerWidth < minMainPanelWidth &&
       !sidebarOpen
     ) {
       doCloseMainPanel();
-    } else if (!viewPanelOpen || (!msgPanelOpen && windowSize.x > viewPanelWidth + minMainPanelWidth + dividerWidth)) {
+    } else if (!viewPanelOpen || (!mainPanelOpen && windowSize.x > viewPanelWidth + minMainPanelWidth + dividerWidth)) {
       doOpenMainPanel();
     }
-  }, [doCloseMainPanel, doOpenMainPanel, msgPanelOpen, sidebarOpen, viewPanelOpen, viewPanelWidth, windowSize.x]);
+  }, [doCloseMainPanel, doOpenMainPanel, mainPanelOpen, sidebarOpen, viewPanelOpen, viewPanelWidth, windowSize.x]);
 
   const classes = useStyles({ sidebar: { width: sidebarWidth }, viewPanel: { width: viewPanelWidth } });
 
   const sidebarDividerPosition = serverPanelWidth + sidebarWidth + 2; // +2 for 2 dividers 1 px each
   const viewPanelDividerPosition = windowSize.x - viewPanelWidth - 1; // -1 for 1 divider 1 px
-  const msgPanelWidth =
+  const mainPanelWidth =
     windowSize.x -
     (serverPanelWidth + 1) -
     (sidebarOpen ? sidebarWidth + 1 : 0) -
@@ -110,7 +110,7 @@ const PanelsFlexbox = ({
           <Sidebar sidebarWidth={sidebarWidth} />
           <Divider orientation="vertical" />
         </ThemeProvider>
-        <MainPanel width={msgPanelWidth} />
+        <MainPanel width={mainPanelWidth} />
         <Divider orientation="vertical" />
         <ViewPanel viewPanelWidth={viewPanelWidth} />
       </Box>
@@ -145,7 +145,7 @@ const mapDispatchToProps = {
 const mapStateToProps = (state: RootState) => {
   return {
     sidebarOpen: state.panels.sidebar,
-    msgPanelOpen: state.panels.msgPanel,
+    mainPanelOpen: state.panels.mainPanel,
     viewPanelOpen: state.panels.viewPanel,
     sidebarWidth: state.panels.sidebarWidth,
     viewPanelWidth: state.panels.viewPanelWidth,

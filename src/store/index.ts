@@ -9,7 +9,7 @@ export const reducers = combineReducers({
   panels: panelsSlice.reducer,
   auth: authSlice.reducer,
   chat: chatSlice.reducer,
-  msgPanel: mainPanelSlice.reducer,
+  mainPanel: mainPanelSlice.reducer,
 });
 
 export const store = configureStore({
